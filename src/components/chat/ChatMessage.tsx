@@ -4,6 +4,7 @@ import { Copy, ThumbsUp, ThumbsDown, Share2, RefreshCw } from 'lucide-react';
 import { Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 export type MessageType = {
   id: string;
@@ -19,24 +20,52 @@ export type MessageType = {
 
 interface ChatMessageProps {
   message: MessageType;
+  onRegenerateResponse?: () => void;
 }
 
-export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
+export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onRegenerateResponse }) => {
   const [reaction, setReaction] = useState<'like' | 'dislike' | null>(
     message.reactions?.liked ? 'like' : message.reactions?.disliked ? 'dislike' : null
   );
+  const { toast } = useToast();
 
   const handleReaction = (type: 'like' | 'dislike') => {
     if (reaction === type) {
       setReaction(null);
+      toast({
+        title: type === 'like' ? 'Feedback removed' : 'Feedback removed',
+        description: 'Thank you for your feedback',
+      });
     } else {
       setReaction(type);
+      toast({
+        title: type === 'like' ? 'Liked' : 'Disliked',
+        description: 'Thank you for your feedback',
+      });
     }
+    // In a real app, you would send this feedback to your backend
   };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(message.content);
-    // You could add toast notification here
+    toast({
+      title: 'Copied to clipboard',
+      description: 'The message has been copied to your clipboard.',
+    });
+  };
+
+  const handleShare = () => {
+    // In a real app, you might open a modal or implement sharing functionality
+    toast({
+      title: 'Share feature',
+      description: 'Sharing functionality would open here',
+    });
+  };
+
+  const handleRegenerate = () => {
+    if (onRegenerateResponse) {
+      onRegenerateResponse();
+    }
   };
 
   return (
@@ -93,15 +122,30 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
               </div>
 
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-8 gap-1.5 text-xs"
+                  onClick={handleRegenerate}
+                >
                   <RefreshCw className="h-3.5 w-3.5" /> 
-                  Generate Response
+                  Regenerate Response
                 </Button>
-                <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs" onClick={handleCopy}>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-8 gap-1.5 text-xs" 
+                  onClick={handleCopy}
+                >
                   <Copy className="h-3.5 w-3.5" /> 
                   Copy
                 </Button>
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8 text-gray-500"
+                  onClick={handleShare}
+                >
                   <Share2 className="h-4 w-4" />
                 </Button>
               </div>

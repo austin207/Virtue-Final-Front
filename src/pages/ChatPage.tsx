@@ -1,16 +1,19 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { ChatMessage, MessageType } from '@/components/chat/ChatMessage';
 import { ChatInput } from '@/components/chat/ChatInput';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 export const ChatPage: React.FC = () => {
   const { chatId } = useParams<{ chatId: string }>();
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [isNewChat, setIsNewChat] = useState(chatId === 'new');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  const { toast } = useToast();
   
   useEffect(() => {
     if (chatId !== 'new') {
@@ -58,6 +61,16 @@ export const ChatPage: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleStartNewChat = () => {
+    navigate('/chat/new');
+    setMessages([]);
+    setIsNewChat(true);
+    toast({
+      title: 'New chat started',
+      description: 'Ask me anything!',
+    });
+  };
+
   const handleSendMessage = (content: string) => {
     // Add user message
     const userMessage: MessageType = {
@@ -86,8 +99,39 @@ export const ChatPage: React.FC = () => {
     
     if (isNewChat) {
       setIsNewChat(false);
+      navigate(`/chat/${Date.now()}`);
       // In a real app, you would create a new chat in the database
       // and update the URL with the new chat ID
+    }
+  };
+
+  const handleRegenerateResponse = () => {
+    // Find the last assistant message and the corresponding user message
+    const lastAssistantMessageIndex = [...messages].reverse().findIndex(m => m.role === 'assistant');
+    
+    if (lastAssistantMessageIndex >= 0) {
+      // Remove the last assistant message
+      const lastIndex = messages.length - 1 - lastAssistantMessageIndex;
+      const updatedMessages = [...messages];
+      updatedMessages.splice(lastIndex, 1);
+      setMessages(updatedMessages);
+      
+      // Simulate generating a new response
+      setTimeout(() => {
+        const newAiMessage: MessageType = {
+          id: Date.now().toString(),
+          role: 'assistant',
+          content: "This is a regenerated response! In a real application, this would be a new response from the AI service based on the same user query.",
+          timestamp: 'just now',
+        };
+        
+        setMessages(prev => [...prev, newAiMessage]);
+        
+        toast({
+          title: 'Response regenerated',
+          description: 'A new response has been generated for you.',
+        });
+      }, 1000);
     }
   };
 
@@ -97,10 +141,23 @@ export const ChatPage: React.FC = () => {
       <header className="h-14 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-800">
         <h1 className="font-semibold">{chatId === 'new' ? 'New Chat' : (chatId ?? 'Chat')}</h1>
         <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="icon">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => {
+              toast({
+                title: 'Search',
+                description: 'Search functionality would open here',
+              });
+            }}
+          >
             <Search className="w-5 h-5" />
           </Button>
-          <Button variant="ghost" size="icon">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={handleStartNewChat}
+          >
             <span className="text-lg">⋯</span>
           </Button>
         </div>
@@ -116,7 +173,11 @@ export const ChatPage: React.FC = () => {
           </div>
         ) : (
           messages.map(message => (
-            <ChatMessage key={message.id} message={message} />
+            <ChatMessage 
+              key={message.id} 
+              message={message} 
+              onRegenerateResponse={message.role === 'assistant' ? handleRegenerateResponse : undefined}
+            />
           ))
         )}
         <div ref={messagesEndRef} />
