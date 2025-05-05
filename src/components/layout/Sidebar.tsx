@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -8,7 +7,7 @@ import { Avatar } from '@/components/ui/avatar';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Toggle } from '@/components/ui/toggle';
 import { useTheme } from '@/components/providers/ThemeProvider';
-import logoImg from '@/assets/logo.png';
+import { logo } from '@/assets';
 
 type SidebarProps = {
   collapsed: boolean;
@@ -112,7 +111,7 @@ export const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
           {!collapsed && (
             <div className="flex items-center">
-              <img src={logoImg} alt="Logo" className="h-6 w-6 mr-2" />
+              <img src={logo} alt="Logo" className="h-6 w-6 mr-2" />
               <h1 className="text-lg font-semibold">My Chats</h1>
             </div>
           )}
