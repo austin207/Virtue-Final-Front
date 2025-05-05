@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { PenLine, Search, Lightbulb, Plus, MessageSquare, BookMarked, Moon, Sun, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,12 +12,33 @@ import { logo } from '@/assets';
 type SidebarProps = {
   collapsed: boolean;
   setCollapsed: (collapsed: boolean) => void;
+  chatItems?: ChatItem[];
+  onNewChat?: () => void;
 };
 
-export const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
+export type ChatItem = {
+  id: string;
+  icon: string;
+  title: string;
+  preview: string;
+  time: string;
+  active?: boolean;
+  href: string;
+};
+
+export const Sidebar = ({ collapsed, setCollapsed, chatItems = [], onNewChat }: SidebarProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
   const [activeTab, setActiveTab] = useState("chats"); // chats or saved
+
+  const handleNewChat = () => {
+    if (onNewChat) {
+      onNewChat();
+    } else {
+      navigate('/chat/new');
+    }
+  };
 
   const navItems = [
     {
@@ -46,8 +67,9 @@ export const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
     },
   ];
 
-  const chatItems = [
+  const defaultChatItems = [
     {
+      id: "cosmic-evolution",
       icon: "✨",
       title: "Cosmic Evolution",
       preview: "Some 15 billion years ago the universe emerged from a hot, dense sea of...",
@@ -55,11 +77,12 @@ export const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
       href: "/chat/cosmic-evolution"
     },
     {
+      id: "new",
       icon: "📝",
       title: "New Chat",
       preview: "Ask anything!",
       time: "Now",
-      active: true,
+      active: location.pathname === "/chat/new",
       href: "/chat/new"
     },
     {
@@ -99,6 +122,8 @@ export const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
     },
   ];
 
+  const displayChatItems = chatItems.length > 0 ? chatItems : defaultChatItems;
+
   return (
     <div
       className={cn(
@@ -127,7 +152,13 @@ export const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
             </Button>
           ) : (
             <div className="flex items-center space-x-2">
-              <Button variant="outline" size="icon" className="w-8 h-8 p-0">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="w-8 h-8 p-0"
+                onClick={handleNewChat}
+                aria-label="New Chat"
+              >
                 <Plus className="h-4 w-4" />
               </Button>
               <Button variant="ghost" size="icon" className="w-8 h-8 p-0">
@@ -218,10 +249,10 @@ export const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
               ))}
             </div>
           ) : (
-            chatItems.map((chat, index) => (
+            displayChatItems.map((chat, index) => (
               <Link 
                 to={chat.href} 
-                key={index} 
+                key={chat.id || index} 
                 className={cn(
                   "block mb-1 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800",
                   location.pathname === chat.href && "bg-gray-100 dark:bg-gray-800",
