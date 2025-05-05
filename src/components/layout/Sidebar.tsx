@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { PenLine, Search, Lightbulb, Plus, MessageSquare, BookMarked, Moon, Sun, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -16,9 +16,10 @@ type SidebarProps = {
   onNewChat?: () => void;
 };
 
+// Updated ChatItem type
 export type ChatItem = {
-  id: string;
-  icon: string;
+  id?: string;
+  image?: { src: string; width: number; height: number };
   title: string;
   preview: string;
   time: string;
@@ -67,10 +68,11 @@ export const Sidebar = ({ collapsed, setCollapsed, chatItems = [], onNewChat }: 
     },
   ];
 
+  // ---- UPDATED: Use image property for chat items ----
   const defaultChatItems = [
     {
       id: "cosmic-evolution",
-      icon: "✨",
+      image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20},
       title: "Cosmic Evolution",
       preview: "Some 15 billion years ago the universe emerged from a hot, dense sea of...",
       time: "9:34 PM",
@@ -78,7 +80,7 @@ export const Sidebar = ({ collapsed, setCollapsed, chatItems = [], onNewChat }: 
     },
     {
       id: "new",
-      icon: "📝",
+      image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20},
       title: "New Chat",
       preview: "Ask anything!",
       time: "Now",
@@ -86,35 +88,35 @@ export const Sidebar = ({ collapsed, setCollapsed, chatItems = [], onNewChat }: 
       href: "/chat/new"
     },
     {
-      icon: "📊",
+      image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20},
       title: "Competitive Analysis research",
       preview: "A competitive analysis of restaurant delivery mobile applications reveals key insights ...",
       time: "Thu",
       href: "/chat/competitive-analysis"
     },
     {
-      icon: "👤",
+      image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20},
       title: "User Personas Research",
       preview: "User persona research is a process of creating fictional but realistic representati...",
       time: "Mon",
       href: "/chat/user-personas"
     },
     {
-      icon: "📣",
+      image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20},
       title: "Call To Action texts",
       preview: 'here are a few examples of CTA button text\n1. "Get started now" ...',
       time: "17 Oct",
       href: "/chat/cta-texts"
     },
     {
-      icon: "🎬",
+      image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20},
       title: "Video Script Intros",
       preview: "Hi, I'm [insert name here], and I'm on my way to Prague, one of the most beautiful...",
       time: "10 Oct",
       href: "/chat/video-scripts"
     },
     {
-      icon: "🍌",
+      image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20},
       title: "UX of a Banana",
       preview: "Are you sure you want to delete this file? This action cannot be undone and the file...",
       time: "21 Aug",
@@ -127,20 +129,20 @@ export const Sidebar = ({ collapsed, setCollapsed, chatItems = [], onNewChat }: 
   return (
     <div
       className={cn(
-        "fixed left-0 top-0 z-20 h-full chat-sidebar border-r border-gray-200 dark:border-gray-800 transition-all duration-300",
+        "fixed left-0 top-0 z-20 h-full chat-sidebar border-r-4 border-gray-200 dark:border-gray-500 transition-all duration-300",
         collapsed ? "w-[60px]" : "w-[260px] md:w-[300px]"
       )}
     >
       <div className="flex flex-col h-full">
         {/* Sidebar Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-500">
           {!collapsed && (
             <div className="flex items-center">
-              <img src={logo} alt="Logo" className="h-6 w-6 mr-2" />
+              <img src="/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png" alt="Logo" className="h-9 w-9 mr-2" />
               <h1 className="text-lg font-semibold">My Chats</h1>
             </div>
           )}
-          
+
           {collapsed ? (
             <Button 
               variant="ghost" 
@@ -153,12 +155,12 @@ export const Sidebar = ({ collapsed, setCollapsed, chatItems = [], onNewChat }: 
           ) : (
             <div className="flex items-center space-x-2">
               <Button 
-                variant="outline" 
-                size="icon" 
-                className="w-8 h-8 p-0"
-                onClick={handleNewChat}
-                aria-label="New Chat"
-              >
+               variant="outline" 
+               size="icon" 
+               className="w-8 h-8 p-0 border-gray-200 dark:border-gray-600 bg-transparent dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+               onClick={handleNewChat}
+               aria-label="New Chat"
+                >
                 <Plus className="h-4 w-4" />
               </Button>
               <Button variant="ghost" size="icon" className="w-8 h-8 p-0">
@@ -252,7 +254,7 @@ export const Sidebar = ({ collapsed, setCollapsed, chatItems = [], onNewChat }: 
             displayChatItems.map((chat, index) => (
               <Link 
                 to={chat.href} 
-                key={chat.id || index} 
+                key={chat.id || index}
                 className={cn(
                   "block mb-1 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800",
                   location.pathname === chat.href && "bg-gray-100 dark:bg-gray-800",
@@ -260,13 +262,23 @@ export const Sidebar = ({ collapsed, setCollapsed, chatItems = [], onNewChat }: 
                 )}
               >
                 <div className="flex items-start">
-                  <span className="flex-shrink-0 mr-2 text-lg">{chat.icon}</span>
+                  {/* ---- UPDATED: Render image instead of icon ---- */}
+                  {chat.image && (
+                    <img
+                      src={chat.image.src}
+                      alt={chat.title}
+                      width={chat.image.width}
+                      height={chat.image.height}
+                      className="flex-shrink-0 mr-2"
+                      style={{ objectFit: "contain" }}
+                    />
+                  )}
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between">
                       <h3 className="font-medium text-sm truncate">{chat.title}</h3>
-                      <span className="text-xs text-gray-500 ml-2 flex-shrink-0">{chat.time}</span>
+                      <span className="text-xs text-gray-400 ml-2 flex-shrink-0">{chat.time}</span>
                     </div>
-                    <p className="text-xs text-gray-500 truncate">{chat.preview}</p>
+                    <p className="text-xs text-gray-400 truncate">{chat.preview}</p>
                   </div>
                 </div>
               </Link>
@@ -275,7 +287,7 @@ export const Sidebar = ({ collapsed, setCollapsed, chatItems = [], onNewChat }: 
         </div>
 
         {/* Footer */}
-        <div className="p-3 border-t border-gray-200 dark:border-gray-800">
+        <div className="p-3 border-t border-gray-200 dark:border-gray-500">
           {collapsed ? (
             <div className="flex flex-col items-center space-y-4">
               <Avatar className="h-8 w-8">
@@ -294,7 +306,7 @@ export const Sidebar = ({ collapsed, setCollapsed, chatItems = [], onNewChat }: 
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <Avatar className="h-8 w-8">
-                  <img src="public/lovable-uploads/c6a91980-5954-4039-8eb2-1eb60a0b573e.png" alt="User" />
+                  <img src="/lovable-uploads/user.png" alt="User" />
                 </Avatar>
                 <div>
                   <div className="flex items-center">
@@ -303,7 +315,6 @@ export const Sidebar = ({ collapsed, setCollapsed, chatItems = [], onNewChat }: 
                   </div>
                 </div>
               </div>
-              
               <Toggle
                 size="sm"
                 pressed={theme === "dark"}

@@ -166,7 +166,7 @@ export const ChatPage: React.FC = () => {
         
         const newChat: ChatItem = {
           id: newChatId,
-          icon: '💬', // Default icon, could be more dynamic based on content
+         // icon: '💬', // Default icon, could be more dynamic based on content
           title: chatTitle,
           preview: content.slice(0, 60) + (content.length > 60 ? '...' : ''),
           time: currentTime,
@@ -263,7 +263,7 @@ export const ChatPage: React.FC = () => {
   return (
     <div className="flex flex-col h-screen">
       {/* Chat Header */}
-      <header className="h-14 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-800">
+      <header className="h-14 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-500 bg-white dark:bg-chat-darker">
         <h1 className="font-semibold">
           {isNewChat ? 'New Chat' : (chatHistory.find(chat => chat.id === chatId)?.title || chatId)}
         </h1>
@@ -293,7 +293,7 @@ export const ChatPage: React.FC = () => {
       {/* Chat Messages */}
       <div className="flex-1 overflow-y-auto flex flex-col">
         {isNewChat ? (
-          <div className="flex-1 flex items-center justify-center">
+          <div className="flex-1 bg-white dark:bg-[#2A2B32] flex items-center justify-center">
             <h2 className="text-2xl font-light text-gray-600 dark:text-gray-300">
               What can I help with?
             </h2>
@@ -331,7 +331,7 @@ export const ChatPage: React.FC = () => {
       </div>
 
       {/* Chat Input */}
-      <div className="border-t border-gray-200 dark:border-gray-800 py-4 mt-auto">
+      <div className="border-t border-gray-200 dark:border-gray-500 py-4 mt-auto bg-white dark:bg-chat-darker">
         <ChatInput onSendMessage={handleSendMessage} disabled={isLoading} />
       </div>
     </div>

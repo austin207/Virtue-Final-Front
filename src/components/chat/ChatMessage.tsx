@@ -76,11 +76,11 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onRegenerateR
         <div className="flex-shrink-0 pt-1">
           {message.role === 'assistant' ? (
             <div className="h-8 w-8 rounded-full bg-ai-primary flex items-center justify-center">
-              <img src="public/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png" alt="AI" className="h-6 w-6" />
+              <img src="/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png" alt="AI" className="h-9 w-9" />
             </div>
           ) : (
             <Avatar className="h-8 w-8">
-              <img src="public/lovable-uploads/c6a91980-5954-4039-8eb2-1eb60a0b573e.png" alt="User" />
+              <img src="/lovable-uploads/user.png" alt="User" />
             </Avatar>
           )}
         </div>
@@ -121,24 +121,24 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onRegenerateR
               </div>
 
               <div className="flex items-center gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="h-8 gap-1.5 text-xs"
-                  onClick={handleRegenerate}
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="h-8 gap-1.5 text-xs border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800 bg-transparent dark:bg-transparent"
+                onClick={handleRegenerate}
                 >
-                  <RefreshCw className="h-3.5 w-3.5" /> 
-                  Regenerate Response
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="h-8 gap-1.5 text-xs" 
-                  onClick={handleCopy}
+              <RefreshCw className="h-3.5 w-3.5" /> 
+                Regenerate Response
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="h-8 gap-1.5 text-xs border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800 bg-transparent dark:bg-transparent"
+                onClick={handleCopy}
                 >
-                  <Copy className="h-3.5 w-3.5" /> 
-                  Copy
-                </Button>
+              <Copy className="h-3.5 w-3.5" /> 
+                Copy
+              </Button>
                 <Button 
                   variant="ghost" 
                   size="icon" 

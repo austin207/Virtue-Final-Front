@@ -54,12 +54,11 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				ai: {
-					primary: '#10a37f',
 					light: '#E9F9F1'
 				},
 				chat: {
-					light: '#F7F7F8',
-					dark: '#343541',
+					light: '#FFFFFF',
+					dark: '#2A2B32',
 					darker: '#2A2B32',
 				},
 				sidebar: {
