@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Copy, ThumbsUp, ThumbsDown, Share2, RefreshCw } from 'lucide-react';
 import { Avatar } from '@/components/ui/avatar';
@@ -77,7 +76,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onRegenerateR
         <div className="flex-shrink-0 pt-1">
           {message.role === 'assistant' ? (
             <div className="h-8 w-8 rounded-full bg-ai-primary flex items-center justify-center">
-              <img src="public/lovable-uploads/ae23f4b9-5616-4cef-bb07-90f13dee0f5e.png" alt="AI" className="h-5 w-5" />
+              <img src="public/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png" alt="AI" className="h-6 w-6" />
             </div>
           ) : (
             <Avatar className="h-8 w-8">

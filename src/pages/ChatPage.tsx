@@ -6,11 +6,13 @@ import { ChatMessage, MessageType } from '@/components/chat/ChatMessage';
 import { ChatInput } from '@/components/chat/ChatInput';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { generateText } from '@/services/llmService';
 
 export const ChatPage: React.FC = () => {
   const { chatId } = useParams<{ chatId: string }>();
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [isNewChat, setIsNewChat] = useState(chatId === 'new');
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -71,7 +73,7 @@ export const ChatPage: React.FC = () => {
     });
   };
 
-  const handleSendMessage = (content: string) => {
+  const handleSendMessage = async (content: string) => {
     // Add user message
     const userMessage: MessageType = {
       id: Date.now().toString(),
@@ -81,31 +83,52 @@ export const ChatPage: React.FC = () => {
     };
     
     setMessages(prev => [...prev, userMessage]);
+    setIsLoading(true);
     
-    // In a real app, you would send the message to an API here
-    // and wait for the response before adding the AI's message
-    
-    // For demo purposes, we'll simulate an AI response after a short delay
-    setTimeout(() => {
+    try {
+      // Call the custom LLM API
+      const response = await generateText({
+        prompt: content,
+        length: 150,
+        temperature: 0.8
+      });
+      
       const aiMessage: MessageType = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: "I'm just a demo AI assistant, so I can't provide a real response right now. In a real application, this would connect to an AI service like ChatGPT or a custom NLP backend.",
+        content: response.generated,
         timestamp: 'just now',
       };
       
       setMessages(prev => [...prev, aiMessage]);
-    }, 1000);
+    } catch (error) {
+      console.error('Error generating response:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to generate a response. Please try again.',
+        variant: 'destructive'
+      });
+      
+      // Add fallback message if API call fails
+      const fallbackMessage: MessageType = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: "I'm sorry, I couldn't process your request right now. The API connection might be down or experiencing issues.",
+        timestamp: 'just now',
+      };
+      
+      setMessages(prev => [...prev, fallbackMessage]);
+    } finally {
+      setIsLoading(false);
+    }
     
     if (isNewChat) {
       setIsNewChat(false);
       navigate(`/chat/${Date.now()}`);
-      // In a real app, you would create a new chat in the database
-      // and update the URL with the new chat ID
     }
   };
 
-  const handleRegenerateResponse = () => {
+  const handleRegenerateResponse = async () => {
     // Find the last assistant message and the corresponding user message
     const lastAssistantMessageIndex = [...messages].reverse().findIndex(m => m.role === 'assistant');
     
@@ -113,25 +136,53 @@ export const ChatPage: React.FC = () => {
       // Remove the last assistant message
       const lastIndex = messages.length - 1 - lastAssistantMessageIndex;
       const updatedMessages = [...messages];
-      updatedMessages.splice(lastIndex, 1);
+      const removedMessage = updatedMessages.splice(lastIndex, 1)[0];
       setMessages(updatedMessages);
       
-      // Simulate generating a new response
-      setTimeout(() => {
-        const newAiMessage: MessageType = {
-          id: Date.now().toString(),
-          role: 'assistant',
-          content: "This is a regenerated response! In a real application, this would be a new response from the AI service based on the same user query.",
-          timestamp: 'just now',
-        };
+      // Find the most recent user message to regenerate from
+      const userMessageIndex = lastIndex - 1 >= 0 && updatedMessages[lastIndex - 1].role === 'user' 
+        ? lastIndex - 1 
+        : updatedMessages.findIndex(m => m.role === 'user');
+      
+      if (userMessageIndex >= 0) {
+        const userPrompt = updatedMessages[userMessageIndex].content;
+        setIsLoading(true);
         
-        setMessages(prev => [...prev, newAiMessage]);
-        
-        toast({
-          title: 'Response regenerated',
-          description: 'A new response has been generated for you.',
-        });
-      }, 1000);
+        try {
+          // Call API with the user's original message
+          const response = await generateText({
+            prompt: userPrompt,
+            length: 150,
+            temperature: 0.9 // Slightly higher temperature for variation
+          });
+          
+          const newAiMessage: MessageType = {
+            id: Date.now().toString(),
+            role: 'assistant',
+            content: response.generated,
+            timestamp: 'just now',
+          };
+          
+          setMessages(prev => [...prev, newAiMessage]);
+          
+          toast({
+            title: 'Response regenerated',
+            description: 'A new response has been generated for you.',
+          });
+        } catch (error) {
+          console.error('Error regenerating response:', error);
+          toast({
+            title: 'Error',
+            description: 'Failed to regenerate a response. Please try again.',
+            variant: 'destructive'
+          });
+          
+          // Add back the original message if regeneration fails
+          setMessages(prev => [...prev, removedMessage]);
+        } finally {
+          setIsLoading(false);
+        }
+      }
     }
   };
 
@@ -181,11 +232,29 @@ export const ChatPage: React.FC = () => {
           ))
         )}
         <div ref={messagesEndRef} />
+        
+        {/* Loading indicator */}
+        {isLoading && (
+          <div className="py-8 px-4 md:px-6 bg-chat-light dark:bg-chat-dark">
+            <div className="max-w-4xl mx-auto flex gap-4">
+              <div className="flex-shrink-0 pt-1">
+                <div className="h-8 w-8 rounded-full bg-ai-primary flex items-center justify-center">
+                  <img src="public/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png" alt="AI" className="h-6 w-6 animate-pulse" />
+                </div>
+              </div>
+              <div className="flex-1">
+                <div className="h-6 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full max-w-md animate-pulse mb-2"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Chat Input */}
       <div className="border-t border-gray-200 dark:border-gray-800 py-4">
-        <ChatInput onSendMessage={handleSendMessage} />
+        <ChatInput onSendMessage={handleSendMessage} disabled={isLoading} />
       </div>
     </div>
   );
