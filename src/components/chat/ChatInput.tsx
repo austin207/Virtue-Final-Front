@@ -37,6 +37,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           placeholder={placeholder}
           disabled={disabled}
           className="w-full py-3 pl-11 pr-20 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-ai-primary dark:focus:ring-ai-primary disabled:opacity-50 disabled:cursor-not-allowed"
+          autoFocus
         />
         <div className="absolute right-3 flex space-x-2">
           <Button 

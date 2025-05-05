@@ -11,13 +11,16 @@ import { generateText } from '@/services/llmService';
 export const ChatPage: React.FC = () => {
   const { chatId } = useParams<{ chatId: string }>();
   const [messages, setMessages] = useState<MessageType[]>([]);
-  const [isNewChat, setIsNewChat] = useState(chatId === 'new');
+  const [isNewChat, setIsNewChat] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
   
   useEffect(() => {
+    // Check if it's a new chat based on the chatId
+    setIsNewChat(chatId === 'new');
+    
     if (chatId !== 'new') {
       // Mock data - in a real app, you'd fetch chat history from an API
       setMessages([
@@ -48,10 +51,9 @@ export const ChatPage: React.FC = () => {
           timeAgo: 'just now',
         }
       ]);
-      setIsNewChat(false);
     } else {
+      // Clear messages for new chat
       setMessages([]);
-      setIsNewChat(true);
     }
   }, [chatId]);
 
@@ -215,21 +217,23 @@ export const ChatPage: React.FC = () => {
       </header>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto flex flex-col">
         {isNewChat ? (
-          <div className="h-full flex items-center justify-center">
+          <div className="flex-1 flex items-center justify-center">
             <h2 className="text-2xl font-light text-gray-600 dark:text-gray-300">
               What can I help with?
             </h2>
           </div>
         ) : (
-          messages.map(message => (
-            <ChatMessage 
-              key={message.id} 
-              message={message} 
-              onRegenerateResponse={message.role === 'assistant' ? handleRegenerateResponse : undefined}
-            />
-          ))
+          <div className="flex-1">
+            {messages.map(message => (
+              <ChatMessage 
+                key={message.id} 
+                message={message} 
+                onRegenerateResponse={message.role === 'assistant' ? handleRegenerateResponse : undefined}
+              />
+            ))}
+          </div>
         )}
         <div ref={messagesEndRef} />
         
@@ -253,7 +257,7 @@ export const ChatPage: React.FC = () => {
       </div>
 
       {/* Chat Input */}
-      <div className="border-t border-gray-200 dark:border-gray-800 py-4">
+      <div className="border-t border-gray-200 dark:border-gray-800 py-4 mt-auto">
         <ChatInput onSendMessage={handleSendMessage} disabled={isLoading} />
       </div>
     </div>
