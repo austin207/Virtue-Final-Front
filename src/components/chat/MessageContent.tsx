@@ -2,7 +2,6 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { ReactMarkdownProps } from 'react-markdown/lib/ast-to-react';
 
 interface MessageContentProps {
   role: 'user' | 'assistant';
