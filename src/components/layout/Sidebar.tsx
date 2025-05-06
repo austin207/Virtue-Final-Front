@@ -68,62 +68,20 @@ export const Sidebar = ({ collapsed, setCollapsed, chatItems = [], onNewChat }: 
     },
   ];
 
-  // ---- UPDATED: Use image property for chat items ----
+  // Only keep the "New Chat" item
   const defaultChatItems = [
     {
-      id: "cosmic-evolution",
-      image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20},
-      title: "Cosmic Evolution",
-      preview: "Some 15 billion years ago the universe emerged from a hot, dense sea of...",
-      time: "9:34 PM",
-      href: "/chat/cosmic-evolution"
-    },
-    {
       id: "new",
-      image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20},
+      image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20 },
       title: "New Chat",
       preview: "Ask anything!",
       time: "Now",
       active: location.pathname === "/chat/new",
       href: "/chat/new"
-    },
-    {
-      image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20},
-      title: "Competitive Analysis research",
-      preview: "A competitive analysis of restaurant delivery mobile applications reveals key insights ...",
-      time: "Thu",
-      href: "/chat/competitive-analysis"
-    },
-    {
-      image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20},
-      title: "User Personas Research",
-      preview: "User persona research is a process of creating fictional but realistic representati...",
-      time: "Mon",
-      href: "/chat/user-personas"
-    },
-    {
-      image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20},
-      title: "Call To Action texts",
-      preview: 'here are a few examples of CTA button text\n1. "Get started now" ...',
-      time: "17 Oct",
-      href: "/chat/cta-texts"
-    },
-    {
-      image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20},
-      title: "Video Script Intros",
-      preview: "Hi, I'm [insert name here], and I'm on my way to Prague, one of the most beautiful...",
-      time: "10 Oct",
-      href: "/chat/video-scripts"
-    },
-    {
-      image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20},
-      title: "UX of a Banana",
-      preview: "Are you sure you want to delete this file? This action cannot be undone and the file...",
-      time: "21 Aug",
-      href: "/chat/ux-banana"
-    },
+    }
   ];
 
+  // Use either the provided chat items or just the new chat option if empty
   const displayChatItems = chatItems.length > 0 ? chatItems : defaultChatItems;
 
   return (
@@ -191,7 +149,9 @@ export const Sidebar = ({ collapsed, setCollapsed, chatItems = [], onNewChat }: 
                 <MessageSquare className="h-4 w-4 mr-2 text-green-500" />
                 CHATS
               </span>
-              <span className="ml-2 px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-xs">24</span>
+              <span className="ml-2 px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-xs">
+                {chatItems.length}
+              </span>
             </Button>
             <Button 
               variant={activeTab === "saved" ? "secondary" : "ghost"} 
@@ -203,7 +163,7 @@ export const Sidebar = ({ collapsed, setCollapsed, chatItems = [], onNewChat }: 
                 <BookMarked className="h-4 w-4 mr-2" />
                 SAVED
               </span>
-              <span className="ml-2 px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-xs">24</span>
+              <span className="ml-2 px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-xs">0</span>
             </Button>
           </div>
         )}
@@ -262,7 +222,6 @@ export const Sidebar = ({ collapsed, setCollapsed, chatItems = [], onNewChat }: 
                 )}
               >
                 <div className="flex items-start">
-                  {/* ---- UPDATED: Render image instead of icon ---- */}
                   {chat.image && (
                     <img
                       src={chat.image.src}
