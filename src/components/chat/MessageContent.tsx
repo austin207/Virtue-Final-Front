@@ -2,6 +2,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { ReactMarkdownProps } from 'react-markdown/lib/ast-to-react';
 
 interface MessageContentProps {
   role: 'user' | 'assistant';
@@ -20,9 +21,9 @@ export const MessageContent: React.FC<MessageContentProps> = ({ role, content })
         pre: ({ node, ...props }) => (
           <pre className="bg-gray-800 text-gray-100 rounded-md p-4 my-4 overflow-auto" {...props} />
         ),
-        code: ({ node, inline, className, children, ...props }) => {
+        code: ({ node, className, children, ...props }: any) => {
           const match = /language-(\w+)/.exec(className || '');
-          return inline ? (
+          return props.inline ? (
             <code className="bg-gray-200 dark:bg-gray-700 px-1 py-0.5 rounded text-sm" {...props}>
               {children}
             </code>
