@@ -1,20 +1,30 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Wand2, ArrowUp, Mic } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useParams } from 'react-router-dom';
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
   placeholder?: string;
-  disabled?: boolean; // Added this prop
+  disabled?: boolean;
 }
 
 export const ChatInput: React.FC<ChatInputProps> = ({ 
   onSendMessage,
   placeholder = "Ask questions, or type '/' for commands",
-  disabled = false // Added default value
+  disabled = false
 }) => {
   const [message, setMessage] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { chatId } = useParams<{ chatId: string }>();
+
+  // Focus input when it's a new chat or chatId changes
+  useEffect(() => {
+    if (inputRef.current && !disabled) {
+      inputRef.current.focus();
+    }
+  }, [chatId, disabled]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,13 +41,13 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           <Wand2 className="h-5 w-5" />
         </div>
         <input
+          ref={inputRef}
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder={placeholder}
           disabled={disabled}
           className="w-full py-3 pl-11 pr-20 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-ai-primary dark:focus:ring-ai-primary disabled:opacity-50 disabled:cursor-not-allowed"
-          autoFocus
         />
         <div className="absolute right-3 flex space-x-2">
           <Button 

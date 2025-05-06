@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
@@ -24,12 +25,17 @@ const getCurrentTimeString = (): string => {
   return `${hours % 12 || 12}:${minutes} ${hours >= 12 ? 'PM' : 'AM'}`;
 };
 
-export const ChatPage: React.FC = () => {
+interface ChatPageProps {
+  updateChatHistory?: (chatItem: ChatItem) => void;
+}
+
+export const ChatPage: React.FC<ChatPageProps> = ({ updateChatHistory }) => {
   const { chatId } = useParams<{ chatId: string }>();
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [isNewChat, setIsNewChat] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState<ChatItem[]>([]);
+  const [currentChat, setCurrentChat] = useState<ChatItem | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -42,78 +48,51 @@ export const ChatPage: React.FC = () => {
     }
   }, []);
 
-  // Save chat history to localStorage whenever it changes
-  useEffect(() => {
-    if (chatHistory.length > 0) {
-      localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
-    }
-  }, [chatHistory]);
-  
   useEffect(() => {
     // Check if it's a new chat based on the chatId
-    setIsNewChat(chatId === 'new');
+    const isNew = chatId === 'new';
+    setIsNewChat(isNew);
     
-    if (chatId !== 'new') {
-      // Try to load chat from history if it exists
-      const savedChat = chatHistory.find(chat => chat.id === chatId);
+    // Clear messages whenever chatId changes
+    setMessages([]);
+    
+    if (!isNew) {
+      // Load chat messages from localStorage based on chatId
+      loadChatMessages(chatId || '');
       
+      // Find the current chat in history
+      const savedChat = chatHistory.find(chat => chat.id === chatId);
       if (savedChat) {
-        // In a real app, you'd fetch chat messages based on the ID
-        // For now, we'll just show a mock message
-        setMessages([
-          {
-            id: '1',
-            role: 'user',
-            content: savedChat.preview,
-            timestamp: savedChat.time,
-          },
-          {
-            id: '2',
-            role: 'assistant',
-            content: "Here's a response to your query about " + savedChat.title,
-            timestamp: savedChat.time,
-          }
-        ]);
-      } else {
-        // Mock data - in a real app, you'd fetch chat history from an API
-        setMessages([
-          {
-            id: '1',
-            role: 'user',
-            content: "How do you define usability testing in UX design?",
-            timestamp: '24 Sep • 11:30 PM',
-          },
-          {
-            id: '2',
-            role: 'assistant',
-            content: "Usability testing is a technique used in user experience (UX) design to evaluate a product or service by testing it with representative users. The purpose of usability testing is to identify any usability problems, collect quantitative and qualitative data on users' experiences, and determine the overall user satisfaction with the product or service.",
-            timestamp: '24 Sep • 11:30 PM',
-          },
-          {
-            id: '3',
-            role: 'user',
-            content: "you're a UX writer now. Generate 3 versions of 404 error messages for a ecommerce clothing website.",
-            timestamp: '1 min ago',
-            timeAgo: 'just now',
-          },
-          {
-            id: '4',
-            role: 'assistant',
-            content: "Sure! Here are three different versions of 404 error messages for an ecommerce clothing website:\n\n1. Uh-oh! It looks like the page you're looking for isn't here. Please check the URL and try again or return to the homepage to continue shopping.\n\n2. Whoops! We can't seem to find the page you're looking for. Please double-check the URL or use our search bar to find what you need. You can also browse our collection of stylish clothes and accessories.\n\n3. Sorry, the page you're trying to access isn't available. It's possible that the item has sold out or the page has been removed. Please click back to return to the previous page or head over to our homepage to explore more.",
-            timestamp: '',
-            timeAgo: 'just now',
-          }
-        ]);
+        setCurrentChat(savedChat);
       }
     } else {
       // Clear messages for new chat
       setMessages([]);
+      setCurrentChat(null);
     }
   }, [chatId, chatHistory]);
 
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    if (chatId && chatId !== 'new' && messages.length > 0) {
+      localStorage.setItem(`chat_messages_${chatId}`, JSON.stringify(messages));
+    }
+  }, [messages, chatId]);
+
+  // Scroll to bottom whenever messages change
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const loadChatMessages = (chatId: string) => {
+    const savedMessages = localStorage.getItem(`chat_messages_${chatId}`);
+    if (savedMessages) {
+      setMessages(JSON.parse(savedMessages));
+    } else {
+      // If no saved messages, start with empty array
+      setMessages([]);
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -135,7 +114,7 @@ export const ChatPage: React.FC = () => {
       id: Date.now().toString(),
       role: 'user',
       content,
-      timestamp: 'just now',
+      timestamp: getCurrentTimeString(),
     };
     
     setMessages(prev => [...prev, userMessage]);
@@ -153,7 +132,7 @@ export const ChatPage: React.FC = () => {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: response.generated,
-        timestamp: 'just now',
+        timestamp: getCurrentTimeString(),
       };
       
       setMessages(prev => [...prev, aiMessage]);
@@ -166,19 +145,28 @@ export const ChatPage: React.FC = () => {
         
         const newChat: ChatItem = {
           id: newChatId,
-         // icon: '💬', // Default icon, could be more dynamic based on content
+          image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20 },
           title: chatTitle,
           preview: content.slice(0, 60) + (content.length > 60 ? '...' : ''),
           time: currentTime,
           href: `/chat/${newChatId}`
         };
         
-        // Update chat history
+        // Update chat history through prop if available
+        if (updateChatHistory) {
+          updateChatHistory(newChat);
+        }
+        
+        // Update chat history in state
         setChatHistory(prev => [newChat, ...prev.filter(chat => chat.id !== 'new')]);
+        
+        // Save the current messages to the new chat's storage
+        localStorage.setItem(`chat_messages_${newChatId}`, JSON.stringify([userMessage, aiMessage]));
         
         // Navigate to the new chat
         setIsNewChat(false);
         navigate(`/chat/${newChatId}`);
+        setCurrentChat(newChat);
       }
     } catch (error) {
       console.error('Error generating response:', error);
@@ -193,7 +181,7 @@ export const ChatPage: React.FC = () => {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: "I'm sorry, I couldn't process your request right now. The API connection might be down or experiencing issues.",
-        timestamp: 'just now',
+        timestamp: getCurrentTimeString(),
       };
       
       setMessages(prev => [...prev, fallbackMessage]);
@@ -234,10 +222,15 @@ export const ChatPage: React.FC = () => {
             id: Date.now().toString(),
             role: 'assistant',
             content: response.generated,
-            timestamp: 'just now',
+            timestamp: getCurrentTimeString(),
           };
           
           setMessages(prev => [...prev, newAiMessage]);
+          
+          // Save the updated messages to localStorage
+          if (chatId && chatId !== 'new') {
+            localStorage.setItem(`chat_messages_${chatId}`, JSON.stringify([...updatedMessages, newAiMessage]));
+          }
           
           toast({
             title: 'Response regenerated',
@@ -265,7 +258,7 @@ export const ChatPage: React.FC = () => {
       {/* Chat Header */}
       <header className="h-14 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-500 bg-white dark:bg-chat-darker">
         <h1 className="font-semibold">
-          {isNewChat ? 'New Chat' : (chatHistory.find(chat => chat.id === chatId)?.title || chatId)}
+          {isNewChat ? 'New Chat' : (currentChat?.title || 'Chat')}
         </h1>
         <div className="flex items-center space-x-2">
           <Button 
@@ -317,7 +310,7 @@ export const ChatPage: React.FC = () => {
             <div className="max-w-4xl mx-auto flex gap-4">
               <div className="flex-shrink-0 pt-1">
                 <div className="h-8 w-8 rounded-full bg-ai-primary flex items-center justify-center">
-                  <img src="public/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png" alt="AI" className="h-6 w-6 animate-pulse" />
+                  <img src="/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png" alt="AI" className="h-6 w-6 animate-pulse" />
                 </div>
               </div>
               <div className="flex-1">

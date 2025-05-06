@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { ChatPage } from "@/pages/ChatPage";
@@ -15,8 +15,9 @@ import { ChatItem } from "@/components/layout/Sidebar";
 
 const queryClient = new QueryClient();
 
-const App = () => {
+const AppContent = () => {
   const [chatHistory, setChatHistory] = useState<ChatItem[]>([]);
+  const navigate = useNavigate();
 
   // Load chat history from localStorage on mount
   useEffect(() => {
@@ -26,35 +27,55 @@ const App = () => {
     }
   }, []);
 
+  // Save chat history to localStorage whenever it changes
+  useEffect(() => {
+    if (chatHistory.length > 0) {
+      localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+    }
+  }, [chatHistory]);
+
   const handleNewChat = () => {
-    window.location.href = '/chat/new';
+    navigate('/chat/new');
+  };
+
+  const updateChatHistory = (newChat: ChatItem) => {
+    setChatHistory(prev => {
+      const filtered = prev.filter(chat => chat.id !== newChat.id);
+      return [newChat, ...filtered];
+    });
   };
 
   return (
+    <ThemeProvider defaultTheme="dark">
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <Routes>
+          <Route path="/" element={
+            <MainLayout 
+              chatItems={chatHistory}
+              onNewChat={handleNewChat} 
+            />
+          }>
+            <Route index element={<Navigate to="/chat/new" replace />} />
+            <Route path="chat/:chatId" element={<ChatPage updateChatHistory={updateChatHistory} />} />
+            <Route path="browse" element={<EmptyPage />} />
+            <Route path="collections" element={<EmptyPage />} />
+            <Route path="settings" element={<EmptyPage />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </TooltipProvider>
+    </ThemeProvider>
+  );
+};
+
+const App = () => {
+  return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="dark">
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={
-                <MainLayout 
-                  chatItems={chatHistory}
-                  onNewChat={handleNewChat} 
-                />
-              }>
-                <Route index element={<Navigate to="/chat/new" replace />} />
-                <Route path="chat/:chatId" element={<ChatPage />} />
-                <Route path="browse" element={<EmptyPage />} />
-                <Route path="collections" element={<EmptyPage />} />
-                <Route path="settings" element={<EmptyPage />} />
-              </Route>
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </ThemeProvider>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
     </QueryClientProvider>
   );
 };
