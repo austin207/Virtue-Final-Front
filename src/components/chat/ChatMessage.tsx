@@ -1,9 +1,12 @@
+
 import React, { useState } from 'react';
 import { Copy, ThumbsUp, ThumbsDown, Share2, RefreshCw } from 'lucide-react';
 import { Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export type MessageType = {
   id: string;
@@ -96,7 +99,41 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onRegenerateR
           </div>
 
           <div className="prose dark:prose-invert prose-sm sm:prose-base max-w-none">
-            {message.content}
+            {message.role === 'assistant' ? (
+              <ReactMarkdown 
+                remarkPlugins={[remarkGfm]}
+                className="break-words"
+                components={{
+                  pre: ({ node, ...props }) => (
+                    <pre className="bg-gray-800 text-gray-100 rounded-md p-4 my-4 overflow-auto" {...props} />
+                  ),
+                  code: ({ node, inline, ...props }) => (
+                    inline 
+                      ? <code className="bg-gray-200 dark:bg-gray-700 px-1 py-0.5 rounded text-sm" {...props} />
+                      : <code {...props} />
+                  ),
+                  a: ({ node, ...props }) => (
+                    <a className="text-blue-600 hover:underline dark:text-blue-400" {...props} />
+                  ),
+                  ul: ({ node, ...props }) => (
+                    <ul className="list-disc pl-6 my-4" {...props} />
+                  ),
+                  ol: ({ node, ...props }) => (
+                    <ol className="list-decimal pl-6 my-4" {...props} />
+                  ),
+                  li: ({ node, ...props }) => (
+                    <li className="my-1" {...props} />
+                  ),
+                  blockquote: ({ node, ...props }) => (
+                    <blockquote className="border-l-4 border-gray-300 dark:border-gray-600 pl-4 italic my-4" {...props} />
+                  )
+                }}
+              >
+                {message.content}
+              </ReactMarkdown>
+            ) : (
+              <div>{message.content}</div>
+            )}
           </div>
 
           {message.role === 'assistant' && (
