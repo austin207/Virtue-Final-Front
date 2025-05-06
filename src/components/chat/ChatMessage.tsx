@@ -1,12 +1,10 @@
 
 import React, { useState } from 'react';
-import { Copy, ThumbsUp, ThumbsDown, Share2, RefreshCw } from 'lucide-react';
-import { Avatar } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import { MessageAvatar } from './MessageAvatar';
+import { MessageContent } from './MessageContent';
+import { MessageActions } from './MessageActions';
 
 export type MessageType = {
   id: string;
@@ -77,15 +75,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onRegenerateR
     )}>
       <div className="max-w-4xl mx-auto flex gap-4">
         <div className="flex-shrink-0 pt-1">
-          {message.role === 'assistant' ? (
-            <div className="h-8 w-8 rounded-full bg-ai-primary flex items-center justify-center">
-              <img src="/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png" alt="AI" className="h-9 w-9" />
-            </div>
-          ) : (
-            <Avatar className="h-8 w-8">
-              <img src="/lovable-uploads/user.png" alt="User" />
-            </Avatar>
-          )}
+          <MessageAvatar role={message.role} />
         </div>
 
         <div className="flex-1">
@@ -99,99 +89,17 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onRegenerateR
           </div>
 
           <div className="prose dark:prose-invert prose-sm sm:prose-base max-w-none">
-            {message.role === 'assistant' ? (
-              <ReactMarkdown 
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  pre: (props) => (
-                    <pre className="bg-gray-800 text-gray-100 rounded-md p-4 my-4 overflow-auto" {...props} />
-                  ),
-                  code: ({ node, className, children, ...props }) => {
-                    const match = /language-(\w+)/.exec(className || '');
-                    return !className ? (
-                      <code className="bg-gray-200 dark:bg-gray-700 px-1 py-0.5 rounded text-sm" {...props}>
-                        {children}
-                      </code>
-                    ) : (
-                      <code className={className} {...props}>
-                        {children}
-                      </code>
-                    );
-                  },
-                  a: (props) => (
-                    <a className="text-blue-600 hover:underline dark:text-blue-400" {...props} />
-                  ),
-                  ul: (props) => (
-                    <ul className="list-disc pl-6 my-4" {...props} />
-                  ),
-                  ol: (props) => (
-                    <ol className="list-decimal pl-6 my-4" {...props} />
-                  ),
-                  li: (props) => (
-                    <li className="my-1" {...props} />
-                  ),
-                  blockquote: (props) => (
-                    <blockquote className="border-l-4 border-gray-300 dark:border-gray-600 pl-4 italic my-4" {...props} />
-                  )
-                }}
-              >
-                {message.content}
-              </ReactMarkdown>
-            ) : (
-              <div>{message.content}</div>
-            )}
+            <MessageContent role={message.role} content={message.content} />
           </div>
 
           {message.role === 'assistant' && (
-            <div className="flex items-center justify-between mt-4">
-              <div className="flex items-center gap-2">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className={cn("rounded-full h-8 w-8", reaction === 'like' && "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300")}
-                  onClick={() => handleReaction('like')}
-                >
-                  <ThumbsUp className="h-4 w-4" />
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className={cn("rounded-full h-8 w-8", reaction === 'dislike' && "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300")}
-                  onClick={() => handleReaction('dislike')}
-                >
-                  <ThumbsDown className="h-4 w-4" />
-                </Button>
-              </div>
-
-              <div className="flex items-center gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="h-8 gap-1.5 text-xs border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800 bg-transparent dark:bg-transparent"
-                onClick={handleRegenerate}
-                >
-              <RefreshCw className="h-3.5 w-3.5" /> 
-                Regenerate Response
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="h-8 gap-1.5 text-xs border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800 bg-transparent dark:bg-transparent"
-                onClick={handleCopy}
-                >
-              <Copy className="h-3.5 w-3.5" /> 
-                Copy
-              </Button>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-8 w-8 text-gray-500"
-                  onClick={handleShare}
-                >
-                  <Share2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
+            <MessageActions 
+              reaction={reaction}
+              onReaction={handleReaction}
+              onCopy={handleCopy}
+              onShare={handleShare}
+              onRegenerate={onRegenerateResponse ? handleRegenerate : undefined}
+            />
           )}
         </div>
       </div>
