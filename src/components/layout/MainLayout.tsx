@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Sidebar, ChatItem } from '@/components/layout/Sidebar';
+import { Sidebar, ChatItem } from '@/components/layout/sidebar/Sidebar';
 
 type MainLayoutProps = {
   chatItems?: ChatItem[];
