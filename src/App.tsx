@@ -11,7 +11,7 @@ import { EmptyPage } from "@/pages/EmptyPage";
 import NotFound from "./pages/NotFound";
 import "./App.css";
 import { useState, useEffect } from "react";
-import { ChatItem } from "@/components/layout/Sidebar";
+import { ChatItem } from "@/components/layout/sidebar/types";
 
 const queryClient = new QueryClient();
 

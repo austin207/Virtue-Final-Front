@@ -1,5 +1,4 @@
-
-import { ChatItem } from '@/components/layout/Sidebar';
+import { ChatItem } from '@/components/layout/sidebar/types';
 
 // Helper function to generate chat title from prompt
 export const generateChatTitle = (prompt: string): string => {

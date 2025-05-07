@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ChatInput } from '@/components/chat/ChatInput';
 import { useToast } from '@/hooks/use-toast';
 import { generateText } from '@/services/llmService';
-import { ChatItem } from '@/components/layout/Sidebar';
+import { ChatItem } from '@/components/layout/sidebar/types';
 import { ChatHeader } from '@/components/chat/ChatHeader';
 import { ChatContainer } from '@/components/chat/ChatContainer';
 import { 
