@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     // Production build optimizations
-    minify: 'terser',
+    minify: mode === 'production' ? 'terser' : false,
     terserOptions: {
       compress: {
         drop_console: mode === 'production', // Only remove console logs in production
