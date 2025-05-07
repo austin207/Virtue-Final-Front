@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Wand2, ArrowUp, Mic, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -18,7 +17,7 @@ interface ChatInputProps {
   tokensPerSecond?: number | null;
 }
 
-export const ChatInput: React.FC<ChatInputProps> = ({ 
+export const ChatInput: React.FC<ChatInputProps> = ({
   onSendMessage,
   placeholder = "Ask questions, or type '/' for commands",
   disabled = false,
@@ -27,7 +26,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   setTemperature,
   length = 150,
   setLength,
-  tokensPerSecond = null
+  tokensPerSecond = null,
 }) => {
   const [message, setMessage] = useState('');
   const [showQuickAssistance, setShowQuickAssistance] = useState(false);
@@ -56,15 +55,15 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   return (
     <>
       {advancedMode && (
-        <AdvancedSettings 
+        <AdvancedSettings
           temperature={temperature}
-          setTemperature={(value) => setTemperature && setTemperature(value)}
+          setTemperature={value => setTemperature && setTemperature(value)}
           length={length}
-          setLength={(value) => setLength && setLength(value)}
+          setLength={value => setLength && setLength(value)}
           tokensPerSecond={tokensPerSecond}
         />
       )}
-      
+
       <div className={`relative max-w-3xl mx-auto w-full px-4 pb-8 pt-4 ${advancedMode ? 'mr-64' : ''}`}>
         <form onSubmit={handleSubmit} className="relative flex items-center">
           <div className="absolute left-3 text-gray-500">
@@ -74,15 +73,15 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             ref={inputRef}
             type="text"
             value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={e => setMessage(e.target.value)}
             placeholder={placeholder}
             disabled={disabled}
             className="w-full py-3 pl-11 pr-20 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-ai-primary dark:focus:ring-ai-primary disabled:opacity-50 disabled:cursor-not-allowed"
           />
           <div className="absolute right-3 flex space-x-2">
-            <Button 
+            <Button
               type="submit"
-              size="icon" 
+              size="icon"
               className="h-8 w-8 bg-ai-primary hover:bg-ai-primary/90 text-white rounded-lg"
               disabled={!message.trim() || disabled}
             >
@@ -92,28 +91,28 @@ export const ChatInput: React.FC<ChatInputProps> = ({
               type="button"
               variant="outline"
               size="icon"
-              className="h-8 w-8 rounded-lg border-gray-200 dark:border-gray-600 bg-transparent dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" 
+              className="h-8 w-8 rounded-lg border-gray-200 dark:border-gray-600 bg-transparent dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
               onClick={openQuickAssistance}
               title="Quick Assistance"
-              >
+            >
               <HelpCircle className="h-4 w-4" />
             </Button>
             <Button
               type="button"
               variant="outline"
               size="icon"
-              className="h-8 w-8 rounded-lg border-gray-200 dark:border-gray-600 bg-transparent dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" 
+              className="h-8 w-8 rounded-lg border-gray-200 dark:border-gray-600 bg-transparent dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
               disabled={disabled}
-              >
+            >
               <Mic className="h-4 w-4" />
             </Button>
           </div>
         </form>
       </div>
 
-      <QuickAssistanceModal 
-        isOpen={showQuickAssistance} 
-        onClose={() => setShowQuickAssistance(false)} 
+      <QuickAssistanceModal
+        isOpen={showQuickAssistance}
+        onClose={() => setShowQuickAssistance(false)}
       />
     </>
   );

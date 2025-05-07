@@ -1,6 +1,4 @@
-
-import { useState } from 'react';
-import { generateText } from '@/services/llmService';
+import { streamGenerateText } from '@/services/llmService'; // <-- use streaming!
 import { ChatItem } from '@/components/layout/sidebar/types';
 import { MessageType } from '@/components/chat/ChatMessage';
 import { 
@@ -34,57 +32,57 @@ export const useChatActions = ({
   toast,
   updateChatHistory
 }: ChatActionsProps) => {
-  
+
+  // Streaming regenerate (optional: you can keep this as batch if you want)
   const handleRegenerateResponse = async () => {
-    // Find the last assistant message and the corresponding user message
     const lastAssistantMessageIndex = [...messages].reverse().findIndex(m => m.role === 'assistant');
-    
     if (lastAssistantMessageIndex >= 0) {
-      // Remove the last assistant message
       const lastIndex = messages.length - 1 - lastAssistantMessageIndex;
       const updatedMessages = [...messages];
       const removedMessage = updatedMessages.splice(lastIndex, 1)[0];
       setMessages(updatedMessages);
-      
-      // Find the most recent user message to regenerate from
+
       const userMessageIndex = lastIndex - 1 >= 0 && updatedMessages[lastIndex - 1].role === 'user' 
         ? lastIndex - 1 
         : updatedMessages.findIndex(m => m.role === 'user');
-      
+
       if (userMessageIndex >= 0) {
         const userPrompt = updatedMessages[userMessageIndex].content;
         setIsLoading(true);
         setTokensPerSecond(null);
+        let aiContent = "";
         const startTime = Date.now();
-        
+        const newAiMessage: MessageType = {
+          id: Date.now().toString(),
+          role: 'assistant',
+          content: "",
+          timestamp: getCurrentTimeString(),
+        };
+        setMessages(prev => [...prev, newAiMessage]);
+        let tokenCount = 0;
+
         try {
-          // Call API with the user's original message
-          const response = await generateText({
-            prompt: userPrompt,
-            length,
-            temperature
-          });
-          
+          await streamGenerateText(
+            { prompt: userPrompt, length: 150, temperature: 0.8 },
+            (token) => {
+              aiContent += token;
+              tokenCount += 1;
+              setMessages(prev => {
+                const updated = [...prev];
+                updated[updated.length - 1] = { ...newAiMessage, content: aiContent };
+                return updated;
+              });
+            }
+          );
           const endTime = Date.now();
           const timeInSeconds = (endTime - startTime) / 1000;
-          // Calculate approximate tokens (assuming ~4 chars per token)
-          const estimatedTokens = response.generated.length / 4;
-          setTokensPerSecond(estimatedTokens / timeInSeconds);
-          
-          const newAiMessage: MessageType = {
-            id: Date.now().toString(),
-            role: 'assistant',
-            content: response.generated,
-            timestamp: getCurrentTimeString(),
-          };
-          
-          setMessages(prev => [...prev, newAiMessage]);
-          
-          // Save the updated messages to localStorage
+          setTokensPerSecond(tokenCount / (timeInSeconds || 1));
+
+          // Save updated messages to localStorage
           if (chatId && chatId !== 'new') {
-            saveChatMessages(chatId, [...updatedMessages, newAiMessage]);
+            saveChatMessages(chatId, [...updatedMessages, { ...newAiMessage, content: aiContent }]);
           }
-          
+
           toast({
             title: 'Response regenerated',
             description: 'A new response has been generated for you.',
@@ -96,8 +94,6 @@ export const useChatActions = ({
             description: 'Failed to regenerate a response. Please try again.',
             variant: 'destructive'
           });
-          
-          // Add back the original message if regeneration fails
           setMessages(prev => [...prev, removedMessage]);
         } finally {
           setIsLoading(false);
@@ -106,49 +102,55 @@ export const useChatActions = ({
     }
   };
 
+  // 🟢 STREAMING SEND MESSAGE
   const handleSendMessage = async (content: string, temp: number, maxLength: number) => {
-    // Add user message
     const userMessage: MessageType = {
       id: Date.now().toString(),
       role: 'user',
       content,
       timestamp: getCurrentTimeString(),
     };
-    
+
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
     setTokensPerSecond(null);
+
+    let aiContent = "";
+    const aiMessage: MessageType = {
+      id: (Date.now() + 1).toString(),
+      role: 'assistant',
+      content: "",
+      timestamp: getCurrentTimeString(),
+    };
+    setMessages(prev => [...prev, aiMessage]);
+
+    let tokenCount = 0;
     const startTime = Date.now();
-    
+
     try {
-      // Call the custom LLM API
-      const response = await generateText({
-        prompt: content,
-        length: maxLength,
-        temperature: temp
-      });
-      
+      await streamGenerateText(
+        { prompt: content, length: maxLength, temperature: temp },
+        (token) => {
+          aiContent += token;
+          tokenCount += 1;
+          setMessages(prev => {
+            const updated = [...prev];
+            updated[updated.length - 1] = { ...aiMessage, content: aiContent };
+            return updated;
+          });
+        }
+      );
+
       const endTime = Date.now();
       const timeInSeconds = (endTime - startTime) / 1000;
-      // Calculate approximate tokens (assuming ~4 chars per token)
-      const estimatedTokens = response.generated.length / 4;
-      setTokensPerSecond(estimatedTokens / timeInSeconds);
-      
-      const aiMessage: MessageType = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: response.generated,
-        timestamp: getCurrentTimeString(),
-      };
-      
-      setMessages(prev => [...prev, aiMessage]);
-      
+      setTokensPerSecond(tokenCount / (timeInSeconds || 1));
+
       // If this is a new chat, create a new chat in history and redirect
       if (isNewChat) {
         const newChatId = Date.now().toString();
         const chatTitle = generateChatTitle(content);
         const currentTime = getCurrentTimeString();
-        
+
         const newChat: ChatItem = {
           id: newChatId,
           image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20 },
@@ -157,16 +159,11 @@ export const useChatActions = ({
           time: currentTime,
           href: `/chat/${newChatId}`
         };
-        
-        // Update chat history through prop if available
+
         if (updateChatHistory) {
           updateChatHistory(newChat);
         }
-        
-        // Save the current messages to the new chat's storage
-        saveChatMessages(newChatId, [userMessage, aiMessage]);
-        
-        // Navigate to the new chat
+        saveChatMessages(newChatId, [userMessage, { ...aiMessage, content: aiContent }]);
         navigate(`/chat/${newChatId}`);
       }
     } catch (error) {
@@ -176,15 +173,14 @@ export const useChatActions = ({
         description: 'Failed to generate a response. Please try again.',
         variant: 'destructive'
       });
-      
-      // Add fallback message if API call fails
+
       const fallbackMessage: MessageType = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: "I'm sorry, I couldn't process your request right now. The API connection might be down or experiencing issues.",
         timestamp: getCurrentTimeString(),
       };
-      
+
       setMessages(prev => [...prev, fallbackMessage]);
     } finally {
       setIsLoading(false);
