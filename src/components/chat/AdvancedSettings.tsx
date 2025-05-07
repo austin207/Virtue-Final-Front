@@ -20,7 +20,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
   tokensPerSecond
 }) => {
   return (
-    <div className="p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-600 space-y-4">
+    <div className="fixed right-0 top-14 w-64 h-calc[100vh-56px] p-4 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-600 space-y-4 z-10">
       <div className="space-y-2">
         <div className="flex justify-between items-center">
           <Label htmlFor="temperature" className="text-sm font-medium">
@@ -35,7 +35,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
         <Slider
           id="temperature"
           min={0}
-          max={1}
+          max={2}
           step={0.1}
           value={[temperature]}
           onValueChange={(values) => setTemperature(values[0])}
@@ -53,8 +53,8 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
         <Slider
           id="length"
           min={50}
-          max={500}
-          step={10}
+          max={4000}
+          step={50}
           value={[length]}
           onValueChange={(values) => setLength(values[0])}
           className="w-full"

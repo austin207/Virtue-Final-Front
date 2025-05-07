@@ -65,7 +65,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         />
       )}
       
-      <div className="relative max-w-3xl mx-auto w-full px-4 pb-8 pt-4">
+      <div className={`relative max-w-3xl mx-auto w-full px-4 pb-8 pt-4 ${advancedMode ? 'mr-64' : ''}`}>
         <form onSubmit={handleSubmit} className="relative flex items-center">
           <div className="absolute left-3 text-gray-500">
             <Wand2 className="h-5 w-5" />
