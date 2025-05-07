@@ -20,21 +20,23 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+    extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
+    mainFields: ['module', 'jsnext:main', 'jsnext'],
   },
   build: {
     // Production build optimizations
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true, // Remove console logs in production
-        drop_debugger: true
+        drop_console: mode === 'production', // Only remove console logs in production
+        drop_debugger: mode === 'production'
       }
     },
     rollupOptions: {
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui-components': ['@/components/ui'],
+          'ui-components': ['@/components/ui/index.ts'],
           'chat-features': ['@/components/chat']
         }
       }
