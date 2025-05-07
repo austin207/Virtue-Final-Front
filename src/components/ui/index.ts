@@ -17,6 +17,8 @@ export * from "./form";
 export * from "./hover-card";
 export * from "./input";
 export * from "./input-otp";
+export * from "./popover";
+export * from "./radio-group";
 export * from "./separator";
 export * from "./sheet";
 export * from "./skeleton";

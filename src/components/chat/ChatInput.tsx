@@ -4,17 +4,30 @@ import { Wand2, ArrowUp, Mic, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useParams } from 'react-router-dom';
 import { QuickAssistanceModal } from '@/components/chat/QuickAssistanceModal';
+import { AdvancedSettings } from '@/components/chat/AdvancedSettings';
 
 interface ChatInputProps {
-  onSendMessage: (message: string) => void;
+  onSendMessage: (message: string, temperature?: number, length?: number) => void;
   placeholder?: string;
   disabled?: boolean;
+  advancedMode?: boolean;
+  temperature?: number;
+  setTemperature?: (value: number) => void;
+  length?: number;
+  setLength?: (value: number) => void;
+  tokensPerSecond?: number | null;
 }
 
 export const ChatInput: React.FC<ChatInputProps> = ({ 
   onSendMessage,
   placeholder = "Ask questions, or type '/' for commands",
-  disabled = false
+  disabled = false,
+  advancedMode = false,
+  temperature = 0.8,
+  setTemperature,
+  length = 150,
+  setLength,
+  tokensPerSecond = null
 }) => {
   const [message, setMessage] = useState('');
   const [showQuickAssistance, setShowQuickAssistance] = useState(false);
@@ -31,7 +44,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim()) {
-      onSendMessage(message);
+      onSendMessage(message, temperature, length);
       setMessage('');
     }
   };
@@ -42,6 +55,16 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 
   return (
     <>
+      {advancedMode && (
+        <AdvancedSettings 
+          temperature={temperature}
+          setTemperature={(value) => setTemperature && setTemperature(value)}
+          length={length}
+          setLength={(value) => setLength && setLength(value)}
+          tokensPerSecond={tokensPerSecond}
+        />
+      )}
+      
       <div className="relative max-w-3xl mx-auto w-full px-4 pb-8 pt-4">
         <form onSubmit={handleSubmit} className="relative flex items-center">
           <div className="absolute left-3 text-gray-500">

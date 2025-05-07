@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ChatInput } from '@/components/chat/ChatInput';
 import { useToast } from '@/hooks/use-toast';
@@ -18,22 +18,48 @@ import { MessageType } from '@/components/chat/ChatMessage';
 
 interface ChatPageProps {
   updateChatHistory?: (chatItem: ChatItem) => void;
+  advancedMode?: boolean;
+  setAdvancedMode?: (mode: boolean) => void;
 }
 
-export const ChatPage: React.FC<ChatPageProps> = ({ updateChatHistory }) => {
+export const ChatPage: React.FC<ChatPageProps> = ({ 
+  updateChatHistory,
+  advancedMode = false,
+  setAdvancedMode
+}) => {
   const { chatId } = useParams<{ chatId: string }>();
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [isNewChat, setIsNewChat] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState<ChatItem[]>([]);
   const [currentChat, setCurrentChat] = useState<ChatItem | null>(null);
+  const [temperature, setTemperature] = useState(0.8);
+  const [length, setLength] = useState(150);
+  const [tokensPerSecond, setTokensPerSecond] = useState<number | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
   
   // Load chat history from localStorage on mount
   useEffect(() => {
     setChatHistory(loadChatHistory());
+    
+    // Load advanced settings from localStorage if available
+    const savedSettings = localStorage.getItem('advancedSettings');
+    if (savedSettings) {
+      try {
+        const { temperature: savedTemp, length: savedLength } = JSON.parse(savedSettings);
+        if (savedTemp !== undefined) setTemperature(savedTemp);
+        if (savedLength !== undefined) setLength(savedLength);
+      } catch (error) {
+        console.error("Failed to parse advanced settings:", error);
+      }
+    }
   }, []);
+  
+  // Save advanced settings whenever they change
+  useEffect(() => {
+    localStorage.setItem('advancedSettings', JSON.stringify({ temperature, length }));
+  }, [temperature, length]);
 
   useEffect(() => {
     // Check if it's a new chat based on the chatId
@@ -86,14 +112,22 @@ export const ChatPage: React.FC<ChatPageProps> = ({ updateChatHistory }) => {
       if (userMessageIndex >= 0) {
         const userPrompt = updatedMessages[userMessageIndex].content;
         setIsLoading(true);
+        setTokensPerSecond(null);
+        const startTime = Date.now();
         
         try {
           // Call API with the user's original message
           const response = await generateText({
             prompt: userPrompt,
-            length: 150,
-            temperature: 0.9 // Slightly higher temperature for variation
+            length,
+            temperature
           });
+          
+          const endTime = Date.now();
+          const timeInSeconds = (endTime - startTime) / 1000;
+          // Calculate approximate tokens (assuming ~4 chars per token)
+          const estimatedTokens = response.generated.length / 4;
+          setTokensPerSecond(estimatedTokens / timeInSeconds);
           
           const newAiMessage: MessageType = {
             id: Date.now().toString(),
@@ -130,7 +164,7 @@ export const ChatPage: React.FC<ChatPageProps> = ({ updateChatHistory }) => {
     }
   };
 
-  const handleSendMessage = async (content: string) => {
+  const handleSendMessage = async (content: string, temp = temperature, maxLength = length) => {
     // Add user message
     const userMessage: MessageType = {
       id: Date.now().toString(),
@@ -141,14 +175,22 @@ export const ChatPage: React.FC<ChatPageProps> = ({ updateChatHistory }) => {
     
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
+    setTokensPerSecond(null);
+    const startTime = Date.now();
     
     try {
       // Call the custom LLM API
       const response = await generateText({
         prompt: content,
-        length: 150,
-        temperature: 0.8
+        length: maxLength,
+        temperature: temp
       });
+      
+      const endTime = Date.now();
+      const timeInSeconds = (endTime - startTime) / 1000;
+      // Calculate approximate tokens (assuming ~4 chars per token)
+      const estimatedTokens = response.generated.length / 4;
+      setTokensPerSecond(estimatedTokens / timeInSeconds);
       
       const aiMessage: MessageType = {
         id: (Date.now() + 1).toString(),
@@ -217,6 +259,8 @@ export const ChatPage: React.FC<ChatPageProps> = ({ updateChatHistory }) => {
       <ChatHeader 
         isNewChat={isNewChat}
         chatTitle={currentChat?.title}
+        advancedMode={advancedMode}
+        setAdvancedMode={setAdvancedMode}
       />
 
       <ChatContainer 
@@ -227,7 +271,16 @@ export const ChatPage: React.FC<ChatPageProps> = ({ updateChatHistory }) => {
       />
 
       <div className="border-t border-gray-200 dark:border-gray-500 py-4 mt-auto bg-white dark:bg-chat-darker">
-        <ChatInput onSendMessage={handleSendMessage} disabled={isLoading} />
+        <ChatInput 
+          onSendMessage={handleSendMessage} 
+          disabled={isLoading}
+          advancedMode={advancedMode}
+          temperature={temperature}
+          setTemperature={setTemperature}
+          length={length}
+          setLength={setLength}
+          tokensPerSecond={tokensPerSecond}
+        />
       </div>
     </div>
   );

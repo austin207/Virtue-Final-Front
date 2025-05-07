@@ -28,9 +28,10 @@ const queryClient = new QueryClient({
 
 const AppContent = () => {
   const [chatHistory, setChatHistory] = useState<ChatItem[]>([]);
+  const [advancedMode, setAdvancedMode] = useState(false);
   const navigate = useNavigate();
 
-  // Load chat history from localStorage on mount
+  // Load chat history and settings from localStorage on mount
   useEffect(() => {
     const savedHistory = localStorage.getItem('chatHistory');
     if (savedHistory) {
@@ -41,6 +42,16 @@ const AppContent = () => {
         localStorage.removeItem('chatHistory');
       }
     }
+    
+    // Load advanced mode setting
+    const savedAdvancedMode = localStorage.getItem('advancedMode');
+    if (savedAdvancedMode) {
+      try {
+        setAdvancedMode(JSON.parse(savedAdvancedMode));
+      } catch (error) {
+        console.error("Failed to parse advanced mode setting:", error);
+      }
+    }
   }, []);
 
   // Save chat history to localStorage whenever it changes
@@ -49,6 +60,11 @@ const AppContent = () => {
       localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
     }
   }, [chatHistory]);
+  
+  // Save advanced mode setting whenever it changes
+  useEffect(() => {
+    localStorage.setItem('advancedMode', JSON.stringify(advancedMode));
+  }, [advancedMode]);
 
   const handleNewChat = () => {
     navigate('/chat/new');
@@ -72,10 +88,18 @@ const AppContent = () => {
               <MainLayout 
                 chatItems={chatHistory}
                 onNewChat={handleNewChat} 
+                advancedMode={advancedMode}
+                setAdvancedMode={setAdvancedMode}
               />
             }>
               <Route index element={<Navigate to="/chat/new" replace />} />
-              <Route path="chat/:chatId" element={<ChatPage updateChatHistory={updateChatHistory} />} />
+              <Route path="chat/:chatId" element={
+                <ChatPage 
+                  updateChatHistory={updateChatHistory} 
+                  advancedMode={advancedMode} 
+                  setAdvancedMode={setAdvancedMode} 
+                />
+              } />
               <Route path="browse" element={<EmptyPage />} />
               <Route path="collections" element={<EmptyPage />} />
               <Route path="settings" element={<EmptyPage />} />

@@ -1,15 +1,25 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, Settings } from 'lucide-react';
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+import { Toggle } from '@/components/ui/toggle';
 
 type SidebarHeaderProps = {
   collapsed: boolean;
   setCollapsed: (collapsed: boolean) => void;
   onNewChat?: () => void;
+  advancedMode?: boolean;
+  setAdvancedMode?: (advanced: boolean) => void;
 };
 
-export const SidebarHeader = ({ collapsed, setCollapsed, onNewChat }: SidebarHeaderProps) => {
+export const SidebarHeader = ({ 
+  collapsed, 
+  setCollapsed, 
+  onNewChat, 
+  advancedMode = false,
+  setAdvancedMode
+}: SidebarHeaderProps) => {
   return (
     <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-500">
       {!collapsed && (
@@ -39,9 +49,27 @@ export const SidebarHeader = ({ collapsed, setCollapsed, onNewChat }: SidebarHea
           >
             <Plus className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="w-8 h-8 p-0">
-            <span className="text-lg">⋯</span>
-          </Button>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="ghost" size="icon" className="w-8 h-8 p-0">
+                <span className="text-lg">⋯</span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-56 p-3" align="end">
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Advanced Mode</span>
+                  <Toggle
+                    aria-label="Toggle advanced mode"
+                    pressed={advancedMode}
+                    onPressedChange={(pressed) => setAdvancedMode && setAdvancedMode(pressed)}
+                  >
+                    <Settings className="h-4 w-4" />
+                  </Toggle>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
           <Button 
             variant="ghost" 
             size="icon" 
