@@ -21,8 +21,9 @@ export const SidebarNavigation = ({ navItems }: SidebarNavigationProps) => {
               <Link 
                 to={item.href} 
                 className={cn(
-                  "sidebar-button",
-                  location.pathname === item.href && "sidebar-button-active"
+                  item.color ? "sidebar-button-colored" : "sidebar-button",
+                  location.pathname === item.href && "sidebar-button-active",
+                  item.color || ""
                 )}
               >
                 {item.icon}
