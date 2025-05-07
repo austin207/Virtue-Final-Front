@@ -23,4 +23,7 @@ export type SidebarProps = {
   setCollapsed: (collapsed: boolean) => void;
   chatItems?: ChatItem[];
   onNewChat?: () => void;
+  advancedMode?: boolean;
+  setAdvancedMode?: (mode: boolean) => void;
 };
+

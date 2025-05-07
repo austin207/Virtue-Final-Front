@@ -15,7 +15,14 @@ import './sidebar.css';
 
 export { type ChatItem } from './types';
 
-export const Sidebar = ({ collapsed, setCollapsed, chatItems = [], onNewChat }: SidebarProps) => {
+export const Sidebar = ({ 
+  collapsed, 
+  setCollapsed, 
+  chatItems = [], 
+  onNewChat,
+  advancedMode,
+  setAdvancedMode
+}: SidebarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
@@ -48,6 +55,8 @@ export const Sidebar = ({ collapsed, setCollapsed, chatItems = [], onNewChat }: 
           collapsed={collapsed} 
           setCollapsed={setCollapsed} 
           onNewChat={handleNewChat} 
+          advancedMode={advancedMode}
+          setAdvancedMode={setAdvancedMode}
         />
 
         {/* Sidebar Tabs */}
