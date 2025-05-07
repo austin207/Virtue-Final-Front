@@ -37,7 +37,7 @@ export default defineConfig(({ mode }) => ({
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'ui-components': ['@/components/ui/index.ts'],
-          'chat-features': ['@/components/chat']
+          'chat-features': ['@/components/chat/index.ts']
         }
       }
     },
