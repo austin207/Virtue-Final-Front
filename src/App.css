@@ -29,13 +29,15 @@ body, html {
 
 /* Fix for any sidebar/panel consistency issues */
 .sidebar-panel, 
-.chat-sidebar {
+.chat-sidebar,
+.advanced-settings-panel {
   border-color: #E5E5E5;
   background-color: white;
 }
 
 .dark .sidebar-panel,
-.dark .chat-sidebar {
+.dark .chat-sidebar,
+.dark .advanced-settings-panel {
   border-color: #444654;
   background-color: #2A2B32;
 }

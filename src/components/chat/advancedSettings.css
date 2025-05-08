@@ -6,10 +6,10 @@
   width: 260px;
   height: calc(100vh - 56px);
   padding: 1rem;
-  background-color: #F7F7F8;
-  border-left: 4px solid #E5E5E5;
   z-index: 10;
   overflow-y: auto;
+  background-color: #F7F7F8;
+  border-left: 3px solid #DADCE0;
 }
 
 .settings-group {
@@ -63,4 +63,13 @@
 
 .dark .settings-description {
   color: #9CA3AF;
+}
+
+/* Improve border prominence */
+.advanced-settings-panel {
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.dark .advanced-settings-panel {
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.15);
 }

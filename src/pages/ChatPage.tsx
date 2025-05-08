@@ -6,6 +6,7 @@ import { ChatContainer } from '@/components/chat/ChatContainer';
 import { ChatItem } from '@/components/layout/sidebar/types';
 import { useChatState } from '@/hooks/useChatState';
 import { useChatActions } from '@/hooks/useChatActions';
+import { AdvancedSettings } from '@/components/chat/AdvancedSettings';
 
 interface ChatPageProps {
   updateChatHistory?: (chatItem: ChatItem) => void;
@@ -55,7 +56,7 @@ export const ChatPage: React.FC<ChatPageProps> = ({
   });
 
   return (
-    <div className={`flex flex-col h-screen ${advancedMode ? 'mr-64' : ''}`}>
+    <div className="flex flex-col h-screen">
       <ChatHeader 
         isNewChat={isNewChat}
         chatTitle={currentChat?.title}
@@ -82,6 +83,16 @@ export const ChatPage: React.FC<ChatPageProps> = ({
           tokensPerSecond={tokensPerSecond}
         />
       </div>
+      
+      {advancedMode && (
+        <AdvancedSettings
+          temperature={temperature}
+          setTemperature={setTemperature}
+          length={length}
+          setLength={setLength}
+          tokensPerSecond={tokensPerSecond}
+        />
+      )}
     </div>
   );
 };
