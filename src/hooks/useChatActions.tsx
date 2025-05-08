@@ -1,3 +1,4 @@
+
 import { streamGenerateText } from '@/services/llmService'; // <-- use streaming!
 import { ChatItem } from '@/components/layout/sidebar/types';
 import { MessageType } from '@/components/chat/ChatMessage';
@@ -102,8 +103,8 @@ export const useChatActions = ({
     }
   };
 
-  // 🟢 STREAMING SEND MESSAGE
-  const handleSendMessage = async (content: string, temp: number, maxLength: number) => {
+  // Streaming send message
+  const handleSendMessage = async (content: string, temperature?: number, maxLength?: number) => {
     const userMessage: MessageType = {
       id: Date.now().toString(),
       role: 'user',
@@ -129,7 +130,11 @@ export const useChatActions = ({
 
     try {
       await streamGenerateText(
-        { prompt: content, length: maxLength, temperature: temp },
+        { 
+          prompt: content, 
+          length: maxLength || 150, 
+          temperature: temperature || 0.8 
+        },
         (token) => {
           aiContent += token;
           tokenCount += 1;
