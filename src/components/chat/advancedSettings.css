@@ -1,0 +1,66 @@
+
+.advanced-settings-panel {
+  position: fixed;
+  right: 0;
+  top: 56px;
+  width: 260px;
+  height: calc(100vh - 56px);
+  padding: 1rem;
+  background-color: #F7F7F8;
+  border-left: 4px solid #E5E5E5;
+  z-index: 10;
+  overflow-y: auto;
+}
+
+.settings-group {
+  margin-bottom: 1.5rem;
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.settings-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.settings-slider {
+  width: 100%;
+  margin: 0.5rem 0;
+}
+
+.settings-description {
+  font-size: 0.75rem;
+  color: #6B7280;
+  margin-top: 0.5rem;
+}
+
+.tokens-badge {
+  font-size: 0.75rem;
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .advanced-settings-panel {
+    background-color: #2A2B32;
+    border-left-color: #444654;
+  }
+
+  .settings-description {
+    color: #9CA3AF;
+  }
+}
+
+/* For when dark mode is explicitly set */
+.dark .advanced-settings-panel {
+  background-color: #2A2B32;
+  border-left-color: #444654;
+}
+
+.dark .settings-description {
+  color: #9CA3AF;
+}

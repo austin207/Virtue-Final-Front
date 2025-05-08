@@ -49,7 +49,9 @@ export const ChatPage: React.FC<ChatPageProps> = ({
     setTokensPerSecond,
     navigate,
     toast,
-    updateChatHistory
+    updateChatHistory,
+    temperature,
+    length
   });
 
   return (

@@ -1,5 +1,5 @@
 
-import { streamGenerateText } from '@/services/llmService'; // <-- use streaming!
+import { streamGenerateText } from '@/services/llmService';
 import { ChatItem } from '@/components/layout/sidebar/types';
 import { MessageType } from '@/components/chat/ChatMessage';
 import { 
@@ -19,6 +19,8 @@ interface ChatActionsProps {
   navigate: (to: string) => void;
   toast: any;
   updateChatHistory?: (chatItem: ChatItem) => void;
+  temperature?: number;
+  length?: number;
 }
 
 export const useChatActions = ({
@@ -31,10 +33,11 @@ export const useChatActions = ({
   setTokensPerSecond,
   navigate,
   toast,
-  updateChatHistory
+  updateChatHistory,
+  temperature = 0.8,
+  length = 150
 }: ChatActionsProps) => {
 
-  // Streaming regenerate (optional: you can keep this as batch if you want)
   const handleRegenerateResponse = async () => {
     const lastAssistantMessageIndex = [...messages].reverse().findIndex(m => m.role === 'assistant');
     if (lastAssistantMessageIndex >= 0) {
@@ -64,7 +67,7 @@ export const useChatActions = ({
 
         try {
           await streamGenerateText(
-            { prompt: userPrompt, length: 150, temperature: 0.8 },
+            { prompt: userPrompt, length, temperature },
             (token) => {
               aiContent += token;
               tokenCount += 1;
@@ -103,8 +106,7 @@ export const useChatActions = ({
     }
   };
 
-  // Streaming send message
-  const handleSendMessage = async (content: string, temperature?: number, maxLength?: number) => {
+  const handleSendMessage = async (content: string, msgTemperature?: number, maxLength?: number) => {
     const userMessage: MessageType = {
       id: Date.now().toString(),
       role: 'user',
@@ -132,8 +134,8 @@ export const useChatActions = ({
       await streamGenerateText(
         { 
           prompt: content, 
-          length: maxLength || 150, 
-          temperature: temperature || 0.8 
+          length: maxLength || length, 
+          temperature: msgTemperature || temperature 
         },
         (token) => {
           aiContent += token;
