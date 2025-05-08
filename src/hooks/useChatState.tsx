@@ -1,8 +1,6 @@
-
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useParams, useNavigate } from 'react-router-dom';
-import { generateText } from '@/services/llmService';
 import { ChatItem } from '@/components/layout/sidebar/types';
 import { MessageType } from '@/components/chat/ChatMessage';
 import { 

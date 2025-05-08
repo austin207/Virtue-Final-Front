@@ -20,7 +20,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
   tokensPerSecond
 }) => {
   return (
-    <div className="fixed right-0 top-14 w-64 h-calc[100vh-56px] p-4 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-600 space-y-4 z-10">
+    <div className="fixed right-0 top-14 w-64 h-calc[100vh-56px] p-4 bg-white dark:bg-gray-800 border-l-4 border-gray-200 dark:border-gray-600 space-y-4 z-10">
       <div className="space-y-2">
         <div className="flex justify-between items-center">
           <Label htmlFor="temperature" className="text-sm font-medium">
