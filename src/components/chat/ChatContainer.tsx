@@ -7,13 +7,15 @@ interface ChatContainerProps {
   isNewChat: boolean;
   isLoading: boolean;
   onRegenerateResponse: () => void;
+  advancedMode?: boolean;
 }
 
 export const ChatContainer: React.FC<ChatContainerProps> = ({ 
   messages, 
   isNewChat, 
   isLoading, 
-  onRegenerateResponse 
+  onRegenerateResponse,
+  advancedMode = false
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -27,7 +29,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
   }, [messages]);
 
   return (
-    <div className="flex-1 overflow-y-auto flex flex-col">
+    <div className={`flex-1 overflow-y-auto flex flex-col ${advancedMode ? 'ml-0 mr-[260px]' : 'ml-0 mr-0'}`}>
       {isNewChat ? (
         <div className="flex-1 bg-white dark:bg-[#2A2B32] flex items-center justify-center">
           <h2 className="text-2xl font-light text-gray-600 dark:text-gray-300">

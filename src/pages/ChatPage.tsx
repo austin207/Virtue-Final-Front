@@ -69,9 +69,10 @@ export const ChatPage: React.FC<ChatPageProps> = ({
         isNewChat={isNewChat}
         isLoading={isLoading}
         onRegenerateResponse={handleRegenerateResponse}
+        advancedMode={advancedMode}
       />
 
-      <div className="border-t border-gray-200 dark:border-gray-500 py-4 mt-auto bg-white dark:bg-chat-darker">
+      <div className={`border-t border-gray-200 dark:border-gray-500 py-4 mt-auto bg-white dark:bg-chat-darker ${advancedMode ? 'pr-[260px]' : ''}`}>
         <ChatInput 
           onSendMessage={handleSendMessage} 
           disabled={isLoading}

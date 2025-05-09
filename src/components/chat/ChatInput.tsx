@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Wand2, ArrowUp, Mic, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -54,17 +55,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 
   return (
     <>
-      {advancedMode && (
-        <AdvancedSettings
-          temperature={temperature}
-          setTemperature={value => setTemperature && setTemperature(value)}
-          length={length}
-          setLength={value => setLength && setLength(value)}
-          tokensPerSecond={tokensPerSecond}
-        />
-      )}
-
-      <div className={`relative max-w-3xl mx-auto w-full px-4 pb-8 pt-4 ${advancedMode ? 'mr-64' : ''}`}>
+      <div className="relative max-w-3xl mx-auto w-full px-4 pb-8 pt-4">
         <form onSubmit={handleSubmit} className="relative flex items-center">
           <div className="absolute left-3 text-gray-500">
             <Wand2 className="h-5 w-5" />
