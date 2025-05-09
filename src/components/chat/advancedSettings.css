@@ -8,8 +8,10 @@
   padding: 1rem;
   z-index: 10;
   overflow-y: auto;
-  background-color: #F7F7F8;
-  border-left: 3px solid #DADCE0;
+  background-color: #FFFFFF; /* Light mode: pure white */
+  border-left: 2px solid #E5E5E5;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .settings-group {
@@ -43,11 +45,12 @@
   font-size: 0.75rem;
 }
 
-/* Dark mode styles */
+/* Dark mode styles - using both prefers-color-scheme and .dark class */
 @media (prefers-color-scheme: dark) {
   .advanced-settings-panel {
     background-color: #2A2B32;
     border-left-color: #444654;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
   }
 
   .settings-description {
@@ -55,21 +58,13 @@
   }
 }
 
-/* For when dark mode is explicitly set */
+/* For when dark mode is explicitly set via class */
 .dark .advanced-settings-panel {
   background-color: #2A2B32;
   border-left-color: #444654;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
 }
 
 .dark .settings-description {
   color: #9CA3AF;
-}
-
-/* Improve border prominence */
-.advanced-settings-panel {
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.05);
-}
-
-.dark .advanced-settings-panel {
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.15);
 }
