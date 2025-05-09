@@ -11,11 +11,12 @@
   background-color: #FFFFFF; /* Light mode: pure white */
   border-left: 2px solid #E5E5E5;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.08);
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .settings-group {
   margin-bottom: 1.5rem;
+  animation: fade-in 0.3s ease-out;
 }
 
 .settings-header {
@@ -33,19 +34,45 @@
 .settings-slider {
   width: 100%;
   margin: 0.5rem 0;
+  transition: all 0.2s ease;
 }
 
 .settings-description {
   font-size: 0.75rem;
   color: #6B7280;
   margin-top: 0.5rem;
+  animation: fade-in 0.4s ease-out;
 }
 
 .tokens-badge {
   font-size: 0.75rem;
+  animation: scale-in 0.3s ease-out;
 }
 
-/* Dark mode styles - using both prefers-color-scheme and .dark class */
+/* Animation keyframes */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Dark mode styles using both media query and class */
 @media (prefers-color-scheme: dark) {
   .advanced-settings-panel {
     background-color: #2A2B32;
@@ -59,6 +86,16 @@
 }
 
 /* For when dark mode is explicitly set via class */
+:root:not(.dark) .advanced-settings-panel {
+  background-color: #FFFFFF;
+  border-left-color: #E5E5E5;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.08);
+}
+
+:root:not(.dark) .settings-description {
+  color: #6B7280;
+}
+
 .dark .advanced-settings-panel {
   background-color: #2A2B32;
   border-left-color: #444654;

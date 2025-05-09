@@ -21,6 +21,7 @@ body, html {
 /* Ensure consistent styling between light and dark modes */
 .chat-container {
   background-color: #F7F7F8;
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark .chat-container {
@@ -32,6 +33,7 @@ body, html {
 .chat-sidebar {
   border-color: #E5E5E5;
   background-color: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark .sidebar-panel,
