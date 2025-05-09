@@ -11,12 +11,22 @@
   background-color: #FFFFFF; /* Light mode: pure white */
   border-left: 2px solid #E5E5E5;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: slide-in-right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .settings-group {
   margin-bottom: 1.5rem;
-  animation: fade-in 0.3s ease-out;
+  animation: fade-in 0.5s ease-out;
+  transform-origin: top center;
+}
+
+.settings-group:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.settings-group:nth-child(2) {
+  animation-delay: 0.2s;
 }
 
 .settings-header {
@@ -24,36 +34,40 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
+  transition: all 0.2s ease;
 }
 
 .settings-label {
   font-size: 0.875rem;
   font-weight: 500;
+  transition: color 0.2s ease;
 }
 
 .settings-slider {
   width: 100%;
   margin: 0.5rem 0;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .settings-description {
   font-size: 0.75rem;
   color: #6B7280;
   margin-top: 0.5rem;
-  animation: fade-in 0.4s ease-out;
+  animation: fade-in 0.6s ease-out;
+  transition: color 0.3s ease;
 }
 
 .tokens-badge {
   font-size: 0.75rem;
-  animation: scale-in 0.3s ease-out;
+  animation: scale-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.3s ease;
 }
 
-/* Animation keyframes */
+/* Enhanced animation keyframes */
 @keyframes fade-in {
   from {
     opacity: 0;
-    transform: translateY(5px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -68,6 +82,17 @@
   }
   to {
     transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
     opacity: 1;
   }
 }
@@ -104,4 +129,27 @@
 
 .dark .settings-description {
   color: #9CA3AF;
+}
+
+/* Input focus and hover animations */
+.settings-slider:hover {
+  transform: scale(1.01);
+}
+
+/* Scrollbar styling for advanced settings */
+.advanced-settings-panel::-webkit-scrollbar {
+  width: 5px;
+}
+
+.advanced-settings-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.advanced-settings-panel::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 10px;
+}
+
+.advanced-settings-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.5);
 }

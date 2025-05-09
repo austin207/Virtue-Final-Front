@@ -5,6 +5,7 @@ import { useToast } from '@/hooks/use-toast';
 import { MessageAvatar } from './MessageAvatar';
 import { MessageContent } from './MessageContent';
 import { MessageActions } from './MessageActions';
+import { fadeIn, getStaggeredAnimation } from '@/utils/animationUtils';
 
 export type MessageType = {
   id: string;
@@ -20,10 +21,15 @@ export type MessageType = {
 
 interface ChatMessageProps {
   message: MessageType;
+  animationDelay?: number;
   onRegenerateResponse?: () => void;
 }
 
-export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onRegenerateResponse }) => {
+export const ChatMessage: React.FC<ChatMessageProps> = ({ 
+  message, 
+  animationDelay = 0,
+  onRegenerateResponse 
+}) => {
   const [reaction, setReaction] = useState<'like' | 'dislike' | null>(
     message.reactions?.liked ? 'like' : message.reactions?.disliked ? 'dislike' : null
   );
@@ -68,18 +74,24 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onRegenerateR
     }
   };
 
+  // Calculate staggered animation delay based on message index
+  const staggeredStyle = getStaggeredAnimation(animationDelay);
+
   return (
-    <div className={cn(
-      "py-8 px-4 md:px-6",
-      message.role === 'assistant' ? "bg-chat-light dark:bg-chat-dark" : "bg-white dark:bg-chat-darker"
-    )}>
-      <div className="max-w-4xl mx-auto flex gap-4">
+    <div 
+      className={cn(
+        "py-8 px-4 md:px-6 transition-all",
+        message.role === 'assistant' ? "bg-chat-light dark:bg-chat-dark" : "bg-white dark:bg-chat-darker"
+      )}
+      style={staggeredStyle}
+    >
+      <div className={`max-w-4xl mx-auto flex gap-4 ${fadeIn(1)}`}>
         <div className="flex-shrink-0 pt-1">
           <MessageAvatar role={message.role} />
         </div>
 
         <div className="flex-1">
-          <div className="flex items-center text-sm text-gray-500 mb-2">
+          <div className={`flex items-center text-sm text-gray-500 mb-2 ${fadeIn(2)}`}>
             <span className="font-medium">
               {message.role === 'assistant' ? 'Response' : 'You'}
             </span>
@@ -88,7 +100,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onRegenerateR
             </span>
           </div>
 
-          <div className="prose dark:prose-invert prose-sm sm:prose-base max-w-none">
+          <div className={`prose dark:prose-invert prose-sm sm:prose-base max-w-none ${fadeIn(3)}`}>
             <MessageContent role={message.role} content={message.content} />
           </div>
 
