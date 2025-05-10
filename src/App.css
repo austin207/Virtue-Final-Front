@@ -8,10 +8,13 @@ body, html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
 }
 
 .chat-glow {
@@ -26,7 +29,7 @@ body, html {
 }
 
 .dark .chat-container {
-  background-color: #343541; /* Changed from #2A2B32 to LLM-like gray */
+  background-color: #343541;
 }
 
 /* Fix for any sidebar/panel consistency issues */
@@ -40,7 +43,7 @@ body, html {
 .dark .sidebar-panel,
 .dark .chat-sidebar {
   border-color: #444654;
-  background-color: #343541; /* Changed from #2A2B32 to LLM-like gray */
+  background-color: #343541;
 }
 
 /* Enhanced animations */
@@ -105,4 +108,40 @@ body, html {
 /* Smooth transitions for all interactive elements */
 button, a, input, textarea {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .chat-glow {
+    box-shadow: none; /* Reduce visual effects on mobile */
+  }
+  
+  .animate-fade-in,
+  .animate-scale-in,
+  .animate-slide-in {
+    animation-duration: 0.3s; /* Slightly faster animations on mobile */
+  }
+}
+
+/* Improved touch targets for mobile */
+@media (max-width: 640px) {
+  button, 
+  .sidebar-button,
+  .sidebar-item {
+    min-height: 44px; /* Apple's recommended minimum touch target size */
+    min-width: 44px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .chat-container {
+    background-color: white !important;
+    color: black !important;
+  }
+  
+  .chat-sidebar,
+  .chat-input {
+    display: none !important;
+  }
 }

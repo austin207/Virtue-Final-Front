@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/components/providers/ThemeProvider';
@@ -11,6 +11,7 @@ import { ChatList } from './ChatList';
 import { SidebarFooter } from './SidebarFooter';
 import { SidebarProps, ChatItem } from './types';
 import { getNavItems, getDefaultChatItem } from './navConfig';
+import { useIsMobile } from '@/hooks/use-mobile';
 import './sidebar.css';
 
 export { type ChatItem } from './types';
@@ -27,6 +28,14 @@ export const Sidebar = ({
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
   const [activeTab, setActiveTab] = useState("chats");
+  const isMobile = useIsMobile();
+
+  // Auto-collapse sidebar on mobile
+  useEffect(() => {
+    if (isMobile && !collapsed) {
+      setCollapsed(true);
+    }
+  }, [isMobile, collapsed, setCollapsed]);
 
   const handleNewChat = () => {
     if (onNewChat) {
@@ -45,7 +54,7 @@ export const Sidebar = ({
   return (
     <div
       className={cn(
-        "fixed left-0 top-0 z-20 h-full chat-sidebar border-r-4 border-gray-200 dark:border-gray-500 transition-all duration-300",
+        "fixed left-0 top-0 z-20 h-full chat-sidebar border-r border-gray-200 dark:border-gray-500 transition-all duration-300",
         collapsed ? "w-[60px]" : "w-[260px] md:w-[300px]"
       )}
     >

@@ -4,6 +4,7 @@ import { Moon, Sun } from 'lucide-react';
 import { Toggle } from '@/components/ui/toggle';
 import { Avatar } from '@/components/ui/avatar';
 import { useNavigate } from 'react-router-dom';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type SidebarFooterProps = {
   collapsed: boolean;
@@ -13,16 +14,21 @@ type SidebarFooterProps = {
 
 export const SidebarFooter = ({ collapsed, theme, setTheme }: SidebarFooterProps) => {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const handleNavigateToProfile = () => {
     navigate('/profile');
   };
 
   return (
-    <div className="p-3 border-t border-gray-200 dark:border-gray-500">
+    <div className="p-2 sm:p-3 border-t border-gray-200 dark:border-gray-500">
       {collapsed ? (
         <div className="flex flex-col items-center space-y-4">
-          <Avatar className="h-8 w-8 cursor-pointer" onClick={handleNavigateToProfile}>
+          <Avatar className="h-8 w-8 cursor-pointer touch-manipulation" 
+                  onClick={handleNavigateToProfile}
+                  tabIndex={0}
+                  role="button"
+                  aria-label="Profile">
             <img src="/lovable-uploads/user.png" alt="User" />
           </Avatar>
           <Toggle
@@ -30,13 +36,18 @@ export const SidebarFooter = ({ collapsed, theme, setTheme }: SidebarFooterProps
             pressed={theme === "dark"}
             onPressedChange={(pressed) => setTheme(pressed ? "dark" : "light")}
             aria-label="Toggle theme"
+            className="touch-manipulation"
           >
             {theme === "dark" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
           </Toggle>
         </div>
       ) : (
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2 cursor-pointer" onClick={handleNavigateToProfile}>
+          <div className="flex items-center space-x-2 cursor-pointer touch-manipulation"
+               onClick={handleNavigateToProfile}
+               tabIndex={0}
+               role="button"
+               aria-label="Profile">
             <Avatar className="h-8 w-8">
               <img src="/lovable-uploads/user.png" alt="User" />
             </Avatar>
@@ -52,6 +63,7 @@ export const SidebarFooter = ({ collapsed, theme, setTheme }: SidebarFooterProps
             pressed={theme === "dark"}
             onPressedChange={(pressed) => setTheme(pressed ? "dark" : "light")}
             aria-label="Toggle theme"
+            className="touch-manipulation"
           >
             {theme === "dark" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
           </Toggle>

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ChatInput } from '@/components/chat/ChatInput';
 import { ChatHeader } from '@/components/chat/ChatHeader';
 import { ChatContainer } from '@/components/chat/ChatContainer';
@@ -7,6 +7,7 @@ import { ChatItem } from '@/components/layout/sidebar/types';
 import { useChatState } from '@/hooks/useChatState';
 import { useChatActions } from '@/hooks/useChatActions';
 import { AdvancedSettings } from '@/components/chat/AdvancedSettings';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ChatPageProps {
   updateChatHistory?: (chatItem: ChatItem) => void;
@@ -19,6 +20,15 @@ export const ChatPage: React.FC<ChatPageProps> = ({
   advancedMode = false,
   setAdvancedMode
 }) => {
+  const isMobile = useIsMobile();
+  
+  // Auto-disable advanced mode on mobile
+  useEffect(() => {
+    if (isMobile && advancedMode && setAdvancedMode) {
+      setAdvancedMode(false);
+    }
+  }, [isMobile, advancedMode, setAdvancedMode]);
+  
   const {
     chatId,
     messages,
@@ -56,7 +66,7 @@ export const ChatPage: React.FC<ChatPageProps> = ({
   });
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen w-full">
       <ChatHeader 
         isNewChat={isNewChat}
         chatTitle={currentChat?.title}
@@ -72,7 +82,7 @@ export const ChatPage: React.FC<ChatPageProps> = ({
         advancedMode={advancedMode}
       />
 
-      <div className={`border-t border-gray-200 dark:border-gray-500 py-4 mt-auto bg-white dark:bg-chat-darker transition-all duration-300 ${advancedMode ? 'pr-[260px]' : ''}`}>
+      <div className={`border-t border-gray-200 dark:border-gray-500 py-2 md:py-4 mt-auto bg-white dark:bg-chat-darker transition-all duration-300 ${!isMobile && advancedMode ? 'pr-[260px]' : ''}`}>
         <ChatInput 
           onSendMessage={handleSendMessage} 
           disabled={isLoading}
@@ -85,7 +95,7 @@ export const ChatPage: React.FC<ChatPageProps> = ({
         />
       </div>
       
-      {advancedMode && (
+      {!isMobile && advancedMode && (
         <AdvancedSettings
           temperature={temperature}
           setTemperature={setTemperature}
