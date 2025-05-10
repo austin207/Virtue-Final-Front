@@ -1,10 +1,17 @@
 
 import React from 'react';
-import { Search, Settings } from 'lucide-react';
+import { Search, Settings, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { Toggle } from '@/components/ui/toggle';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu';
 
 interface ChatHeaderProps {
   isNewChat: boolean;
@@ -71,13 +78,34 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         >
           <Search className="w-5 h-5" />
         </Button>
-        <Button 
-          variant="ghost" 
-          size="icon"
-          onClick={handleStartNewChat}
-        >
-          <span className="text-lg">⋯</span>
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <span className="text-lg">⋯</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={handleStartNewChat}>
+              <Plus className="mr-2 h-4 w-4" />
+              New Chat
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => {
+              navigator.clipboard.writeText(window.location.href);
+              toast({ title: "Link Copied", description: "Chat link copied to clipboard" });
+            }}>
+              Share Chat
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {
+              toast({ 
+                title: "Export Feature", 
+                description: "Chat export functionality coming soon" 
+              });
+            }}>
+              Export Chat
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );
