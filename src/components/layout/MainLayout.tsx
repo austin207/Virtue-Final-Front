@@ -26,7 +26,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
   }, [isMobile]);
 
   return (
-    <div className="h-screen w-screen flex overflow-hidden bg-white dark:bg-gray-950">
+    <div className="h-screen w-screen flex overflow-hidden bg-background dark:bg-gray-950">
       <Sidebar 
         collapsed={sidebarCollapsed} 
         setCollapsed={setSidebarCollapsed} 

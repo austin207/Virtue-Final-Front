@@ -29,7 +29,8 @@ export default defineConfig(({ mode }) => ({
     terserOptions: {
       compress: {
         drop_console: mode === 'production', // Only remove console logs in production
-        drop_debugger: mode === 'production'
+        drop_debugger: mode === 'production',
+        passes: 2 // More aggressive optimization
       }
     },
     rollupOptions: {
@@ -42,6 +43,23 @@ export default defineConfig(({ mode }) => ({
       }
     },
     // Enable source maps for production (helps with error tracking)
-    sourcemap: true
+    sourcemap: true,
+    // Add build manifest for better caching
+    manifest: true,
+    // Improve CSS extraction
+    cssCodeSplit: true,
+    // Better asset handling
+    assetsInlineLimit: 4096, // 4kb
+    // Use modern JS output
+    target: 'es2018'
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom'],
+    exclude: []
+  },
+  // Add preview configuration for testing the production build
+  preview: {
+    port: 8080,
+    host: true
   }
 }));

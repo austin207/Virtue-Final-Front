@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { ChatInput } from '@/components/chat/ChatInput';
 import { ChatHeader } from '@/components/chat/ChatHeader';
 import { ChatContainer } from '@/components/chat/ChatContainer';
@@ -8,6 +8,7 @@ import { useChatState } from '@/hooks/useChatState';
 import { useChatActions } from '@/hooks/useChatActions';
 import { AdvancedSettings } from '@/components/chat/AdvancedSettings';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { debounce } from '@/lib/utils';
 
 interface ChatPageProps {
   updateChatHistory?: (chatItem: ChatItem) => void;
@@ -64,6 +65,17 @@ export const ChatPage: React.FC<ChatPageProps> = ({
     temperature,
     length
   });
+  
+  // Debounced window resize handler for performance
+  const handleResize = useCallback(debounce(() => {
+    // Force re-render when window is resized for proper layout adjustments
+    window.dispatchEvent(new Event('resize'));
+  }, 250), []);
+  
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [handleResize]);
 
   return (
     <div className="flex flex-col h-screen w-full">

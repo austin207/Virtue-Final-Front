@@ -133,6 +133,17 @@ button, a, input, textarea {
   }
 }
 
+/* Fix iOS 100vh issue */
+@supports (-webkit-touch-callout: none) {
+  .h-screen {
+    height: -webkit-fill-available;
+  }
+  
+  .min-h-screen {
+    min-height: -webkit-fill-available;
+  }
+}
+
 /* Print styles */
 @media print {
   .chat-container {

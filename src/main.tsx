@@ -9,6 +9,18 @@ if (import.meta.env.PROD) {
     console.error('Critical error:', event.error);
     // Here you could send error reports to your error tracking service
   });
+  
+  // Disable console logs in production
+  if (typeof window !== 'undefined') {
+    const noop = () => {};
+    console.log = noop;
+    console.debug = noop;
+  }
 }
 
-createRoot(document.getElementById("root")!).render(<App />);
+// Use createRoot for React 18
+const container = document.getElementById('root');
+if (!container) throw new Error('Root element not found');
+
+const root = createRoot(container);
+root.render(<App />);
