@@ -58,8 +58,8 @@ export default {
 				},
 				chat: {
 					light: '#FFFFFF',
-					dark: '#2A2B32',
-					darker: '#2A2B32',
+					dark: '#343541',  // Changed from #2A2B32 to LLM-like gray
+					darker: '#343541', // Changed from #2A2B32 to LLM-like gray
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',

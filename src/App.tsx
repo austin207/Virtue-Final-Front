@@ -15,6 +15,7 @@ const ChatPage = lazy(() => import("@/pages/ChatPage").then(module => ({ default
 const BrowsePage = lazy(() => import("@/pages/BrowsePage").then(module => ({ default: module.BrowsePage })));
 const CollectionsPage = lazy(() => import("@/pages/CollectionsPage").then(module => ({ default: module.CollectionsPage })));
 const SettingsPage = lazy(() => import("@/pages/SettingsPage").then(module => ({ default: module.SettingsPage })));
+const ProfilePage = lazy(() => import("@/pages/ProfilePage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 // Create a client with default options enhanced for production
@@ -105,6 +106,7 @@ const AppContent = () => {
               <Route path="browse" element={<BrowsePage />} />
               <Route path="collections" element={<CollectionsPage />} />
               <Route path="settings" element={<SettingsPage />} />
+              <Route path="profile" element={<ProfilePage />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

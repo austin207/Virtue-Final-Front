@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Search, Settings, Plus } from 'lucide-react';
+import { Search, UserCog, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
@@ -38,9 +38,10 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   };
 
   const handleSearch = () => {
+    navigate('/browse');
     toast({
       title: 'Search',
-      description: 'Search functionality would open here',
+      description: 'Search the web for information',
     });
   };
 
@@ -53,6 +54,14 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         description: newMode ? 'You can now adjust temperature and length parameters.' : 'Switched back to normal mode.',
       });
     }
+  };
+
+  const handleNavigateToProfile = () => {
+    navigate('/profile');
+    toast({
+      title: 'Profile',
+      description: 'View and edit your profile settings',
+    });
   };
 
   return (
@@ -68,7 +77,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
             aria-label="Toggle advanced mode"
             className="bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800"
           >
-            <Settings className="w-5 h-5" />
+            <UserCog className="w-5 h-5" />
           </Toggle>
         )}
         <Button 
@@ -88,6 +97,10 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
             <DropdownMenuItem onClick={handleStartNewChat}>
               <Plus className="mr-2 h-4 w-4" />
               New Chat
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleNavigateToProfile}>
+              <UserCog className="mr-2 h-4 w-4" />
+              Profile Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => {

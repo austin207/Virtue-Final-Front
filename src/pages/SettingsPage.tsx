@@ -17,7 +17,7 @@ export const SettingsPage: React.FC = () => {
       <header className="h-14 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-500 bg-white dark:bg-chat-darker">
         <h1 className="font-semibold">Settings</h1>
       </header>
-      <div className="flex-1 overflow-auto p-4">
+      <div className="flex-1 overflow-auto p-4 bg-gray-50 dark:bg-chat-dark">
         <div className="max-w-3xl mx-auto">
           <div className="grid gap-8">
             {/* Appearance */}
