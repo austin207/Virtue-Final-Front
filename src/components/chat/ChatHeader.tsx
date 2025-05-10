@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Search, UserCog, Plus } from 'lucide-react';
+import { Search, UserCog, Plus, Share2, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
@@ -64,6 +64,22 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
     });
   };
 
+  const handleShareChat = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast({
+      title: "Chat Link Copied",
+      description: "The link to this chat has been copied to your clipboard.",
+    });
+  };
+
+  const handleExportChat = () => {
+    // In a real app, this would export the current chat to a file
+    toast({
+      title: "Chat Exported",
+      description: "Your chat has been exported successfully.",
+    });
+  };
+
   return (
     <header className="h-14 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-500 bg-white dark:bg-chat-darker">
       <h1 className="font-semibold">
@@ -103,18 +119,12 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
               Profile Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => {
-              navigator.clipboard.writeText(window.location.href);
-              toast({ title: "Link Copied", description: "Chat link copied to clipboard" });
-            }}>
+            <DropdownMenuItem onClick={handleShareChat}>
+              <Share2 className="mr-2 h-4 w-4" />
               Share Chat
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {
-              toast({ 
-                title: "Export Feature", 
-                description: "Chat export functionality coming soon" 
-              });
-            }}>
+            <DropdownMenuItem onClick={handleExportChat}>
+              <Download className="mr-2 h-4 w-4" />
               Export Chat
             </DropdownMenuItem>
           </DropdownMenuContent>

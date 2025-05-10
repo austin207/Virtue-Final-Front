@@ -3,6 +3,7 @@ import React from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { Toggle } from '@/components/ui/toggle';
 import { Avatar } from '@/components/ui/avatar';
+import { useNavigate } from 'react-router-dom';
 
 type SidebarFooterProps = {
   collapsed: boolean;
@@ -11,12 +12,18 @@ type SidebarFooterProps = {
 };
 
 export const SidebarFooter = ({ collapsed, theme, setTheme }: SidebarFooterProps) => {
+  const navigate = useNavigate();
+
+  const handleNavigateToProfile = () => {
+    navigate('/profile');
+  };
+
   return (
     <div className="p-3 border-t border-gray-200 dark:border-gray-500">
       {collapsed ? (
         <div className="flex flex-col items-center space-y-4">
-          <Avatar className="h-8 w-8">
-            <img src="/lovable-uploads/c6a91980-5954-4039-8eb2-1eb60a0b573e.png" alt="User" />
+          <Avatar className="h-8 w-8 cursor-pointer" onClick={handleNavigateToProfile}>
+            <img src="/lovable-uploads/user.png" alt="User" />
           </Avatar>
           <Toggle
             size="sm"
@@ -29,7 +36,7 @@ export const SidebarFooter = ({ collapsed, theme, setTheme }: SidebarFooterProps
         </div>
       ) : (
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 cursor-pointer" onClick={handleNavigateToProfile}>
             <Avatar className="h-8 w-8">
               <img src="/lovable-uploads/user.png" alt="User" />
             </Avatar>

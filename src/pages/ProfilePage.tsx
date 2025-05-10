@@ -38,11 +38,11 @@ export const ProfilePage: React.FC = () => {
     }));
   };
 
-  const handleToggleChange = (category: string, field: string, value: boolean) => {
+  const handleToggleChange = (category: 'notifications' | 'privacy', field: string, value: boolean) => {
     setFormData(prev => ({
       ...prev,
       [category]: {
-        ...prev[category as keyof typeof prev],
+        ...prev[category],
         [field]: value
       }
     }));

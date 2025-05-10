@@ -100,7 +100,7 @@
 /* Dark mode styles using both media query and class */
 @media (prefers-color-scheme: dark) {
   .advanced-settings-panel {
-    background-color: #2A2B32;
+    background-color: #343541; /* Changed to LLM-like gray */
     border-left-color: #444654;
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
   }
@@ -122,7 +122,7 @@
 }
 
 .dark .advanced-settings-panel {
-  background-color: #2A2B32;
+  background-color: #343541; /* Changed to LLM-like gray */
   border-left-color: #444654;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
 }
