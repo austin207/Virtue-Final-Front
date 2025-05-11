@@ -43,13 +43,13 @@ export const BrowsePage: React.FC = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col">
-      <header className="h-14 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-500 bg-white dark:bg-chat-darker">
+    <div className="h-screen flex flex-col bg-white dark:bg-[#343440]">
+      <header className="h-14 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-600 bg-white dark:bg-[#343440]">
         <h1 className="font-semibold">Browse</h1>
       </header>
       <div className="flex-1 overflow-auto p-4">
         <div className={`max-w-3xl mx-auto ${fadeIn()}`}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
+          <div className="bg-white dark:bg-[#343440] rounded-lg shadow p-6 mb-6 text-gray-800 dark:text-white">
             <h2 className="text-xl font-bold mb-4">Web Search</h2>
             <div className="flex gap-2">
               <div className="relative flex-1">
@@ -74,7 +74,7 @@ export const BrowsePage: React.FC = () => {
           </div>
           
           {results.length > 0 && (
-            <div className={`bg-white dark:bg-gray-800 rounded-lg shadow p-6 ${scaleIn()}`}>
+            <div className={`bg-white dark:bg-[#343440] rounded-lg shadow p-6 text-gray-800 dark:text-white ${scaleIn()}`}>
               <h3 className="text-lg font-semibold mb-4">Search Results</h3>
               <div className="space-y-6">
                 {results.map((result, index) => (

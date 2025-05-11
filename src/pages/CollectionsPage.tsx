@@ -34,8 +34,8 @@ export const CollectionsPage: React.FC = () => {
   ];
 
   return (
-    <div className="h-screen flex flex-col">
-      <header className="h-14 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-500 bg-white dark:bg-chat-darker">
+    <div className="h-screen flex flex-col bg-white dark:bg-[#343440]">
+      <header className="h-14 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-500 bg-white dark:bg-[#343440]">
         <h1 className="font-semibold">Collections</h1>
         <Button variant="outline" size="sm">
           <Plus className="h-4 w-4 mr-2" />
@@ -48,7 +48,7 @@ export const CollectionsPage: React.FC = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {collections.map((collection, index) => (
-              <Card key={collection.id} className={`hover:shadow-lg transition-all duration-300 ${fadeIn(index + 1)}`}>
+              <Card key={collection.id} className={`border-2 border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 ${fadeIn(index + 1)}`}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div className="bg-primary/10 p-2 rounded-md">
@@ -73,7 +73,7 @@ export const CollectionsPage: React.FC = () => {
             ))}
 
             {/* Add Collection Card */}
-            <Card className={`border-dashed flex flex-col items-center justify-center p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer ${fadeIn(4)}`}>
+            <Card className={`border-2 border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer ${fadeIn(4)}`}>
               <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-full mb-4">
                 <Plus className="h-8 w-8 text-gray-500 dark:text-gray-400" />
               </div>
