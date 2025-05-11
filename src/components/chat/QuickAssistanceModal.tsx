@@ -15,14 +15,14 @@ export const QuickAssistanceModal: React.FC<QuickAssistanceModalProps> = ({ isOp
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="w-full max-w-xl bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg">
         <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-semibold">ChatGPT Quick Assistance</h2>
+          <h2 className="text-lg font-semibold">Virtue Quick Assistance</h2>
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X className="h-5 w-5" />
           </Button>
         </div>
 
         <div className="p-6">
-          <p className="text-center mb-1">Start by asking the question and let ChatGPT handle the rest.</p>
+          <p className="text-center mb-1">Start by asking the question and let Virtue handle the rest.</p>
           <p className="text-center text-sm text-gray-500 mb-6">If you're unsure where to begin, take a look at our examples for inspiration.</p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">

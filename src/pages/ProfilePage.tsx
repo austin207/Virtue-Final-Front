@@ -20,7 +20,7 @@ export const ProfilePage: React.FC = () => {
     name: 'John Doe',
     email: 'john.doe@example.com',
     username: 'johndoe',
-    avatar: '/lovable-uploads/user.png',
+    avatar: '/uploads/user.png',
     notifications: {
       email: true,
       push: false

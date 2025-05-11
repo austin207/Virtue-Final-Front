@@ -23,7 +23,7 @@ export const SidebarHeader = ({
     <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-500">
       {!collapsed && (
         <div className="flex items-center">
-          <img src="/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png" alt="Logo" className="h-9 w-9 mr-2" />
+          <img src="/uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png" alt="Logo" className="h-9 w-9 mr-2" />
           <h1 className="text-lg font-semibold">My Chats</h1>
         </div>
       )}

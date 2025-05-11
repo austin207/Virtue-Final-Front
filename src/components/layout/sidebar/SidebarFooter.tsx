@@ -29,7 +29,7 @@ export const SidebarFooter = ({ collapsed, theme, setTheme }: SidebarFooterProps
                   tabIndex={0}
                   role="button"
                   aria-label="Profile">
-            <img src="/lovable-uploads/user.png" alt="User" />
+            <img src="/uploads/user.png" alt="User" />
           </Avatar>
           <Toggle
             size="sm"
@@ -49,7 +49,7 @@ export const SidebarFooter = ({ collapsed, theme, setTheme }: SidebarFooterProps
                role="button"
                aria-label="Profile">
             <Avatar className="h-8 w-8">
-              <img src="/lovable-uploads/user.png" alt="User" />
+              <img src="/uploads/user.png" alt="User" />
             </Avatar>
             <div>
               <div className="flex items-center">

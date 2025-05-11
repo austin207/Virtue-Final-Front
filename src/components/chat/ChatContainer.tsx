@@ -65,7 +65,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
             <div className="flex-shrink-0 pt-1">
               <div className="h-8 w-8 rounded-full bg-ai-primary flex items-center justify-center">
                 <img 
-                  src="/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png" 
+                  src="/uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png" 
                   alt="AI" 
                   className="h-6 w-6 animate-pulse transition-opacity" 
                 />

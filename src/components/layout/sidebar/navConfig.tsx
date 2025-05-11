@@ -35,7 +35,7 @@ export const getNavItems = (): NavItem[] => {
 export const getDefaultChatItem = (isActive: boolean) => {
   return {
     id: "new",
-    image: { src: "/lovable-uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20 },
+    image: { src: "/uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20 },
     title: "New Chat",
     preview: "Ask anything!",
     time: "Now",
