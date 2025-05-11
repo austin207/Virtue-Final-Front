@@ -10,7 +10,7 @@
   overflow-y: auto;
   background-color: #FFFFFF;
   border-left: 2px solid #E5E5E5;
-  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.08);
+  box-shadow: -2px 0 8px rgba(128, 128, 128, 0.08);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   animation: slide-in-right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
@@ -167,7 +167,7 @@
   .advanced-settings-panel {
     background-color: #343541;
     border-left-color: #444654;
-    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+    box-shadow: -2px 0 8px rgba(100, 100, 100, 0.2);
   }
 
   .settings-description {
@@ -179,7 +179,7 @@
 :root:not(.dark) .advanced-settings-panel {
   background-color: #FFFFFF;
   border-left-color: #E5E5E5;
-  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.08);
+  box-shadow: -2px 0 8px rgba(128, 128, 128, 0.08);
 }
 
 :root:not(.dark) .settings-description {
@@ -189,7 +189,7 @@
 .dark .advanced-settings-panel {
   background-color: #343541;
   border-left-color: #444654;
-  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+  box-shadow: -2px 0 8px rgba(100, 100, 100, 0.2);
 }
 
 .dark .settings-description {
