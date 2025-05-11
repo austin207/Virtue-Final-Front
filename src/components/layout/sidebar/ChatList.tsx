@@ -34,6 +34,11 @@ export const ChatList = ({ chatItems }: ChatListProps) => {
                 style={{ objectFit: "contain" }}
               />
             )}
+            {chat.icon && (
+              <div className="flex-shrink-0 mr-2">
+                {chat.icon}
+              </div>
+            )}
             <div className="flex-1 min-w-0">
               <div className="flex justify-between">
                 <h3 className="font-medium text-sm truncate">{chat.title}</h3>

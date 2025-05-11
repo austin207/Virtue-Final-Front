@@ -160,7 +160,7 @@ export const useChatActions = ({
 
         const newChat: ChatItem = {
           id: newChatId,
-          image: { src: "/uploads/aee35629-9539-47bc-973b-4a7479c24dc7.png", width: 20, height: 20 },
+          image: { src: "/uploads/user.png", width: 20, height: 20 },
           title: chatTitle,
           preview: content.slice(0, 60) + (content.length > 60 ? '...' : ''),
           time: currentTime,

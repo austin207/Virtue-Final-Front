@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 export type ChatItem = {
   id?: string;
   image?: { src: string; width: number; height: number };
+  icon?: ReactNode;
   title: string;
   preview: string;
   time: string;
