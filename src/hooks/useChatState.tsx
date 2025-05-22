@@ -23,6 +23,7 @@ export const useChatState = (updateChatHistory?: (chatItem: ChatItem) => void) =
   const [top_K, setTopK] = useState(40);
   const [top_P, setTopP] = useState(0.9);
   const [repetition_penalty, setRepetitionPenalty] = useState(1.1);
+  const [selectedModel, setSelectedModel] = useState('virtue-v2');
   const [tokensPerSecond, setTokensPerSecond] = useState<number | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -40,13 +41,15 @@ export const useChatState = (updateChatHistory?: (chatItem: ChatItem) => void) =
           length: savedLength,
           top_K: savedTopK,
           top_P: savedTopP,
-          repetition_penalty: savedRepetitionPenalty 
+          repetition_penalty: savedRepetitionPenalty,
+          selectedModel: savedModel
         } = JSON.parse(savedSettings);
         if (savedTemp !== undefined) setTemperature(savedTemp);
         if (savedLength !== undefined) setLength(savedLength);
         if (savedTopK !== undefined) setTopK(savedTopK);
         if (savedTopP !== undefined) setTopP(savedTopP);
         if (savedRepetitionPenalty !== undefined) setRepetitionPenalty(savedRepetitionPenalty);
+        if (savedModel !== undefined) setSelectedModel(savedModel);
       } catch (error) {
         console.error("Failed to parse advanced settings:", error);
       }
@@ -60,9 +63,10 @@ export const useChatState = (updateChatHistory?: (chatItem: ChatItem) => void) =
       length,
       top_K,
       top_P,
-      repetition_penalty
+      repetition_penalty,
+      selectedModel
     }));
-  }, [temperature, length, top_K, top_P, repetition_penalty]);
+  }, [temperature, length, top_K, top_P, repetition_penalty, selectedModel]);
 
   // Handle chat ID changes
   useEffect(() => {
@@ -117,6 +121,8 @@ export const useChatState = (updateChatHistory?: (chatItem: ChatItem) => void) =
     setTopP,
     repetition_penalty,
     setRepetitionPenalty,
+    selectedModel,
+    setSelectedModel,
     tokensPerSecond,
     setTokensPerSecond,
     navigate,

@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, UserCog, Plus, Share2, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { Toggle } from '@/components/ui/toggle';
+import { ModelSelector } from './ModelSelector';
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -18,14 +19,49 @@ interface ChatHeaderProps {
   chatTitle?: string;
   advancedMode?: boolean;
   setAdvancedMode?: (mode: boolean) => void;
+  selectedModel?: string;
+  setSelectedModel?: (model: string) => void;
 }
 
 export const ChatHeader: React.FC<ChatHeaderProps> = ({ 
   isNewChat, 
   chatTitle,
   advancedMode = false,
-  setAdvancedMode
+  setAdvancedMode,
+  selectedModel: externalSelectedModel,
+  setSelectedModel: externalSetSelectedModel
 }) => {
+  // Local state as fallback if props aren't provided
+  const [localSelectedModel, setLocalSelectedModel] = useState('virtue-v2');
+  
+  // Determine if we're using external or local state
+  const selectedModel = externalSelectedModel || localSelectedModel;
+  const setSelectedModel = externalSetSelectedModel || setLocalSelectedModel;
+  
+  // Save selected model to localStorage
+  useEffect(() => {
+    if (!externalSetSelectedModel) { // Only save if using local state
+      localStorage.setItem('selectedModel', localSelectedModel);
+    }
+  }, [localSelectedModel, externalSetSelectedModel]);
+  
+  // Load selected model from localStorage on mount
+  useEffect(() => {
+    if (!externalSetSelectedModel) { // Only load if using local state
+      const savedModel = localStorage.getItem('selectedModel');
+      if (savedModel) {
+        setLocalSelectedModel(savedModel);
+      }
+    }
+  }, [externalSetSelectedModel]);
+  
+  const handleModelChange = (modelId: string) => {
+    setSelectedModel(modelId);
+    toast({
+      title: 'Model Changed',
+      description: `Switched to ${modelId === 'virtue-v1' ? 'Virtue-V1 (RNN)' : 'Virtue-V2 (Transformer)'}`
+    });
+  };
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -82,9 +118,19 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 
   return (
     <header className="h-14 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-500 bg-white dark:bg-chat-darker">
-      <h1 className="font-semibold">
-        {isNewChat ? 'New Chat' : (chatTitle || 'Chat')}
-      </h1>
+      <div className="flex items-center space-x-3">
+        <h1 className="font-semibold">
+          {isNewChat ? 'New Chat' : (chatTitle || 'Chat')}
+        </h1>
+        {/* Model selector - only show for new chats */}
+        {isNewChat && (
+          <ModelSelector
+            selectedModel={selectedModel}
+            onModelChange={handleModelChange}
+            className="w-40 text-xs"
+          />
+        )}
+      </div>
       <div className="flex items-center space-x-2">
         {setAdvancedMode && (
           <Toggle

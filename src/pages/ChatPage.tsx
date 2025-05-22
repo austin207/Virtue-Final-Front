@@ -48,6 +48,8 @@ export const ChatPage: React.FC<ChatPageProps> = ({
     setTopP,
     repetition_penalty,
     setRepetitionPenalty,
+    selectedModel,
+    setSelectedModel,
     tokensPerSecond,
     setTokensPerSecond,
     navigate,
@@ -90,6 +92,24 @@ export const ChatPage: React.FC<ChatPageProps> = ({
         chatTitle={currentChat?.title}
         advancedMode={advancedMode}
         setAdvancedMode={setAdvancedMode}
+        selectedModel={selectedModel}
+        setSelectedModel={(modelId) => {
+          // Update selected model
+          setSelectedModel(modelId);
+          
+          // Update relevant model parameters based on selected model
+          if (modelId === 'virtue-v1') {
+            // RNN model defaults
+            setTopK(40);
+            setTopP(0.9);
+            setRepetitionPenalty(1.1);
+          } else {
+            // Transformer model defaults
+            setTopK(0);
+            setTopP(0.8);
+            setRepetitionPenalty(1.2);
+          }
+        }}
       />
 
       <ChatContainer 
