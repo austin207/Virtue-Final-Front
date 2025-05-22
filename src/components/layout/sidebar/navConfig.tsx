@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { PenLine, Search, Lightbulb, MessageSquare } from 'lucide-react';
+import { PenLine, Search, Lightbulb, MessageSquare, Cog } from 'lucide-react';
 import { NavItem } from './types';
 
 export const getNavItems = (): NavItem[] => {
@@ -24,7 +24,7 @@ export const getNavItems = (): NavItem[] => {
       href: "/collections",
     },
     {
-      icon: <PenLine className="h-5 w-5" />,
+      icon: <Cog className="h-5 w-5" />,
       label: "Settings",
       color: "text-purple-500 bg-purple-100 dark:bg-purple-900/30",
       href: "/settings",

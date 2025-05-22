@@ -20,6 +20,9 @@ export const useChatState = (updateChatHistory?: (chatItem: ChatItem) => void) =
   const [currentChat, setCurrentChat] = useState<ChatItem | null>(null);
   const [temperature, setTemperature] = useState(0.8);
   const [length, setLength] = useState(150);
+  const [top_K, setTopK] = useState(40);
+  const [top_P, setTopP] = useState(0.9);
+  const [repetition_penalty, setRepetitionPenalty] = useState(1.1);
   const [tokensPerSecond, setTokensPerSecond] = useState<number | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -32,9 +35,18 @@ export const useChatState = (updateChatHistory?: (chatItem: ChatItem) => void) =
     const savedSettings = localStorage.getItem('advancedSettings');
     if (savedSettings) {
       try {
-        const { temperature: savedTemp, length: savedLength } = JSON.parse(savedSettings);
+        const { 
+          temperature: savedTemp, 
+          length: savedLength,
+          top_K: savedTopK,
+          top_P: savedTopP,
+          repetition_penalty: savedRepetitionPenalty 
+        } = JSON.parse(savedSettings);
         if (savedTemp !== undefined) setTemperature(savedTemp);
         if (savedLength !== undefined) setLength(savedLength);
+        if (savedTopK !== undefined) setTopK(savedTopK);
+        if (savedTopP !== undefined) setTopP(savedTopP);
+        if (savedRepetitionPenalty !== undefined) setRepetitionPenalty(savedRepetitionPenalty);
       } catch (error) {
         console.error("Failed to parse advanced settings:", error);
       }
@@ -43,8 +55,14 @@ export const useChatState = (updateChatHistory?: (chatItem: ChatItem) => void) =
   
   // Save advanced settings whenever they change
   useEffect(() => {
-    localStorage.setItem('advancedSettings', JSON.stringify({ temperature, length }));
-  }, [temperature, length]);
+    localStorage.setItem('advancedSettings', JSON.stringify({ 
+      temperature, 
+      length,
+      top_K,
+      top_P,
+      repetition_penalty
+    }));
+  }, [temperature, length, top_K, top_P, repetition_penalty]);
 
   // Handle chat ID changes
   useEffect(() => {
@@ -93,6 +111,12 @@ export const useChatState = (updateChatHistory?: (chatItem: ChatItem) => void) =
     setTemperature,
     length,
     setLength,
+    top_K,
+    setTopK,
+    top_P,
+    setTopP,
+    repetition_penalty,
+    setRepetitionPenalty,
     tokensPerSecond,
     setTokensPerSecond,
     navigate,

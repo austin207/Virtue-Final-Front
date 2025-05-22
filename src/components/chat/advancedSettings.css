@@ -53,33 +53,67 @@
   appearance: none;
 }
 
-/* Cross-browser slider styles */
-.settings-slider::-webkit-slider-thumb {
+/* Basic slider styling */
+.settings-slider, .html-slider {
+  margin: 10px 0;
+}
+
+/* HTML Range Slider styles */
+.html-slider {
   -webkit-appearance: none;
   appearance: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #10b981;
-  cursor: pointer;
+  width: 100%;
+  height: 4px;
+  border-radius: 9999px;
+  background: #e5e7eb;
+  outline: none;
+  margin: 16px 0;
 }
 
-.settings-slider::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
+/* Thumb styles for HTML sliders */
+.html-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: #10b981;
+  border: 2px solid #fff;
   cursor: pointer;
-  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s, transform 0.2s;
 }
 
-.settings-slider::-ms-thumb {
-  width: 16px;
-  height: 16px;
+.html-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: #10b981;
+  border: 2px solid #fff;
   cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s, transform 0.2s;
 }
+
+/* Hover effects */
+.html-slider:hover::-webkit-slider-thumb {
+  transform: scale(1.1);
+}
+
+.html-slider:hover::-moz-range-thumb {
+  transform: scale(1.1);
+}
+
+/* Active effects */
+.html-slider:active::-webkit-slider-thumb {
+  background: #0ea271;
+}
+
+.html-slider:active::-moz-range-thumb {
+  background: #0ea271;
+}
+
+/* We're using HTML range inputs now, so we can remove these styles */
 
 .settings-description {
   font-size: 0.75rem;
@@ -194,6 +228,28 @@
 
 .dark .settings-description {
   color: #9CA3AF;
+}
+
+/* Dark mode Radix UI slider styles */
+.dark .settings-slider [data-orientation="horizontal"] > div:first-child {
+  background-color: #4b5563 !important;
+}
+
+.dark .settings-slider [data-orientation="horizontal"] button {
+  border-color: #343541 !important;
+}
+
+/* Dark mode HTML slider styles */
+.dark .html-slider {
+  background: #4b5563;
+}
+
+.dark .html-slider::-webkit-slider-thumb {
+  border-color: #343541;
+}
+
+.dark .html-slider::-moz-range-thumb {
+  border-color: #343541;
 }
 
 /* Input focus and hover animations */
