@@ -19,42 +19,53 @@ export const useChatState = (updateChatHistory?: (chatItem: ChatItem) => void) =
   const [chatHistory, setChatHistory] = useState<ChatItem[]>([]);
   const [currentChat, setCurrentChat] = useState<ChatItem | null>(null);
   const [tokensPerSecond, setTokensPerSecond] = useState<number | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // Use the new advanced settings hook
+  // Use the advanced settings hook
   const advancedSettings = useAdvancedSettings();
 
   // Load chat history on mount
   useEffect(() => {
-    setChatHistory(loadChatHistory());
+    const history = loadChatHistory();
+    setChatHistory(history);
   }, []);
 
-  // Handle chat ID changes
+  // Handle chat ID changes with better state management
   useEffect(() => {
-    const isNew = chatId === 'new';
+    const isNew = chatId === 'new' || !chatId;
     setIsNewChat(isNew);
-    setMessages([]);
+    setIsInitialized(false);
     
     if (!isNew && chatId) {
+      // Loading existing chat
       const loadedMessages = loadChatMessages(chatId);
       setMessages(loadedMessages);
       
       const savedChat = chatHistory.find(chat => chat.id === chatId);
       if (savedChat) {
         setCurrentChat(savedChat);
+      } else {
+        setCurrentChat(null);
       }
     } else {
+      // New chat - ensure clean state
+      setMessages([]);
       setCurrentChat(null);
+      setTokensPerSecond(null);
     }
+    
+    // Mark as initialized after state is set
+    setTimeout(() => setIsInitialized(true), 100);
   }, [chatId, chatHistory]);
 
-  // Save messages to localStorage whenever they change
+  // Save messages to localStorage whenever they change (but only for existing chats)
   useEffect(() => {
-    if (chatId && chatId !== 'new' && messages.length > 0) {
+    if (chatId && chatId !== 'new' && messages.length > 0 && isInitialized) {
       saveChatMessages(chatId, messages);
     }
-  }, [messages, chatId]);
+  }, [messages, chatId, isInitialized]);
 
   return {
     chatId,
@@ -70,6 +81,7 @@ export const useChatState = (updateChatHistory?: (chatItem: ChatItem) => void) =
     setTokensPerSecond,
     navigate,
     toast,
+    isInitialized,
     ...advancedSettings
   };
 };

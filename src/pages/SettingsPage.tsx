@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
 import { Separator } from '@/components/ui/separator';
+import { ApiKeyManager } from '@/components/settings/ApiKeyManager';
 import { fadeIn } from '@/utils/animationUtils';
 
 export const SettingsPage: React.FC = () => {
@@ -14,14 +15,19 @@ export const SettingsPage: React.FC = () => {
   
   return (
     <div className="h-screen flex flex-col">
-      <header className="h-14 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-500 bg-white dark:bg-chat-darker">
+      <header className="h-14 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-500 bg-white dark:bg-gray-900">
         <h1 className="font-semibold">Settings</h1>
       </header>
-      <div className="flex-1 overflow-auto p-4 bg-gray-50 dark:bg-chat-dark">
+      <div className="flex-1 overflow-auto p-4 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-3xl mx-auto">
           <div className="grid gap-8">
+            {/* API Keys */}
+            <div className={fadeIn()}>
+              <ApiKeyManager />
+            </div>
+            
             {/* Appearance */}
-            <Card className={fadeIn()}>
+            <Card className={fadeIn(1)}>
               <CardHeader>
                 <CardTitle>Appearance</CardTitle>
                 <CardDescription>Customize how the application looks</CardDescription>

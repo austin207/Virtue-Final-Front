@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Wand2, ArrowUp, Mic, HelpCircle } from 'lucide-react';
+import { Wand2, ArrowUp, Mic, HelpCircle, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useParams } from 'react-router-dom';
 import { QuickAssistanceModal } from '@/components/chat/QuickAssistanceModal';
-import { AdvancedSettings } from '@/components/chat/AdvancedSettings';
+import { SearchModal } from '@/components/search/SearchModal';
 
 interface ChatInputProps {
   onSendMessage: (message: string, temperature?: number, length?: number) => void;
@@ -31,6 +31,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 }) => {
   const [message, setMessage] = useState('');
   const [showQuickAssistance, setShowQuickAssistance] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const { chatId } = useParams<{ chatId: string }>();
 
@@ -49,8 +50,8 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     }
   };
 
-  const openQuickAssistance = () => {
-    setShowQuickAssistance(true);
+  const handleInsertSearchResults = (results: string) => {
+    setMessage(prev => prev + (prev ? '\n\n' : '') + results);
   };
 
   return (
@@ -67,13 +68,13 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             onChange={e => setMessage(e.target.value)}
             placeholder={placeholder}
             disabled={disabled}
-            className="w-full py-3 pl-11 pr-20 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-ai-primary dark:focus:ring-ai-primary disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 pl-11 pr-32 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 disabled:opacity-50 disabled:cursor-not-allowed"
           />
-          <div className="absolute right-3 flex space-x-2">
+          <div className="absolute right-3 flex space-x-1">
             <Button
               type="submit"
               size="icon"
-              className="h-8 w-8 bg-ai-primary hover:bg-ai-primary/90 text-white rounded-lg"
+              className="h-8 w-8 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
               disabled={!message.trim() || disabled}
             >
               <ArrowUp className="h-4 w-4" />
@@ -83,7 +84,17 @@ export const ChatInput: React.FC<ChatInputProps> = ({
               variant="outline"
               size="icon"
               className="h-8 w-8 rounded-lg border-gray-200 dark:border-gray-600 bg-transparent dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-              onClick={openQuickAssistance}
+              onClick={() => setShowSearch(true)}
+              title="Web Search"
+            >
+              <Search className="h-4 w-4" />
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              className="h-8 w-8 rounded-lg border-gray-200 dark:border-gray-600 bg-transparent dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+              onClick={() => setShowQuickAssistance(true)}
               title="Quick Assistance"
             >
               <HelpCircle className="h-4 w-4" />
@@ -94,6 +105,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
               size="icon"
               className="h-8 w-8 rounded-lg border-gray-200 dark:border-gray-600 bg-transparent dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
               disabled={disabled}
+              title="Voice Input"
             >
               <Mic className="h-4 w-4" />
             </Button>
@@ -104,6 +116,12 @@ export const ChatInput: React.FC<ChatInputProps> = ({
       <QuickAssistanceModal
         isOpen={showQuickAssistance}
         onClose={() => setShowQuickAssistance(false)}
+      />
+
+      <SearchModal
+        isOpen={showSearch}
+        onClose={() => setShowSearch(false)}
+        onInsertResults={handleInsertSearchResults}
       />
     </>
   );

@@ -1,47 +1,104 @@
 
-import { useToast } from "@/hooks/use-toast";
+import { toast } from '@/hooks/use-toast';
 
-// Using DuckDuckGo API via RapidAPI (can be replaced with actual API key)
-// This is a mock implementation that simulates search results
 export interface SearchResult {
   title: string;
   link: string;
   snippet: string;
+  position: number;
 }
 
-export const searchWeb = async (query: string): Promise<SearchResult[]> => {
-  try {
-    // For a real implementation, you would use an actual API like:
-    // const response = await fetch(`https://api.example.com/search?q=${encodeURIComponent(query)}`, {
-    //   headers: { "Authorization": "Bearer YOUR_API_KEY" }
-    // });
-    
-    console.log(`Searching for: ${query}`);
-    
-    // Simulating API response for demonstration
-    // In a real implementation, replace this with actual API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Mock results
-    return [
-      {
-        title: `Search result for "${query}" - Example Site`,
-        link: "https://example.com/result1",
-        snippet: `This is a result that matches your search for "${query}". It contains relevant information about your query.`
-      },
-      {
-        title: `${query} - Documentation and Resources`,
-        link: "https://docs.example.com/resources",
-        snippet: `Find comprehensive documentation about "${query}" and related topics. Learn how to implement and use ${query} effectively.`
-      },
-      {
-        title: `Latest News on ${query}`,
-        link: "https://news.example.com/tech",
-        snippet: `Stay updated with the latest developments and news regarding ${query} and related technologies.`
-      }
-    ];
-  } catch (error) {
-    console.error("Search failed:", error);
-    throw new Error("Search failed. Please try again later.");
+export interface SearchResponse {
+  results: SearchResult[];
+  searchTerm: string;
+  totalResults?: number;
+}
+
+class SearchService {
+  private apiKey: string | null = null;
+
+  constructor() {
+    // Load API key from localStorage
+    this.loadApiKey();
   }
-};
+
+  private loadApiKey() {
+    const savedKey = localStorage.getItem('serpApiKey');
+    this.apiKey = savedKey;
+  }
+
+  setApiKey(key: string) {
+    this.apiKey = key;
+    localStorage.setItem('serpApiKey', key);
+  }
+
+  getApiKey(): string | null {
+    return this.apiKey;
+  }
+
+  async search(query: string, numResults: number = 10): Promise<SearchResponse> {
+    if (!this.apiKey) {
+      throw new Error('SerpAPI key not configured. Please add it in settings.');
+    }
+
+    const url = new URL('https://serpapi.com/search');
+    url.searchParams.append('engine', 'google');
+    url.searchParams.append('q', query);
+    url.searchParams.append('api_key', this.apiKey);
+    url.searchParams.append('num', numResults.toString());
+
+    try {
+      const response = await fetch(url.toString());
+      
+      if (!response.ok) {
+        throw new Error(`Search failed: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      const results: SearchResult[] = (data.organic_results || []).map((result: any, index: number) => ({
+        title: result.title || 'No title',
+        link: result.link || '#',
+        snippet: result.snippet || 'No description available',
+        position: index + 1
+      }));
+
+      return {
+        results,
+        searchTerm: query,
+        totalResults: data.search_information?.total_results
+      };
+    } catch (error) {
+      console.error('Search error:', error);
+      throw error;
+    }
+  }
+
+  async quickSearch(query: string): Promise<string> {
+    try {
+      const response = await this.search(query, 5);
+      
+      if (response.results.length === 0) {
+        return `No search results found for "${query}".`;
+      }
+
+      let summary = `Search results for "${query}":\n\n`;
+      
+      response.results.slice(0, 3).forEach((result, index) => {
+        summary += `${index + 1}. **${result.title}**\n`;
+        summary += `   ${result.snippet}\n`;
+        summary += `   [Read more](${result.link})\n\n`;
+      });
+
+      return summary;
+    } catch (error) {
+      throw error;
+    }
+  }
+}
+
+export const searchService = new SearchService();

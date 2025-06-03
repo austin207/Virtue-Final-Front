@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Sidebar, ChatItem } from '@/components/layout/sidebar/Sidebar';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 type MainLayoutProps = {
   chatItems?: ChatItem[];
@@ -35,9 +36,10 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
         advancedMode={advancedMode}
         setAdvancedMode={setAdvancedMode}
       />
-      <main className={`flex-1 transition-all duration-300 overflow-hidden ${
-        sidebarCollapsed ? 'ml-[60px]' : 'ml-[260px] md:ml-[300px]'
-      }`}>
+      <main className={cn(
+        "flex-1 transition-all duration-300 ease-in-out overflow-hidden",
+        sidebarCollapsed ? "ml-[60px]" : "ml-[260px] md:ml-[300px]"
+      )}>
         <Outlet />
       </main>
     </div>
