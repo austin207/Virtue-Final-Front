@@ -9,6 +9,7 @@ import { SidebarSearch } from './SidebarSearch';
 import { SidebarNavigation } from './SidebarNavigation';
 import { ChatList } from './ChatList';
 import { SidebarFooter } from './SidebarFooter';
+import { TrainModelSection } from '@/components/chat/TrainModelSection';
 import { SidebarProps, ChatItem } from './types';
 import { getNavItems, getDefaultChatItem } from './navConfig';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -54,7 +55,8 @@ export const Sidebar = ({
   return (
     <div
       className={cn(
-        "fixed left-0 top-0 z-20 h-full chat-sidebar border-r border-gray-200 dark:border-gray-500 bg-white dark:bg-gray-900 transition-all duration-300 ease-in-out",
+        "fixed left-0 top-0 z-20 h-full chat-sidebar border-r bg-gray-50 dark:bg-gray-900 transition-all duration-300 ease-in-out",
+        "border-gray-200 dark:border-gray-700",
         collapsed ? "w-[60px]" : "w-[260px] md:w-[300px]"
       )}
     >
@@ -94,6 +96,13 @@ export const Sidebar = ({
             <ChatList chatItems={displayChatItems} />
           )}
         </div>
+
+        {/* Train Your Own Model Section */}
+        {!collapsed && (
+          <div className="border-t border-gray-200 dark:border-gray-700">
+            <TrainModelSection />
+          </div>
+        )}
 
         {/* Footer */}
         <SidebarFooter 

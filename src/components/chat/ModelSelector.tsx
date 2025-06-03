@@ -80,7 +80,11 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
   onModelChange,
   className = ''
 }) => {
-  const [activeTab, setActiveTab] = useState('my-models');
+  const [activeTab, setActiveTab] = useState(() => {
+    const allModels = [...MY_MODELS, ...PERFORMANCE_MODELS];
+    const selectedModelData = allModels.find(m => m.id === selectedModel);
+    return selectedModelData?.type === 'local' ? 'my-models' : 'performance-models';
+  });
 
   const allModels = [...MY_MODELS, ...PERFORMANCE_MODELS];
   const selectedModelData = allModels.find(m => m.id === selectedModel);
@@ -90,24 +94,38 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
   };
 
   return (
-    <div className={`w-full ${className}`}>
+    <div className={`w-full max-w-md ${className}`}>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-2">
-          <TabsTrigger value="my-models" className="text-xs">My Models</TabsTrigger>
-          <TabsTrigger value="performance-models" className="text-xs">Performance Models</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 mb-3 h-8 bg-gray-100 dark:bg-gray-800">
+          <TabsTrigger 
+            value="my-models" 
+            className="text-xs py-1 px-2 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700"
+          >
+            My Models
+          </TabsTrigger>
+          <TabsTrigger 
+            value="performance-models" 
+            className="text-xs py-1 px-2 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700"
+          >
+            Performance Models
+          </TabsTrigger>
         </TabsList>
         
         <TabsContent value="my-models" className="mt-0">
           <Select value={selectedModel} onValueChange={handleModelSelect}>
-            <SelectTrigger className="h-8">
+            <SelectTrigger className="h-9 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
               <SelectValue placeholder="Select Model" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
               {MY_MODELS.map(model => (
-                <SelectItem key={model.id} value={model.id}>
-                  <div className="flex flex-col">
-                    <span className="font-medium">{model.name}</span>
-                    <span className="text-xs text-gray-500">{model.description}</span>
+                <SelectItem 
+                  key={model.id} 
+                  value={model.id}
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700 focus:bg-gray-50 dark:focus:bg-gray-700"
+                >
+                  <div className="flex flex-col items-start">
+                    <span className="font-medium text-sm">{model.name}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">{model.description}</span>
                   </div>
                 </SelectItem>
               ))}
@@ -117,15 +135,19 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
         
         <TabsContent value="performance-models" className="mt-0">
           <Select value={selectedModel} onValueChange={handleModelSelect}>
-            <SelectTrigger className="h-8">
+            <SelectTrigger className="h-9 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
               <SelectValue placeholder="Select Model" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
               {PERFORMANCE_MODELS.map(model => (
-                <SelectItem key={model.id} value={model.id}>
-                  <div className="flex flex-col">
-                    <span className="font-medium">{model.name}</span>
-                    <span className="text-xs text-gray-500">{model.description}</span>
+                <SelectItem 
+                  key={model.id} 
+                  value={model.id}
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700 focus:bg-gray-50 dark:focus:bg-gray-700"
+                >
+                  <div className="flex flex-col items-start">
+                    <span className="font-medium text-sm">{model.name}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">{model.description}</span>
                   </div>
                 </SelectItem>
               ))}

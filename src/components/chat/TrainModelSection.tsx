@@ -1,19 +1,20 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
-import { Upload, Play, Pause, Square, FileText, Database } from 'lucide-react';
+import { Upload, Play, Square, FileText, Database, ChevronUp, ChevronDown } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 
 export const TrainModelSection: React.FC = () => {
   const [isTraining, setIsTraining] = useState(false);
   const [trainingProgress, setTrainingProgress] = useState(0);
   const [modelName, setModelName] = useState('');
   const [trainingData, setTrainingData] = useState('');
+  const [isExpanded, setIsExpanded] = useState(false);
   const { toast } = useToast();
 
   const handleStartTraining = () => {
@@ -86,31 +87,45 @@ export const TrainModelSection: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 w-96 z-50">
-      <Card className="shadow-lg border-2 border-blue-200 dark:border-blue-800">
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <Database className="h-5 w-5 text-blue-600" />
-            Train Your Own Model
-          </CardTitle>
-          <CardDescription>
+    <div className="p-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+      <div 
+        className="flex items-center justify-between cursor-pointer mb-2"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        <div className="flex items-center gap-2">
+          <Database className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">Train Your Own Model</span>
+        </div>
+        {isExpanded ? (
+          <ChevronUp className="h-4 w-4 text-gray-500" />
+        ) : (
+          <ChevronDown className="h-4 w-4 text-gray-500" />
+        )}
+      </div>
+
+      <div className={cn(
+        "overflow-hidden transition-all duration-300 ease-in-out",
+        isExpanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+      )}>
+        <div className="space-y-3 pt-2">
+          <p className="text-xs text-gray-600 dark:text-gray-400">
             Create and train custom AI models with your data
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+          </p>
+
           <div className="space-y-2">
-            <Label htmlFor="model-name">Model Name</Label>
+            <Label htmlFor="model-name" className="text-xs">Model Name</Label>
             <Input
               id="model-name"
               placeholder="My Custom Model"
               value={modelName}
               onChange={(e) => setModelName(e.target.value)}
               disabled={isTraining}
+              className="h-8 text-xs"
             />
           </div>
 
           <div className="space-y-2">
-            <Label>Training Data</Label>
+            <Label className="text-xs">Training Data</Label>
             <div className="flex gap-2">
               <input
                 type="file"
@@ -122,58 +137,60 @@ export const TrainModelSection: React.FC = () => {
               />
               <Label
                 htmlFor="file-upload"
-                className="flex-1 flex items-center justify-center gap-2 h-9 px-3 border border-gray-300 dark:border-gray-600 rounded-md cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 h-7 px-2 border border-gray-300 dark:border-gray-600 rounded-md cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-xs"
               >
-                <Upload className="h-4 w-4" />
-                Upload File
+                <Upload className="h-3 w-3" />
+                Upload
               </Label>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setTrainingData('')}
                 disabled={isTraining}
+                className="h-7 px-2"
               >
-                <FileText className="h-4 w-4" />
+                <FileText className="h-3 w-3" />
               </Button>
             </div>
             <Textarea
               placeholder="Or paste your training data here..."
               value={trainingData}
               onChange={(e) => setTrainingData(e.target.value)}
-              rows={3}
+              rows={2}
               disabled={isTraining}
+              className="text-xs resize-none"
             />
           </div>
 
           {isTraining && (
             <div className="space-y-2">
-              <div className="flex justify-between text-sm">
+              <div className="flex justify-between text-xs">
                 <span>Training Progress</span>
                 <span>{Math.round(trainingProgress)}%</span>
               </div>
-              <Progress value={trainingProgress} className="w-full" />
+              <Progress value={trainingProgress} className="w-full h-2" />
             </div>
           )}
 
           <div className="flex gap-2">
             {!isTraining ? (
-              <Button onClick={handleStartTraining} className="flex-1" size="sm">
-                <Play className="h-4 w-4 mr-2" />
+              <Button onClick={handleStartTraining} className="flex-1 h-7 text-xs" size="sm">
+                <Play className="h-3 w-3 mr-1" />
                 Start Training
               </Button>
             ) : (
-              <Button onClick={handleStopTraining} variant="destructive" className="flex-1" size="sm">
-                <Square className="h-4 w-4 mr-2" />
+              <Button onClick={handleStopTraining} variant="destructive" className="flex-1 h-7 text-xs" size="sm">
+                <Square className="h-3 w-3 mr-1" />
                 Stop Training
               </Button>
             )}
           </div>
 
-          <div className="text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 p-2 rounded">
-            <strong>Note:</strong> This is a placeholder interface. Full training functionality will be implemented in the next phase.
+          <div className="text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 p-2 rounded text-center">
+            <strong>Note:</strong> Placeholder interface. Full training functionality coming soon.
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };

@@ -27,7 +27,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
   }, [isMobile]);
 
   return (
-    <div className="h-screen w-screen flex overflow-hidden bg-background dark:bg-gray-950">
+    <div className="h-screen w-screen flex overflow-hidden bg-gray-50 dark:bg-gray-950">
       <Sidebar 
         collapsed={sidebarCollapsed} 
         setCollapsed={setSidebarCollapsed} 
@@ -37,7 +37,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
         setAdvancedMode={setAdvancedMode}
       />
       <main className={cn(
-        "flex-1 transition-all duration-300 ease-in-out overflow-hidden",
+        "flex-1 transition-all duration-300 ease-in-out overflow-hidden bg-white dark:bg-gray-900",
         sidebarCollapsed ? "ml-[60px]" : "ml-[260px] md:ml-[300px]"
       )}>
         <Outlet />
