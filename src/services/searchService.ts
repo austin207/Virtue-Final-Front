@@ -102,3 +102,9 @@ class SearchService {
 }
 
 export const searchService = new SearchService();
+
+// Export a function for the BrowsePage to use
+export const searchWeb = async (query: string): Promise<SearchResult[]> => {
+  const response = await searchService.search(query);
+  return response.results;
+};
