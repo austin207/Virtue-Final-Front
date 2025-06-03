@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { 
   Select, 
@@ -23,6 +24,11 @@ export const DEFAULT_MODELS: Model[] = [
     id: 'virtue-v2',
     name: 'Virtue-V2',
     description: 'Transformer-based language model'
+  },
+  {
+    id: 'llama-transformer',
+    name: 'LLama-based Transformer',
+    description: 'LLama-powered transformer model'
   }
 ];
 

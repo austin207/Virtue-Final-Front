@@ -21,6 +21,10 @@ interface ChatActionsProps {
   updateChatHistory?: (chatItem: ChatItem) => void;
   temperature?: number;
   length?: number;
+  top_K?: number;
+  top_P?: number;
+  repetition_penalty?: number;
+  selectedModel?: string;
 }
 
 export const useChatActions = ({
@@ -35,8 +39,24 @@ export const useChatActions = ({
   toast,
   updateChatHistory,
   temperature = 0.8,
-  length = 150
+  length = 150,
+  top_K = 40,
+  top_P = 0.9,
+  repetition_penalty = 1.1,
+  selectedModel = 'virtue-v2'
 }: ChatActionsProps) => {
+
+  const mapModelToServiceType = (modelId: string) => {
+    switch (modelId) {
+      case 'virtue-v1':
+        return 'rnn';
+      case 'virtue-v2':
+      case 'llama-transformer':
+        return 'transformer';
+      default:
+        return 'transformer';
+    }
+  };
 
   const handleRegenerateResponse = async () => {
     const lastAssistantMessageIndex = [...messages].reverse().findIndex(m => m.role === 'assistant');
@@ -67,7 +87,15 @@ export const useChatActions = ({
 
         try {
           await streamGenerateText(
-            { prompt: userPrompt, length, temperature },
+            { 
+              prompt: userPrompt, 
+              length, 
+              temperature,
+              model: mapModelToServiceType(selectedModel),
+              top_k: top_K,
+              top_p: top_P,
+              repetition_penalty
+            },
             (token) => {
               aiContent += token;
               tokenCount += 1;
@@ -82,7 +110,6 @@ export const useChatActions = ({
           const timeInSeconds = (endTime - startTime) / 1000;
           setTokensPerSecond(tokenCount / (timeInSeconds || 1));
 
-          // Save updated messages to localStorage
           if (chatId && chatId !== 'new') {
             saveChatMessages(chatId, [...updatedMessages, { ...newAiMessage, content: aiContent }]);
           }
@@ -125,6 +152,8 @@ export const useChatActions = ({
       content: "",
       timestamp: getCurrentTimeString(),
     };
+    
+    // Add AI message immediately to show loading state
     setMessages(prev => [...prev, aiMessage]);
 
     let tokenCount = 0;
@@ -135,7 +164,11 @@ export const useChatActions = ({
         { 
           prompt: content, 
           length: maxLength || length, 
-          temperature: msgTemperature || temperature 
+          temperature: msgTemperature || temperature,
+          model: mapModelToServiceType(selectedModel),
+          top_k: top_K,
+          top_p: top_P,
+          repetition_penalty
         },
         (token) => {
           aiContent += token;
@@ -152,7 +185,7 @@ export const useChatActions = ({
       const timeInSeconds = (endTime - startTime) / 1000;
       setTokensPerSecond(tokenCount / (timeInSeconds || 1));
 
-      // If this is a new chat, create a new chat in history and redirect
+      // Handle new chat creation
       if (isNewChat) {
         const newChatId = Date.now().toString();
         const chatTitle = generateChatTitle(content);
@@ -170,7 +203,9 @@ export const useChatActions = ({
         if (updateChatHistory) {
           updateChatHistory(newChat);
         }
-        saveChatMessages(newChatId, [userMessage, { ...aiMessage, content: aiContent }]);
+        
+        const finalMessages = [userMessage, { ...aiMessage, content: aiContent }];
+        saveChatMessages(newChatId, finalMessages);
         navigate(`/chat/${newChatId}`);
       }
     } catch (error) {
@@ -188,7 +223,11 @@ export const useChatActions = ({
         timestamp: getCurrentTimeString(),
       };
 
-      setMessages(prev => [...prev, fallbackMessage]);
+      setMessages(prev => {
+        const updated = [...prev];
+        updated[updated.length - 1] = fallbackMessage;
+        return updated;
+      });
     } finally {
       setIsLoading(false);
     }

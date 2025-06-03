@@ -1,11 +1,11 @@
+
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ChatItem } from '@/components/layout/sidebar/types';
 import { MessageType } from '@/components/chat/ChatMessage';
+import { useAdvancedSettings } from '@/hooks/useAdvancedSettings';
 import { 
-  generateChatTitle, 
-  getCurrentTimeString,
   loadChatMessages, 
   loadChatHistory, 
   saveChatMessages 
@@ -18,78 +18,33 @@ export const useChatState = (updateChatHistory?: (chatItem: ChatItem) => void) =
   const [isLoading, setIsLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState<ChatItem[]>([]);
   const [currentChat, setCurrentChat] = useState<ChatItem | null>(null);
-  const [temperature, setTemperature] = useState(0.8);
-  const [length, setLength] = useState(150);
-  const [top_K, setTopK] = useState(40);
-  const [top_P, setTopP] = useState(0.9);
-  const [repetition_penalty, setRepetitionPenalty] = useState(1.1);
-  const [selectedModel, setSelectedModel] = useState('virtue-v2');
   const [tokensPerSecond, setTokensPerSecond] = useState<number | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+  
+  // Use the new advanced settings hook
+  const advancedSettings = useAdvancedSettings();
 
-  // Load chat history and advanced settings from localStorage on mount
+  // Load chat history on mount
   useEffect(() => {
     setChatHistory(loadChatHistory());
-    
-    // Load advanced settings from localStorage if available
-    const savedSettings = localStorage.getItem('advancedSettings');
-    if (savedSettings) {
-      try {
-        const { 
-          temperature: savedTemp, 
-          length: savedLength,
-          top_K: savedTopK,
-          top_P: savedTopP,
-          repetition_penalty: savedRepetitionPenalty,
-          selectedModel: savedModel
-        } = JSON.parse(savedSettings);
-        if (savedTemp !== undefined) setTemperature(savedTemp);
-        if (savedLength !== undefined) setLength(savedLength);
-        if (savedTopK !== undefined) setTopK(savedTopK);
-        if (savedTopP !== undefined) setTopP(savedTopP);
-        if (savedRepetitionPenalty !== undefined) setRepetitionPenalty(savedRepetitionPenalty);
-        if (savedModel !== undefined) setSelectedModel(savedModel);
-      } catch (error) {
-        console.error("Failed to parse advanced settings:", error);
-      }
-    }
   }, []);
-  
-  // Save advanced settings whenever they change
-  useEffect(() => {
-    localStorage.setItem('advancedSettings', JSON.stringify({ 
-      temperature, 
-      length,
-      top_K,
-      top_P,
-      repetition_penalty,
-      selectedModel
-    }));
-  }, [temperature, length, top_K, top_P, repetition_penalty, selectedModel]);
 
   // Handle chat ID changes
   useEffect(() => {
-    // Check if it's a new chat based on the chatId
     const isNew = chatId === 'new';
     setIsNewChat(isNew);
-    
-    // Clear messages whenever chatId changes
     setMessages([]);
     
-    if (!isNew) {
-      // Load chat messages from localStorage based on chatId
-      const loadedMessages = loadChatMessages(chatId || '');
+    if (!isNew && chatId) {
+      const loadedMessages = loadChatMessages(chatId);
       setMessages(loadedMessages);
       
-      // Find the current chat in history
       const savedChat = chatHistory.find(chat => chat.id === chatId);
       if (savedChat) {
         setCurrentChat(savedChat);
       }
     } else {
-      // Clear messages for new chat
-      setMessages([]);
       setCurrentChat(null);
     }
   }, [chatId, chatHistory]);
@@ -111,21 +66,10 @@ export const useChatState = (updateChatHistory?: (chatItem: ChatItem) => void) =
     chatHistory,
     setChatHistory,
     currentChat,
-    temperature,
-    setTemperature,
-    length,
-    setLength,
-    top_K,
-    setTopK,
-    top_P,
-    setTopP,
-    repetition_penalty,
-    setRepetitionPenalty,
-    selectedModel,
-    setSelectedModel,
     tokensPerSecond,
     setTokensPerSecond,
     navigate,
-    toast
+    toast,
+    ...advancedSettings
   };
 };

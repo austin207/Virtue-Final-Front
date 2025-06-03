@@ -7,6 +7,7 @@ import { ChatItem } from '@/components/layout/sidebar/types';
 import { useChatState } from '@/hooks/useChatState';
 import { useChatActions } from '@/hooks/useChatActions';
 import { AdvancedSettings } from '@/components/chat/AdvancedSettings';
+import { TrainModelSection } from '@/components/chat/TrainModelSection';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { debounce } from '@/lib/utils';
 
@@ -71,12 +72,15 @@ export const ChatPage: React.FC<ChatPageProps> = ({
     toast,
     updateChatHistory,
     temperature,
-    length
+    length,
+    top_K,
+    top_P,
+    repetition_penalty,
+    selectedModel
   });
   
   // Debounced window resize handler for performance
   const handleResize = useCallback(debounce(() => {
-    // Force re-render when window is resized for proper layout adjustments
     window.dispatchEvent(new Event('resize'));
   }, 250), []);
   
@@ -84,6 +88,25 @@ export const ChatPage: React.FC<ChatPageProps> = ({
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [handleResize]);
+
+  const handleModelChange = (modelId: string) => {
+    setSelectedModel(modelId);
+    
+    // Update relevant model parameters based on selected model
+    if (modelId === 'virtue-v1') {
+      setTopK(40);
+      setTopP(0.9);
+      setRepetitionPenalty(1.1);
+    } else if (modelId === 'llama-transformer') {
+      setTopK(50);
+      setTopP(0.95);
+      setRepetitionPenalty(1.0);
+    } else {
+      setTopK(0);
+      setTopP(0.8);
+      setRepetitionPenalty(1.2);
+    }
+  };
 
   return (
     <div className="flex flex-col h-screen w-full">
@@ -93,23 +116,7 @@ export const ChatPage: React.FC<ChatPageProps> = ({
         advancedMode={advancedMode}
         setAdvancedMode={setAdvancedMode}
         selectedModel={selectedModel}
-        setSelectedModel={(modelId) => {
-          // Update selected model
-          setSelectedModel(modelId);
-          
-          // Update relevant model parameters based on selected model
-          if (modelId === 'virtue-v1') {
-            // RNN model defaults
-            setTopK(40);
-            setTopP(0.9);
-            setRepetitionPenalty(1.1);
-          } else {
-            // Transformer model defaults
-            setTopK(0);
-            setTopP(0.8);
-            setRepetitionPenalty(1.2);
-          }
-        }}
+        setSelectedModel={handleModelChange}
       />
 
       <ChatContainer 
@@ -132,6 +139,9 @@ export const ChatPage: React.FC<ChatPageProps> = ({
           tokensPerSecond={tokensPerSecond}
         />
       </div>
+      
+      {/* Train Model Section */}
+      <TrainModelSection />
       
       {!isMobile && advancedMode && (
         <AdvancedSettings
