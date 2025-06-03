@@ -1,4 +1,3 @@
-
 import React, { useEffect, useCallback } from 'react';
 import { ChatInput } from '@/components/chat/ChatInput';
 import { ChatHeader } from '@/components/chat/ChatHeader';
@@ -7,7 +6,6 @@ import { ChatItem } from '@/components/layout/sidebar/types';
 import { useChatState } from '@/hooks/useChatState';
 import { useChatActions } from '@/hooks/useChatActions';
 import { AdvancedSettings } from '@/components/chat/AdvancedSettings';
-import { TrainModelSection } from '@/components/chat/TrainModelSection';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { debounce } from '@/lib/utils';
 
@@ -139,9 +137,6 @@ export const ChatPage: React.FC<ChatPageProps> = ({
           tokensPerSecond={tokensPerSecond}
         />
       </div>
-      
-      {/* Train Model Section */}
-      <TrainModelSection />
       
       {!isMobile && advancedMode && (
         <AdvancedSettings

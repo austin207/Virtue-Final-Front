@@ -1,45 +1,43 @@
 
-import React from 'react';
-import { PenLine, Search, Lightbulb, MessageSquare, Cog } from 'lucide-react';
-import { NavItem } from './types';
+import { MessageSquare, Search, BookOpen, Settings, User, Database } from 'lucide-react';
 
-export const getNavItems = (): NavItem[] => {
-  return [
-    {
-      icon: <MessageSquare className="h-5 w-5" />,
-      label: "Chat",
-      color: "text-green-500 bg-green-100 dark:bg-green-900/30",
-      href: "/",
-    },
-    {
-      icon: <Search className="h-5 w-5" />,
-      label: "Browse",
-      color: "text-blue-500 bg-blue-100 dark:bg-blue-900/30",
-      href: "/browse",
-    },
-    {
-      icon: <Lightbulb className="h-5 w-5" />,
-      label: "Collections",
-      color: "text-amber-500 bg-amber-100 dark:bg-amber-900/30",
-      href: "/collections",
-    },
-    {
-      icon: <Cog className="h-5 w-5" />,
-      label: "Settings",
-      color: "text-purple-500 bg-purple-100 dark:bg-purple-900/30",
-      href: "/settings",
-    },
-  ];
-};
+export const getNavItems = () => [
+  {
+    title: "Chat",
+    url: "/chat/new",
+    icon: MessageSquare,
+  },
+  {
+    title: "Browse",
+    url: "/browse",
+    icon: Search,
+  },
+  {
+    title: "Collections",
+    url: "/collections",
+    icon: BookOpen,
+  },
+  {
+    title: "Train Model",
+    url: "/train",
+    icon: Database,
+  },
+  {
+    title: "Settings",
+    url: "/settings",
+    icon: Settings,
+  },
+  {
+    title: "Profile",
+    url: "/profile",
+    icon: User,
+  },
+];
 
-export const getDefaultChatItem = (isActive: boolean) => {
-  return {
-    id: "new",
-    image: { src: "/uploads/user.png", width: 20, height: 20 },
-    title: "New Chat",
-    preview: "Ask anything!",
-    time: "Now",
-    active: isActive,
-    href: "/chat/new"
-  };
-};
+export const getDefaultChatItem = (isActive: boolean = false) => ({
+  id: 'new',
+  title: 'New Chat',
+  timestamp: new Date().toISOString(),
+  isActive,
+  preview: 'Start a new conversation'
+});
