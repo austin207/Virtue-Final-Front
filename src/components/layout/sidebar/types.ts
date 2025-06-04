@@ -1,5 +1,6 @@
 
 import { ReactNode } from 'react';
+import { LucideProps } from 'lucide-react';
 
 export type ChatItem = {
   id?: string;
@@ -13,7 +14,7 @@ export type ChatItem = {
 };
 
 export type NavItem = {
-  icon: ReactNode;
+  icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>;
   label: string;
   color: string;
   href: string;
@@ -27,4 +28,3 @@ export type SidebarProps = {
   advancedMode?: boolean;
   setAdvancedMode?: (mode: boolean) => void;
 };
-
