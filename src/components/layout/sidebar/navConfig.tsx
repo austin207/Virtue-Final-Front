@@ -1,50 +1,51 @@
 
-import { MessageSquare, Search, BookOpen, Settings, User, Database } from 'lucide-react';
+import { MessageSquare, Search, BookOpen, Database, Settings, User } from 'lucide-react';
+import { NavItem, ChatItem } from './types';
 
-export const getNavItems = () => [
+export const getNavItems = (): NavItem[] => [
   {
     icon: MessageSquare,
-    label: "Chat",
-    color: "text-blue-600",
-    href: "/chat/new",
+    label: 'Chat',
+    color: 'bg-gray-600 hover:bg-gray-700',
+    href: '/chat/new'
   },
   {
     icon: Search,
-    label: "Browse", 
-    color: "text-green-600",
-    href: "/browse",
+    label: 'Browse',
+    color: 'bg-gray-600 hover:bg-gray-700',
+    href: '/browse'
   },
   {
     icon: BookOpen,
-    label: "Collections",
-    color: "text-purple-600", 
-    href: "/collections",
+    label: 'Collections',
+    color: 'bg-gray-600 hover:bg-gray-700',
+    href: '/collections'
   },
   {
     icon: Database,
-    label: "Train Model",
-    color: "text-orange-600",
-    href: "/train",
+    label: 'Train Model',
+    color: 'bg-gray-600 hover:bg-gray-700',
+    href: '/train-model'
   },
   {
     icon: Settings,
-    label: "Settings",
-    color: "text-gray-600",
-    href: "/settings",
+    label: 'Settings',
+    color: 'bg-gray-600 hover:bg-gray-700',
+    href: '/settings'
   },
   {
     icon: User,
-    label: "Profile",
-    color: "text-indigo-600",
-    href: "/profile",
-  },
+    label: 'Profile',
+    color: 'bg-gray-600 hover:bg-gray-700',
+    href: '/profile'
+  }
 ];
 
-export const getDefaultChatItem = (isActive: boolean = false) => ({
-  id: 'new',
+export const getDefaultChatItem = (isActive: boolean = false): ChatItem => ({
+  id: 'new-chat',
   title: 'New Chat',
-  time: 'now',
-  active: isActive,
   preview: 'Start a new conversation',
-  href: '/chat/new'
+  time: 'now',
+  href: '/chat/new',
+  active: isActive
 });

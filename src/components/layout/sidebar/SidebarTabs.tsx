@@ -19,7 +19,7 @@ export const SidebarTabs = ({ activeTab, setActiveTab, chatCount }: SidebarTabsP
         onClick={() => setActiveTab("chats")}
       >
         <span className="flex items-center">
-          <MessageSquare className="h-4 w-4 mr-2 text-green-500" />
+          <MessageSquare className="h-4 w-4 mr-2 text-gray-500" />
           CHATS
         </span>
         <span className="ml-2 px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-xs">
@@ -33,7 +33,7 @@ export const SidebarTabs = ({ activeTab, setActiveTab, chatCount }: SidebarTabsP
         onClick={() => setActiveTab("saved")}
       >
         <span className="flex items-center">
-          <BookMarked className="h-4 w-4 mr-2" />
+          <BookMarked className="h-4 w-4 mr-2 text-gray-500" />
           SAVED
         </span>
         <span className="ml-2 px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-xs">0</span>
