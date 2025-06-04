@@ -97,16 +97,16 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
   return (
     <div className={`w-full ${className}`}>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-2 h-9 bg-gray-100 dark:bg-gray-800">
+        <TabsList className="grid w-full grid-cols-2 mb-2 h-9 bg-gray-600 dark:bg-gray-700">
           <TabsTrigger 
             value="my-models" 
-            className="text-xs py-2 px-3 data-[state=active]:bg-gray-500 data-[state=active]:text-white dark:data-[state=active]:bg-gray-500"
+            className="text-xs py-2 px-3 text-gray-300 data-[state=active]:bg-gray-500 data-[state=active]:text-white dark:text-gray-300 dark:data-[state=active]:bg-gray-600 dark:data-[state=active]:text-white"
           >
             My Models
           </TabsTrigger>
           <TabsTrigger 
             value="performance-models" 
-            className="text-xs py-2 px-3 data-[state=active]:bg-gray-500 data-[state=active]:text-white dark:data-[state=active]:bg-gray-500"
+            className="text-xs py-2 px-3 text-gray-300 data-[state=active]:bg-gray-500 data-[state=active]:text-white dark:text-gray-300 dark:data-[state=active]:bg-gray-600 dark:data-[state=active]:text-white"
           >
             Performance Models
           </TabsTrigger>
@@ -118,7 +118,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
               <SelectValue placeholder="Select Model">
                 {selectedModelData && selectedModelData.type === 'local' && (
                   <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="text-xs bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200">LOCAL</Badge>
+                    <Badge variant="secondary" className="text-xs bg-gray-500 text-white dark:bg-gray-600 dark:text-white">LOCAL</Badge>
                     <span className="text-sm">{selectedModelData.name}</span>
                   </div>
                 )}
@@ -132,7 +132,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 focus:bg-gray-50 dark:focus:bg-gray-700"
                 >
                   <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="text-xs bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200">LOCAL</Badge>
+                    <Badge variant="secondary" className="text-xs bg-gray-500 text-white dark:bg-gray-600 dark:text-white">LOCAL</Badge>
                     <div className="flex flex-col items-start">
                       <span className="font-medium text-sm">{model.name}</span>
                       <span className="text-xs text-gray-500 dark:text-gray-400">{model.description}</span>
@@ -150,7 +150,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
               <SelectValue placeholder="Select Model">
                 {selectedModelData && selectedModelData.type === 'api' && (
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="text-xs capitalize border-gray-300 text-gray-700 dark:border-gray-600 dark:text-gray-300">
+                    <Badge variant="outline" className="text-xs border-gray-400 text-gray-600 dark:border-gray-500 dark:text-gray-400">
                       {selectedModelData.provider}
                     </Badge>
                     <span className="text-sm">{selectedModelData.name}</span>
@@ -166,7 +166,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 focus:bg-gray-50 dark:focus:bg-gray-700"
                 >
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="text-xs capitalize border-gray-300 text-gray-700 dark:border-gray-600 dark:text-gray-300">
+                    <Badge variant="outline" className="text-xs border-gray-400 text-gray-600 dark:border-gray-500 dark:text-gray-400">
                       {model.provider}
                     </Badge>
                     <div className="flex flex-col items-start">
