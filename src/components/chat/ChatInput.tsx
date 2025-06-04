@@ -68,13 +68,13 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             onChange={e => setMessage(e.target.value)}
             placeholder={placeholder}
             disabled={disabled}
-            className="w-full py-3 pl-11 pr-32 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 pl-11 pr-32 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
           />
           <div className="absolute right-3 flex space-x-1">
             <Button
               type="submit"
               size="icon"
-              className="h-8 w-8 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+              className="h-8 w-8 bg-gray-600 hover:bg-gray-700 text-white rounded-lg"
               disabled={!message.trim() || disabled}
             >
               <ArrowUp className="h-4 w-4" />
