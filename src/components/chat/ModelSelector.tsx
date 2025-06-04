@@ -100,13 +100,13 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
         <TabsList className="grid w-full grid-cols-2 mb-2 h-9 bg-gray-100 dark:bg-gray-800">
           <TabsTrigger 
             value="my-models" 
-            className="text-xs py-2 px-3 data-[state=active]:bg-gray-600 data-[state=active]:text-white dark:data-[state=active]:bg-gray-600"
+            className="text-xs py-2 px-3 data-[state=active]:bg-gray-500 data-[state=active]:text-white dark:data-[state=active]:bg-gray-500"
           >
             My Models
           </TabsTrigger>
           <TabsTrigger 
             value="performance-models" 
-            className="text-xs py-2 px-3 data-[state=active]:bg-gray-600 data-[state=active]:text-white dark:data-[state=active]:bg-gray-600"
+            className="text-xs py-2 px-3 data-[state=active]:bg-gray-500 data-[state=active]:text-white dark:data-[state=active]:bg-gray-500"
           >
             Performance Models
           </TabsTrigger>

@@ -6,37 +6,37 @@ export const getNavItems = (): NavItem[] => [
   {
     icon: MessageSquare,
     label: 'Chat',
-    color: 'bg-gray-600 hover:bg-gray-700',
+    color: 'bg-gray-500 hover:bg-gray-600',
     href: '/chat/new'
   },
   {
     icon: Search,
     label: 'Browse',
-    color: 'bg-gray-600 hover:bg-gray-700',
+    color: 'bg-gray-500 hover:bg-gray-600',
     href: '/browse'
   },
   {
     icon: BookOpen,
     label: 'Collections',
-    color: 'bg-gray-600 hover:bg-gray-700',
+    color: 'bg-gray-500 hover:bg-gray-600',
     href: '/collections'
   },
   {
     icon: Database,
     label: 'Train Model',
-    color: 'bg-gray-600 hover:bg-gray-700',
+    color: 'bg-gray-500 hover:bg-gray-600',
     href: '/train-model'
   },
   {
     icon: Settings,
     label: 'Settings',
-    color: 'bg-gray-600 hover:bg-gray-700',
+    color: 'bg-gray-500 hover:bg-gray-600',
     href: '/settings'
   },
   {
     icon: User,
     label: 'Profile',
-    color: 'bg-gray-600 hover:bg-gray-700',
+    color: 'bg-gray-500 hover:bg-gray-600',
     href: '/profile'
   }
 ];
