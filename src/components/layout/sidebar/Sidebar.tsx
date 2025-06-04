@@ -49,7 +49,7 @@ export const Sidebar = ({
 
   // Use either the provided chat items or just the new chat option if empty
   const defaultChatItems = [getDefaultChatItem(location.pathname === "/chat/new")];
-  const displayChatItems = chatItems.length > 0 ? chatItems : defaultChatItems;
+  const displayChatItems: ChatItem[] = chatItems.length > 0 ? chatItems : defaultChatItems;
 
   return (
     <div

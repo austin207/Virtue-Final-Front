@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Settings, Search } from 'lucide-react';
+import { Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ModelSelector } from './ModelSelector';
-import { SearchModal } from '@/components/search/SearchModal';
+import { SearchModalTrigger } from '@/components/search/SearchModalTrigger';
 
 interface ChatHeaderProps {
   isNewChat: boolean;
@@ -44,7 +44,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
       </div>
 
       <div className="flex items-center gap-2">
-        <SearchModal />
+        <SearchModalTrigger />
         
         {setAdvancedMode && (
           <Button

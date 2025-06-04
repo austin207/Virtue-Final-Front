@@ -3,41 +3,48 @@ import { MessageSquare, Search, BookOpen, Settings, User, Database } from 'lucid
 
 export const getNavItems = () => [
   {
-    title: "Chat",
-    url: "/chat/new",
     icon: MessageSquare,
+    label: "Chat",
+    color: "text-blue-600",
+    href: "/chat/new",
   },
   {
-    title: "Browse",
-    url: "/browse",
     icon: Search,
+    label: "Browse", 
+    color: "text-green-600",
+    href: "/browse",
   },
   {
-    title: "Collections",
-    url: "/collections",
     icon: BookOpen,
+    label: "Collections",
+    color: "text-purple-600", 
+    href: "/collections",
   },
   {
-    title: "Train Model",
-    url: "/train",
     icon: Database,
+    label: "Train Model",
+    color: "text-orange-600",
+    href: "/train",
   },
   {
-    title: "Settings",
-    url: "/settings",
     icon: Settings,
+    label: "Settings",
+    color: "text-gray-600",
+    href: "/settings",
   },
   {
-    title: "Profile",
-    url: "/profile",
     icon: User,
+    label: "Profile",
+    color: "text-indigo-600",
+    href: "/profile",
   },
 ];
 
 export const getDefaultChatItem = (isActive: boolean = false) => ({
   id: 'new',
   title: 'New Chat',
-  timestamp: new Date().toISOString(),
-  isActive,
-  preview: 'Start a new conversation'
+  time: 'now',
+  active: isActive,
+  preview: 'Start a new conversation',
+  href: '/chat/new'
 });
