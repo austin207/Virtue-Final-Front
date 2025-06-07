@@ -97,16 +97,16 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
   return (
     <div className={`w-full ${className}`}>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-2 h-9 bg-gray-600 dark:bg-gray-700">
+        <TabsList className="grid w-full grid-cols-2 mb-2 h-9 bg-gray-500 dark:bg-gray-600">
           <TabsTrigger 
             value="my-models" 
-            className="text-xs py-2 px-3 text-gray-300 data-[state=active]:bg-gray-500 data-[state=active]:text-white dark:text-gray-300 dark:data-[state=active]:bg-gray-600 dark:data-[state=active]:text-white"
+            className="text-xs py-2 px-3 text-gray-200 data-[state=active]:bg-gray-400 data-[state=active]:text-white dark:text-gray-300 dark:data-[state=active]:bg-gray-500 dark:data-[state=active]:text-white"
           >
             My Models
           </TabsTrigger>
           <TabsTrigger 
             value="performance-models" 
-            className="text-xs py-2 px-3 text-gray-300 data-[state=active]:bg-gray-500 data-[state=active]:text-white dark:text-gray-300 dark:data-[state=active]:bg-gray-600 dark:data-[state=active]:text-white"
+            className="text-xs py-2 px-3 text-gray-200 data-[state=active]:bg-gray-400 data-[state=active]:text-white dark:text-gray-300 dark:data-[state=active]:bg-gray-500 dark:data-[state=active]:text-white"
           >
             Performance Models
           </TabsTrigger>
@@ -114,25 +114,25 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
         
         <TabsContent value="my-models" className="mt-0">
           <Select value={selectedModel} onValueChange={handleModelSelect}>
-            <SelectTrigger className="h-10 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 focus:ring-gray-500 dark:focus:ring-gray-400">
+            <SelectTrigger className="h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:ring-gray-400 dark:focus:ring-gray-500">
               <SelectValue placeholder="Select Model">
                 {selectedModelData && selectedModelData.type === 'local' && (
                   <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="text-xs bg-gray-500 text-white dark:bg-gray-600 dark:text-white">LOCAL</Badge>
+                    <Badge variant="secondary" className="text-xs bg-gray-400 text-white dark:bg-gray-500 dark:text-white">LOCAL</Badge>
                     <span className="text-sm">{selectedModelData.name}</span>
                   </div>
                 )}
               </SelectValue>
             </SelectTrigger>
-            <SelectContent className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
+            <SelectContent className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600">
               {MY_MODELS.map(model => (
                 <SelectItem 
                   key={model.id} 
                   value={model.id}
-                  className="hover:bg-gray-50 dark:hover:bg-gray-700 focus:bg-gray-50 dark:focus:bg-gray-700"
+                  className="hover:bg-gray-100 dark:hover:bg-gray-700 focus:bg-gray-100 dark:focus:bg-gray-700"
                 >
                   <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="text-xs bg-gray-500 text-white dark:bg-gray-600 dark:text-white">LOCAL</Badge>
+                    <Badge variant="secondary" className="text-xs bg-gray-400 text-white dark:bg-gray-500 dark:text-white">LOCAL</Badge>
                     <div className="flex flex-col items-start">
                       <span className="font-medium text-sm">{model.name}</span>
                       <span className="text-xs text-gray-500 dark:text-gray-400">{model.description}</span>
@@ -146,7 +146,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
         
         <TabsContent value="performance-models" className="mt-0">
           <Select value={selectedModel} onValueChange={handleModelSelect}>
-            <SelectTrigger className="h-10 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 focus:ring-gray-500 dark:focus:ring-gray-400">
+            <SelectTrigger className="h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:ring-gray-400 dark:focus:ring-gray-500">
               <SelectValue placeholder="Select Model">
                 {selectedModelData && selectedModelData.type === 'api' && (
                   <div className="flex items-center gap-2">
@@ -158,12 +158,12 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
                 )}
               </SelectValue>
             </SelectTrigger>
-            <SelectContent className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600">
+            <SelectContent className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600">
               {PERFORMANCE_MODELS.map(model => (
                 <SelectItem 
                   key={model.id} 
                   value={model.id}
-                  className="hover:bg-gray-50 dark:hover:bg-gray-700 focus:bg-gray-50 dark:focus:bg-gray-700"
+                  className="hover:bg-gray-100 dark:hover:bg-gray-700 focus:bg-gray-100 dark:focus:bg-gray-700"
                 >
                   <div className="flex items-center gap-2">
                     <Badge variant="outline" className="text-xs border-gray-400 text-gray-600 dark:border-gray-500 dark:text-gray-400">
