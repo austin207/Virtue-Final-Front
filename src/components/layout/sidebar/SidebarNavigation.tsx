@@ -12,8 +12,43 @@ type SidebarNavigationProps = {
 export const SidebarNavigation = ({ navItems }: SidebarNavigationProps) => {
   const location = useLocation();
   
+  const containerStyle = {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+    gap: '16px',
+    padding: '16px 0'
+  };
+
+  const linkBaseStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '6px',
+    width: '40px',
+    height: '40px',
+    transition: 'all 0.2s ease',
+    textDecoration: 'none',
+    backgroundColor: '#6b7280',
+    color: '#ffffff'
+  };
+
+  const linkActiveStyle = {
+    ...linkBaseStyle,
+    backgroundColor: '#7f8a96'
+  };
+
+  const linkHoverStyle = {
+    backgroundColor: '#7f8a96'
+  };
+
+  const iconStyle = {
+    width: '20px',
+    height: '20px'
+  };
+  
   return (
-    <div className="flex flex-col items-center space-y-4 py-4">
+    <div style={containerStyle}>
       {navItems.map((item, index) => {
         const IconComponent = item.icon;
         const isActive = location.pathname === item.href;
@@ -23,14 +58,19 @@ export const SidebarNavigation = ({ navItems }: SidebarNavigationProps) => {
               <TooltipTrigger asChild>
                 <Link 
                   to={item.href} 
-                  className={cn(
-                    "flex items-center justify-center rounded-md w-10 h-10 transition-colors text-white",
-                    isActive 
-                      ? "bg-gray-600 hover:bg-gray-700" 
-                      : "bg-gray-500 hover:bg-gray-600"
-                  )}
+                  style={isActive ? linkActiveStyle : linkBaseStyle}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      Object.assign(e.currentTarget.style, linkHoverStyle);
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      Object.assign(e.currentTarget.style, linkBaseStyle);
+                    }
+                  }}
                 >
-                  <IconComponent className="h-5 w-5" />
+                  <IconComponent style={iconStyle} />
                 </Link>
               </TooltipTrigger>
               <TooltipContent side="right">{item.label}</TooltipContent>

@@ -54,12 +54,102 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     setMessage(prev => prev + (prev ? '\n\n' : '') + results);
   };
 
+  const containerStyle = {
+    position: 'relative' as const,
+    maxWidth: '768px',
+    margin: '0 auto',
+    width: '100%',
+    padding: '16px 16px 32px 16px'
+  };
+
+  const formStyle = {
+    position: 'relative' as const,
+    display: 'flex',
+    alignItems: 'center'
+  };
+
+  const iconStyle = {
+    position: 'absolute' as const,
+    left: '12px',
+    color: '#9ca3af',
+    width: '20px',
+    height: '20px'
+  };
+
+  const inputStyle = {
+    width: '100%',
+    padding: '12px 12px 12px 44px',
+    paddingRight: '128px',
+    backgroundColor: '#374151',
+    borderRadius: '8px',
+    border: '1px solid #4b5563',
+    color: '#f9fafb',
+    fontSize: '14px',
+    outline: 'none',
+    transition: 'all 0.2s ease'
+  };
+
+  const inputFocusStyle = {
+    borderColor: '#6b7280',
+    boxShadow: '0 0 0 2px rgba(107, 114, 128, 0.2)'
+  };
+
+  const inputDisabledStyle = {
+    opacity: 0.5,
+    cursor: 'not-allowed'
+  };
+
+  const buttonsContainerStyle = {
+    position: 'absolute' as const,
+    right: '12px',
+    display: 'flex',
+    gap: '4px'
+  };
+
+  const buttonStyle = {
+    width: '32px',
+    height: '32px',
+    borderRadius: '8px',
+    border: '1px solid #4b5563',
+    backgroundColor: '#374151',
+    color: '#f9fafb',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease'
+  };
+
+  const submitButtonStyle = {
+    ...buttonStyle,
+    backgroundColor: '#6b7280',
+    borderColor: '#6b7280'
+  };
+
+  const submitButtonHoverStyle = {
+    backgroundColor: '#7f8a96'
+  };
+
+  const buttonHoverStyle = {
+    backgroundColor: '#4b5563'
+  };
+
+  const submitButtonDisabledStyle = {
+    opacity: 0.5,
+    cursor: 'not-allowed'
+  };
+
+  const buttonIconStyle = {
+    width: '16px',
+    height: '16px'
+  };
+
   return (
     <>
-      <div className="relative max-w-3xl mx-auto w-full px-4 pb-8 pt-4">
-        <form onSubmit={handleSubmit} className="relative flex items-center">
-          <div className="absolute left-3 text-gray-500">
-            <Wand2 className="h-5 w-5" />
+      <div style={containerStyle}>
+        <form onSubmit={handleSubmit} style={formStyle}>
+          <div style={iconStyle}>
+            <Wand2 />
           </div>
           <input
             ref={inputRef}
@@ -68,47 +158,71 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             onChange={e => setMessage(e.target.value)}
             placeholder={placeholder}
             disabled={disabled}
-            className="w-full py-3 pl-11 pr-32 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{
+              ...inputStyle,
+              ...(disabled ? inputDisabledStyle : {}),
+            }}
+            onFocus={(e) => Object.assign(e.target.style, inputFocusStyle)}
+            onBlur={(e) => Object.assign(e.target.style, inputStyle)}
           />
-          <div className="absolute right-3 flex space-x-1">
-            <Button
+          <div style={buttonsContainerStyle}>
+            <button
               type="submit"
-              size="icon"
-              className="h-8 w-8 bg-gray-600 hover:bg-gray-700 text-white rounded-lg"
+              style={{
+                ...submitButtonStyle,
+                ...((!message.trim() || disabled) ? submitButtonDisabledStyle : {})
+              }}
               disabled={!message.trim() || disabled}
+              onMouseEnter={(e) => {
+                if (message.trim() && !disabled) {
+                  Object.assign(e.currentTarget.style, submitButtonHoverStyle);
+                }
+              }}
+              onMouseLeave={(e) => {
+                Object.assign(e.currentTarget.style, submitButtonStyle);
+              }}
             >
-              <ArrowUp className="h-4 w-4" />
-            </Button>
-            <Button
+              <ArrowUp style={buttonIconStyle} />
+            </button>
+            <button
               type="button"
-              variant="outline"
-              size="icon"
-              className="h-8 w-8 rounded-lg border-gray-200 dark:border-gray-600 bg-transparent dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+              style={buttonStyle}
               onClick={() => setShowSearch(true)}
               title="Web Search"
+              onMouseEnter={(e) => Object.assign(e.currentTarget.style, buttonHoverStyle)}
+              onMouseLeave={(e) => Object.assign(e.currentTarget.style, buttonStyle)}
             >
-              <Search className="h-4 w-4" />
-            </Button>
-            <Button
+              <Search style={buttonIconStyle} />
+            </button>
+            <button
               type="button"
-              variant="outline"
-              size="icon"
-              className="h-8 w-8 rounded-lg border-gray-200 dark:border-gray-600 bg-transparent dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+              style={buttonStyle}
               onClick={() => setShowQuickAssistance(true)}
               title="Quick Assistance"
+              onMouseEnter={(e) => Object.assign(e.currentTarget.style, buttonHoverStyle)}
+              onMouseLeave={(e) => Object.assign(e.currentTarget.style, buttonStyle)}
             >
-              <HelpCircle className="h-4 w-4" />
-            </Button>
-            <Button
+              <HelpCircle style={buttonIconStyle} />
+            </button>
+            <button
               type="button"
-              variant="outline"
-              size="icon"
-              className="h-8 w-8 rounded-lg border-gray-200 dark:border-gray-600 bg-transparent dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+              style={{
+                ...buttonStyle,
+                ...(disabled ? { opacity: 0.5, cursor: 'not-allowed' } : {})
+              }}
               disabled={disabled}
               title="Voice Input"
+              onMouseEnter={(e) => {
+                if (!disabled) {
+                  Object.assign(e.currentTarget.style, buttonHoverStyle);
+                }
+              }}
+              onMouseLeave={(e) => {
+                Object.assign(e.currentTarget.style, buttonStyle);
+              }}
             >
-              <Mic className="h-4 w-4" />
-            </Button>
+              <Mic style={buttonIconStyle} />
+            </button>
           </div>
         </form>
       </div>

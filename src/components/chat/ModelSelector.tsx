@@ -94,19 +94,92 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
     onModelChange(modelId);
   };
 
+  const selectorStyle = {
+    width: '100%',
+    ...className && {}
+  };
+
+  const tabsListStyle = {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    width: '100%',
+    marginBottom: '8px',
+    height: '36px',
+    backgroundColor: '#6b7280',
+    borderRadius: '6px',
+    padding: '2px'
+  };
+
+  const tabTriggerStyle = {
+    fontSize: '12px',
+    padding: '8px 12px',
+    color: '#d1d5db',
+    backgroundColor: 'transparent',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease'
+  };
+
+  const tabTriggerActiveStyle = {
+    ...tabTriggerStyle,
+    backgroundColor: '#7f8a96',
+    color: '#ffffff'
+  };
+
+  const selectTriggerStyle = {
+    height: '40px',
+    backgroundColor: '#374151',
+    border: '1px solid #4b5563',
+    borderRadius: '6px',
+    color: '#f9fafb',
+    padding: '0 12px',
+    fontSize: '14px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  };
+
+  const selectContentStyle = {
+    backgroundColor: '#2d2d2d',
+    border: '1px solid #4b5563',
+    borderRadius: '6px',
+    padding: '4px',
+    zIndex: 1000
+  };
+
+  const selectItemStyle = {
+    padding: '8px 12px',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    color: '#f9fafb',
+    backgroundColor: 'transparent',
+    transition: 'all 0.2s ease'
+  };
+
+  const badgeStyle = {
+    fontSize: '10px',
+    padding: '2px 6px',
+    borderRadius: '4px',
+    backgroundColor: '#6b7280',
+    color: '#ffffff',
+    border: '1px solid #6b7280'
+  };
+
   return (
-    <div className={`w-full ${className}`}>
+    <div style={selectorStyle}>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-2 h-9 bg-gray-500 dark:bg-gray-600">
+        <TabsList style={tabsListStyle}>
           <TabsTrigger 
             value="my-models" 
-            className="text-xs py-2 px-3 text-gray-200 data-[state=active]:bg-gray-400 data-[state=active]:text-white dark:text-gray-300 dark:data-[state=active]:bg-gray-500 dark:data-[state=active]:text-white"
+            style={activeTab === 'my-models' ? tabTriggerActiveStyle : tabTriggerStyle}
           >
             My Models
           </TabsTrigger>
           <TabsTrigger 
             value="performance-models" 
-            className="text-xs py-2 px-3 text-gray-200 data-[state=active]:bg-gray-400 data-[state=active]:text-white dark:text-gray-300 dark:data-[state=active]:bg-gray-500 dark:data-[state=active]:text-white"
+            style={activeTab === 'performance-models' ? tabTriggerActiveStyle : tabTriggerStyle}
           >
             Performance Models
           </TabsTrigger>
@@ -114,28 +187,28 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
         
         <TabsContent value="my-models" className="mt-0">
           <Select value={selectedModel} onValueChange={handleModelSelect}>
-            <SelectTrigger className="h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:ring-gray-400 dark:focus:ring-gray-500">
+            <SelectTrigger style={selectTriggerStyle}>
               <SelectValue placeholder="Select Model">
                 {selectedModelData && selectedModelData.type === 'local' && (
-                  <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="text-xs bg-gray-400 text-white dark:bg-gray-500 dark:text-white">LOCAL</Badge>
-                    <span className="text-sm">{selectedModelData.name}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Badge style={badgeStyle}>LOCAL</Badge>
+                    <span>{selectedModelData.name}</span>
                   </div>
                 )}
               </SelectValue>
             </SelectTrigger>
-            <SelectContent className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600">
+            <SelectContent style={selectContentStyle}>
               {MY_MODELS.map(model => (
                 <SelectItem 
                   key={model.id} 
                   value={model.id}
-                  className="hover:bg-gray-100 dark:hover:bg-gray-700 focus:bg-gray-100 dark:focus:bg-gray-700"
+                  style={selectItemStyle}
                 >
-                  <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="text-xs bg-gray-400 text-white dark:bg-gray-500 dark:text-white">LOCAL</Badge>
-                    <div className="flex flex-col items-start">
-                      <span className="font-medium text-sm">{model.name}</span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">{model.description}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Badge style={badgeStyle}>LOCAL</Badge>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                      <span style={{ fontWeight: '500', fontSize: '14px' }}>{model.name}</span>
+                      <span style={{ fontSize: '12px', color: '#9ca3af' }}>{model.description}</span>
                     </div>
                   </div>
                 </SelectItem>
@@ -146,32 +219,32 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
         
         <TabsContent value="performance-models" className="mt-0">
           <Select value={selectedModel} onValueChange={handleModelSelect}>
-            <SelectTrigger className="h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:ring-gray-400 dark:focus:ring-gray-500">
+            <SelectTrigger style={selectTriggerStyle}>
               <SelectValue placeholder="Select Model">
                 {selectedModelData && selectedModelData.type === 'api' && (
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="text-xs border-gray-400 text-gray-600 dark:border-gray-500 dark:text-gray-400">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Badge style={{ ...badgeStyle, backgroundColor: 'transparent', border: '1px solid #6b7280' }}>
                       {selectedModelData.provider}
                     </Badge>
-                    <span className="text-sm">{selectedModelData.name}</span>
+                    <span>{selectedModelData.name}</span>
                   </div>
                 )}
               </SelectValue>
             </SelectTrigger>
-            <SelectContent className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600">
+            <SelectContent style={selectContentStyle}>
               {PERFORMANCE_MODELS.map(model => (
                 <SelectItem 
                   key={model.id} 
                   value={model.id}
-                  className="hover:bg-gray-100 dark:hover:bg-gray-700 focus:bg-gray-100 dark:focus:bg-gray-700"
+                  style={selectItemStyle}
                 >
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="text-xs border-gray-400 text-gray-600 dark:border-gray-500 dark:text-gray-400">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Badge style={{ ...badgeStyle, backgroundColor: 'transparent', border: '1px solid #6b7280' }}>
                       {model.provider}
                     </Badge>
-                    <div className="flex flex-col items-start">
-                      <span className="font-medium text-sm">{model.name}</span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">{model.description}</span>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                      <span style={{ fontWeight: '500', fontSize: '14px' }}>{model.name}</span>
+                      <span style={{ fontSize: '12px', color: '#9ca3af' }}>{model.description}</span>
                     </div>
                   </div>
                 </SelectItem>

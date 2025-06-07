@@ -3,153 +3,195 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 0 0% 45%;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 0 0% 45%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 0 0% 45%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 0 0% 45%;
-  }
-
-  .dark {
-    --background: 240 6% 22%;
-    --foreground: 210 40% 98%;
-
-    --card: 240 6% 22%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 240 6% 22%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 0 0% 60%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 240 6% 26%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 240 6% 26%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 240 6% 26%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 240 6% 26%;
-    --input: 240 6% 26%;
-    --ring: 0 0% 60%;
-    
-    --sidebar-background: 240 6% 22%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 0 0% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 6% 26%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 6% 26%;
-    --sidebar-ring: 0 0% 60%;
-
-    color-scheme: dark;
-  }
+/* Custom CSS overrides to fix all blue/teal color issues */
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-  }
-  
-  /* Improve touch targets for mobile */
-  @media (max-width: 640px) {
-    button, a {
-      @apply min-h-[44px] touch-manipulation;
-    }
-  }
-  
-  /* Fix iOS 100vh issue */
-  @supports (-webkit-touch-callout: none) {
-    .h-screen {
-      height: -webkit-fill-available;
-    }
-  }
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: #1a1a1a;
+  color: #e5e5e5;
 }
 
-@layer components {
-  .chat-container {
-    @apply bg-[#F7F7F8] dark:bg-chat-dark;
-  }
+/* Force override all blue/teal colors */
+.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-teal-500, .bg-teal-600,
+.text-blue-500, .text-blue-600, .text-teal-500, .text-teal-600,
+.border-blue-500, .border-blue-600, .border-teal-500, .border-teal-600 {
+  background-color: #6b7280 !important;
+  color: #f9fafb !important;
+  border-color: #6b7280 !important;
+}
 
-  .chat-sidebar {
-    @apply bg-white dark:bg-chat-darker;
-  }
+/* Custom variables for consistent theming */
+:root {
+  --background: #1a1a1a;
+  --foreground: #e5e5e5;
+  --card: #2d2d2d;
+  --card-foreground: #e5e5e5;
+  --popover: #2d2d2d;
+  --popover-foreground: #e5e5e5;
+  --primary: #6b7280;
+  --primary-foreground: #f9fafb;
+  --secondary: #374151;
+  --secondary-foreground: #f9fafb;
+  --muted: #374151;
+  --muted-foreground: #9ca3af;
+  --accent: #374151;
+  --accent-foreground: #f9fafb;
+  --destructive: #ef4444;
+  --destructive-foreground: #f9fafb;
+  --border: #4b5563;
+  --input: #4b5563;
+  --ring: #6b7280;
+  --radius: 0.5rem;
+}
 
-  .chat-input {
-    @apply bg-white dark:bg-chat-darker text-foreground border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400;
-    @apply w-full sm:w-[calc(100%-2rem)]; /* Responsive width */
-  }
+/* Chat container styling */
+.chat-container {
+  background-color: #2d2d2d !important;
+  color: #e5e5e5 !important;
+}
 
-  .sidebar-button {
-    @apply flex items-center justify-center w-10 h-10 rounded-md bg-white dark:bg-chat-darker hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors;
-  }
-  
-  .sidebar-button-active {
-    @apply bg-gray-600 text-white hover:bg-gray-700 dark:hover:bg-gray-500;
-  }
+.chat-sidebar {
+  background-color: #1a1a1a !important;
+  border-right: 1px solid #4b5563 !important;
+}
 
-  .sidebar-item {
-    @apply flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors;
-  }
-  
-  .sidebar-item-active {
-    @apply bg-gray-100 dark:bg-gray-800;
-  }
-  
-  /* Mobile-specific components */
-  @media (max-width: 640px) {
-    .chat-input {
-      @apply py-3 px-3; /* Larger touch target */
-    }
-    
-    .sidebar-button, 
-    .sidebar-item {
-      @apply h-12; /* Taller touch targets */
-    }
+/* Button styling */
+button {
+  background-color: #6b7280 !important;
+  color: #f9fafb !important;
+  border: 1px solid #6b7280 !important;
+  border-radius: 6px;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background-color: #7f8a96 !important;
+  border-color: #7f8a96 !important;
+}
+
+button:focus {
+  outline: 2px solid #6b7280 !important;
+  outline-offset: 2px;
+}
+
+/* Input styling */
+input, textarea, select {
+  background-color: #374151 !important;
+  color: #f9fafb !important;
+  border: 1px solid #4b5563 !important;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid #6b7280 !important;
+  outline-offset: 2px;
+  border-color: #6b7280 !important;
+}
+
+/* Tab styling */
+[role="tab"] {
+  background-color: #374151 !important;
+  color: #9ca3af !important;
+  border: 1px solid #4b5563 !important;
+}
+
+[role="tab"][data-state="active"] {
+  background-color: #6b7280 !important;
+  color: #f9fafb !important;
+}
+
+/* Override any remaining blue/teal in Radix components */
+[data-radix-popper-content-wrapper],
+[data-radix-select-content],
+[data-radix-tabs-content],
+[data-radix-dialog-content] {
+  background-color: #2d2d2d !important;
+  border: 1px solid #4b5563 !important;
+  color: #e5e5e5 !important;
+}
+
+/* Badge styling */
+.badge {
+  background-color: #6b7280 !important;
+  color: #f9fafb !important;
+  border: 1px solid #6b7280 !important;
+}
+
+/* Sidebar specific styling */
+.sidebar-button {
+  background-color: #6b7280 !important;
+  color: #f9fafb !important;
+  border: none !important;
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.sidebar-button:hover {
+  background-color: #7f8a96 !important;
+}
+
+.sidebar-button-active {
+  background-color: #6b7280 !important;
+  color: #f9fafb !important;
+}
+
+/* Force override any blue backgrounds in the UI */
+* {
+  background-color: inherit !important;
+}
+
+body * {
+  background-color: transparent;
+}
+
+.chat-container * {
+  background-color: transparent;
+}
+
+/* Specific overrides for components that might have blue */
+[class*="blue"],
+[class*="teal"],
+[style*="blue"],
+[style*="teal"] {
+  background-color: #6b7280 !important;
+  color: #f9fafb !important;
+  border-color: #6b7280 !important;
+}
+
+/* Animation classes */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  button {
+    min-height: 44px;
+    min-width: 44px;
   }
 }
