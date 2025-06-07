@@ -20,85 +20,59 @@ body, html {
   height: 100%;
   width: 100%;
   overflow-x: hidden;
-  background-color: #1a1a1a;
-  color: #e5e5e5;
+  background-color: #1f2937;
+  color: #f9fafb;
 }
 
 /* CSS Variables for consistent theming */
 :root {
-  --background: #1a1a1a;
-  --foreground: #e5e5e5;
-  --card: #2d2d2d;
-  --card-foreground: #e5e5e5;
-  --popover: #2d2d2d;
-  --popover-foreground: #e5e5e5;
-  --primary: #6b7280;
-  --primary-foreground: #f9fafb;
-  --secondary: #374151;
-  --secondary-foreground: #f9fafb;
-  --muted: #374151;
-  --muted-foreground: #9ca3af;
-  --accent: #374151;
-  --accent-foreground: #f9fafb;
-  --destructive: #ef4444;
-  --destructive-foreground: #f9fafb;
-  --border: #4b5563;
-  --input: #4b5563;
-  --ring: #6b7280;
-  --radius: 0.5rem;
-  --sidebar-bg: #1a1a1a;
-  --sidebar-hover: #374151;
+  --primary-bg: #1f2937;
+  --secondary-bg: #374151;
+  --tertiary-bg: #4b5563;
+  --card-bg: #2d3748;
+  --border-color: #4b5563;
+  --text-primary: #f9fafb;
+  --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
   --button-bg: #6b7280;
   --button-hover: #7f8a96;
-  --tab-active: #6b7280;
-  --tab-inactive: #374151;
+  --input-bg: #374151;
+  --focus-ring: #6b7280;
+  --radius: 8px;
 }
 
-/* Global component overrides */
-.bg-primary { background-color: var(--primary) !important; }
-.bg-secondary { background-color: var(--secondary) !important; }
-.bg-muted { background-color: var(--muted) !important; }
-.bg-card { background-color: var(--card) !important; }
-.bg-background { background-color: var(--background) !important; }
+/* Global resets and overrides */
+.bg-background { background-color: var(--primary-bg) !important; }
+.bg-card { background-color: var(--card-bg) !important; }
+.bg-secondary { background-color: var(--secondary-bg) !important; }
+.bg-muted { background-color: var(--tertiary-bg) !important; }
+.text-foreground { color: var(--text-primary) !important; }
+.text-muted-foreground { color: var(--text-muted) !important; }
+.border-border { border-color: var(--border-color) !important; }
 
-.text-primary { color: var(--primary-foreground) !important; }
-.text-secondary { color: var(--secondary-foreground) !important; }
-.text-muted-foreground { color: var(--muted-foreground) !important; }
-.text-foreground { color: var(--foreground) !important; }
-
-.border-primary { border-color: var(--primary) !important; }
-.border-secondary { border-color: var(--secondary) !important; }
-.border-border { border-color: var(--border) !important; }
-
-/* Force remove any blue/teal colors */
-.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-teal-500, .bg-teal-600,
-.text-blue-500, .text-blue-600, .text-teal-500, .text-teal-600,
-.border-blue-500, .border-blue-600, .border-teal-500, .border-teal-600,
-[class*="blue"], [class*="teal"] {
+/* Remove all blue/teal colors globally */
+[class*="blue"], [class*="teal"], [class*="cyan"], [class*="indigo"], [class*="purple"] {
   background-color: var(--button-bg) !important;
-  color: var(--primary-foreground) !important;
+  color: var(--text-primary) !important;
   border-color: var(--button-bg) !important;
 }
 
-/* Button styling */
-button, .btn {
+/* Universal button styling */
+button, .btn, [role="button"] {
   background-color: var(--button-bg) !important;
-  color: var(--primary-foreground) !important;
+  color: var(--text-primary) !important;
   border: 1px solid var(--button-bg) !important;
-  border-radius: 6px;
+  border-radius: var(--radius);
   padding: 8px 16px;
   transition: all 0.2s ease;
   cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
 }
 
-button:hover, .btn:hover {
+button:hover, .btn:hover, [role="button"]:hover {
   background-color: var(--button-hover) !important;
   border-color: var(--button-hover) !important;
-}
-
-button:focus, .btn:focus {
-  outline: 2px solid var(--ring) !important;
-  outline-offset: 2px;
 }
 
 button:disabled, .btn:disabled {
@@ -106,99 +80,59 @@ button:disabled, .btn:disabled {
   cursor: not-allowed;
 }
 
-/* Input styling */
+/* Universal input styling */
 input, textarea, select {
-  background-color: var(--secondary) !important;
-  color: var(--primary-foreground) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 6px;
+  background-color: var(--input-bg) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius);
   padding: 8px 12px;
   transition: all 0.2s ease;
 }
 
 input:focus, textarea:focus, select:focus {
-  outline: 2px solid var(--ring) !important;
+  outline: 2px solid var(--focus-ring) !important;
   outline-offset: 2px;
-  border-color: var(--ring) !important;
+  border-color: var(--focus-ring) !important;
 }
 
-/* Tab styling */
-[role="tab"], .tab-trigger {
-  background-color: var(--tab-inactive) !important;
-  color: var(--muted-foreground) !important;
-  border: 1px solid var(--border) !important;
-  transition: all 0.2s ease;
-}
-
-[role="tab"][data-state="active"], .tab-trigger.active {
-  background-color: var(--tab-active) !important;
-  color: var(--primary-foreground) !important;
-}
-
-/* Radix UI component overrides */
+/* Radix UI overrides */
 [data-radix-popper-content-wrapper],
 [data-radix-select-content],
 [data-radix-tabs-content],
 [data-radix-dialog-content],
 [data-radix-popover-content] {
-  background-color: var(--card) !important;
-  border: 1px solid var(--border) !important;
-  color: var(--foreground) !important;
-  border-radius: 6px !important;
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  border-radius: var(--radius) !important;
+}
+
+[data-radix-select-item],
+[data-radix-dropdown-menu-item] {
+  color: var(--text-primary) !important;
 }
 
 [data-radix-select-item]:hover,
 [data-radix-dropdown-menu-item]:hover {
-  background-color: var(--muted) !important;
-  color: var(--foreground) !important;
+  background-color: var(--secondary-bg) !important;
+  color: var(--text-primary) !important;
 }
 
-/* Badge styling */
-.badge {
-  background-color: var(--button-bg) !important;
-  color: var(--primary-foreground) !important;
-  border: 1px solid var(--button-bg) !important;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-}
-
-/* Sidebar specific styling */
-.chat-sidebar {
-  background-color: var(--sidebar-bg) !important;
-  border-right: 1px solid var(--border) !important;
-}
-
-.sidebar-button {
-  background-color: var(--button-bg) !important;
-  color: var(--primary-foreground) !important;
-  border: none !important;
-  border-radius: 6px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Tab styling */
+[role="tab"], .tab-trigger {
+  background-color: var(--secondary-bg) !important;
+  color: var(--text-muted) !important;
+  border: 1px solid var(--border-color) !important;
   transition: all 0.2s ease;
-  cursor: pointer;
 }
 
-.sidebar-button:hover {
-  background-color: var(--button-hover) !important;
+[role="tab"][data-state="active"], .tab-trigger.active {
+  background-color: var(--button-bg) !important;
+  color: var(--text-primary) !important;
 }
 
-.sidebar-button-active {
-  background-color: var(--tab-active) !important;
-  color: var(--primary-foreground) !important;
-}
-
-/* Chat container styling */
-.chat-container {
-  background-color: var(--card) !important;
-  color: var(--foreground) !important;
-}
-
-/* Animation classes */
+/* Animations */
 .animate-fade-in {
   animation: fadeIn 0.3s ease-in-out;
 }
@@ -214,16 +148,4 @@ input:focus, textarea:focus, select:focus {
     min-height: 44px;
     min-width: 44px;
   }
-}
-
-/* Utility classes */
-.gray-theme {
-  background-color: var(--button-bg) !important;
-  color: var(--primary-foreground) !important;
-  border-color: var(--button-bg) !important;
-}
-
-.gray-theme:hover {
-  background-color: var(--button-hover) !important;
-  border-color: var(--button-hover) !important;
 }

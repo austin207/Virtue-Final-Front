@@ -47,7 +47,6 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const { chatId } = useParams<{ chatId: string }>();
 
-  // Focus input when it's a new chat or chatId changes
   useEffect(() => {
     if (inputRef.current && !disabled) {
       inputRef.current.focus();
@@ -68,11 +67,32 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 
   return (
     <>
-      <div className="chat-input-container">
-        <form onSubmit={handleSubmit} className="chat-input-form">
-          <div className="input-icon">
+      <div style={{
+        position: 'relative',
+        maxWidth: '768px',
+        margin: '0 auto',
+        width: '100%',
+        padding: '16px 16px 32px 16px'
+      }}>
+        <form onSubmit={handleSubmit} style={{
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center'
+        }}>
+          <div style={{
+            position: 'absolute',
+            left: '12px',
+            color: '#9ca3af',
+            width: '20px',
+            height: '20px',
+            zIndex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
             <Wand2 />
           </div>
+          
           <input
             ref={inputRef}
             type="text"
@@ -80,39 +100,153 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             onChange={e => setMessage(e.target.value)}
             placeholder={placeholder}
             disabled={disabled}
-            className="chat-input-field"
+            style={{
+              width: '100%',
+              padding: '12px 12px 12px 44px',
+              paddingRight: '140px',
+              backgroundColor: '#374151',
+              borderRadius: '8px',
+              border: '1px solid #4b5563',
+              color: '#f9fafb',
+              fontSize: '14px',
+              outline: 'none',
+              transition: 'all 0.2s ease'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#6b7280';
+              e.target.style.boxShadow = '0 0 0 2px rgba(107, 114, 128, 0.2)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = '#4b5563';
+              e.target.style.boxShadow = 'none';
+            }}
           />
-          <div className="input-buttons">
+          
+          <div style={{
+            position: 'absolute',
+            right: '12px',
+            display: 'flex',
+            gap: '4px'
+          }}>
             <button
               type="submit"
-              className={`input-button primary ${(!message.trim() || disabled) ? 'disabled' : ''}`}
               disabled={!message.trim() || disabled}
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '8px',
+                border: '1px solid #6b7280',
+                backgroundColor: (!message.trim() || disabled) ? '#4b5563' : '#6b7280',
+                color: '#f9fafb',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: (!message.trim() || disabled) ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s ease',
+                padding: '0',
+                opacity: (!message.trim() || disabled) ? 0.5 : 1
+              }}
+              onMouseEnter={(e) => {
+                if (!(!message.trim() || disabled)) {
+                  e.currentTarget.style.backgroundColor = '#7f8a96';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!(!message.trim() || disabled)) {
+                  e.currentTarget.style.backgroundColor = '#6b7280';
+                }
+              }}
             >
-              <ArrowUp />
+              <ArrowUp style={{ width: '16px', height: '16px' }} />
             </button>
+            
             <button
               type="button"
-              className="input-button"
               onClick={() => setShowSearch(true)}
               title="Web Search"
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '8px',
+                border: '1px solid #4b5563',
+                backgroundColor: '#374151',
+                color: '#f9fafb',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                padding: '0'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#4b5563';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#374151';
+              }}
             >
-              <Search />
+              <Search style={{ width: '16px', height: '16px' }} />
             </button>
+            
             <button
               type="button"
-              className="input-button"
               onClick={() => setShowQuickAssistance(true)}
               title="Quick Assistance"
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '8px',
+                border: '1px solid #4b5563',
+                backgroundColor: '#374151',
+                color: '#f9fafb',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                padding: '0'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#4b5563';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#374151';
+              }}
             >
-              <HelpCircle />
+              <HelpCircle style={{ width: '16px', height: '16px' }} />
             </button>
+            
             <button
               type="button"
-              className={`input-button ${disabled ? 'disabled' : ''}`}
               disabled={disabled}
               title="Voice Input"
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '8px',
+                border: '1px solid #4b5563',
+                backgroundColor: '#374151',
+                color: '#f9fafb',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: disabled ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s ease',
+                padding: '0',
+                opacity: disabled ? 0.5 : 1
+              }}
+              onMouseEnter={(e) => {
+                if (!disabled) {
+                  e.currentTarget.style.backgroundColor = '#4b5563';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!disabled) {
+                  e.currentTarget.style.backgroundColor = '#374151';
+                }
+              }}
             >
-              <Mic />
+              <Mic style={{ width: '16px', height: '16px' }} />
             </button>
           </div>
         </form>
@@ -128,102 +262,6 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         onClose={() => setShowSearch(false)}
         onInsertResults={handleInsertSearchResults}
       />
-
-      <style>{`
-        .chat-input-container {
-          position: relative;
-          max-width: 768px;
-          margin: 0 auto;
-          width: 100%;
-          padding: 16px 16px 32px 16px;
-        }
-
-        .chat-input-form {
-          position: relative;
-          display: flex;
-          align-items: center;
-        }
-
-        .input-icon {
-          position: absolute;
-          left: 12px;
-          color: #9ca3af;
-          width: 20px;
-          height: 20px;
-          z-index: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .chat-input-field {
-          width: 100%;
-          padding: 12px 12px 12px 44px;
-          padding-right: 128px;
-          background-color: #374151 !important;
-          border-radius: 8px;
-          border: 1px solid #4b5563 !important;
-          color: #f9fafb !important;
-          font-size: 14px;
-          outline: none;
-          transition: all 0.2s ease;
-        }
-
-        .chat-input-field:focus {
-          border-color: #6b7280 !important;
-          box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.2);
-        }
-
-        .chat-input-field:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        .input-buttons {
-          position: absolute;
-          right: 12px;
-          display: flex;
-          gap: 4px;
-        }
-
-        .input-button {
-          width: 32px;
-          height: 32px;
-          border-radius: 8px;
-          border: 1px solid #4b5563;
-          background-color: #374151;
-          color: #f9fafb;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          padding: 0;
-        }
-
-        .input-button:hover:not(.disabled) {
-          background-color: #4b5563;
-        }
-
-        .input-button.primary {
-          background-color: #6b7280;
-          border-color: #6b7280;
-        }
-
-        .input-button.primary:hover:not(.disabled) {
-          background-color: #7f8a96;
-        }
-
-        .input-button.disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        .input-button svg {
-          width: 16px;
-          height: 16px;
-        }
-      `}</style>
     </>
   );
 };

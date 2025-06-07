@@ -1,8 +1,6 @@
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
 import { Settings } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { ModelSelector } from './ModelSelector';
 import { SearchModalTrigger } from '@/components/search/SearchModalTrigger';
 
@@ -23,79 +21,42 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   selectedModel,
   setSelectedModel
 }) => {
-  const headerStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: '16px',
-    borderBottom: '1px solid #4b5563',
-    backgroundColor: '#1a1a1a'
-  };
-
-  const leftSectionStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '16px'
-  };
-
-  const titleStyle = {
-    fontSize: '20px',
-    fontWeight: '600',
-    color: '#f9fafb'
-  };
-
-  const modelSectionStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px'
-  };
-
-  const modelLabelStyle = {
-    fontSize: '14px',
-    color: '#9ca3af'
-  };
-
-  const rightSectionStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px'
-  };
-
-  const advancedButtonStyle = {
-    height: '32px',
-    padding: '0 12px',
-    backgroundColor: advancedMode ? '#374151' : 'transparent',
-    border: 'none',
-    borderRadius: '6px',
-    color: '#f9fafb',
-    cursor: 'pointer',
-    transition: 'all 0.2s ease',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px'
-  };
-
-  const advancedButtonHoverStyle = {
-    backgroundColor: '#374151'
-  };
-
-  const iconStyle = {
-    width: '16px',
-    height: '16px'
-  };
-
   return (
-    <div style={headerStyle}>
-      <div style={leftSectionStyle}>
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: '16px',
+      borderBottom: '1px solid #4b5563',
+      backgroundColor: '#1f2937'
+    }}>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '16px'
+      }}>
         <div>
-          <h1 style={titleStyle}>
+          <h1 style={{
+            fontSize: '20px',
+            fontWeight: '600',
+            color: '#f9fafb',
+            margin: 0
+          }}>
             {isNewChat ? 'New Chat' : chatTitle || 'Chat'}
           </h1>
         </div>
         
-        {/* Model Selector */}
-        <div style={modelSectionStyle}>
-          <span style={modelLabelStyle}>Model:</span>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}>
+          <span style={{
+            fontSize: '14px',
+            color: '#9ca3af'
+          }}>
+            Model:
+          </span>
           <ModelSelector
             selectedModel={selectedModel}
             onModelChange={setSelectedModel}
@@ -104,26 +65,45 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         </div>
       </div>
 
-      <div style={rightSectionStyle}>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px'
+      }}>
         <SearchModalTrigger />
         
         {setAdvancedMode && (
           <button
-            style={advancedButtonStyle}
             onClick={() => setAdvancedMode?.(!advancedMode)}
+            style={{
+              height: '32px',
+              padding: '0 12px',
+              backgroundColor: advancedMode ? '#6b7280' : '#374151',
+              border: '1px solid #4b5563',
+              borderRadius: '6px',
+              color: '#f9fafb',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              fontSize: '14px'
+            }}
             onMouseEnter={(e) => {
               if (!advancedMode) {
-                Object.assign(e.currentTarget.style, advancedButtonHoverStyle);
+                e.currentTarget.style.backgroundColor = '#6b7280';
               }
             }}
             onMouseLeave={(e) => {
               if (!advancedMode) {
-                Object.assign(e.currentTarget.style, { ...advancedButtonStyle, backgroundColor: 'transparent' });
+                e.currentTarget.style.backgroundColor = '#374151';
               }
             }}
           >
-            <Settings style={iconStyle} />
-            <span style={{ display: window.innerWidth >= 640 ? 'inline' : 'none' }}>Advanced</span>
+            <Settings style={{ width: '16px', height: '16px' }} />
+            <span style={{ display: window.innerWidth >= 640 ? 'inline' : 'none' }}>
+              Advanced
+            </span>
           </button>
         )}
       </div>
