@@ -3,7 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom CSS overrides to fix all blue/teal color issues */
+/* Reset and base styles */
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
@@ -24,16 +24,7 @@ body, html {
   color: #e5e5e5;
 }
 
-/* Force override all blue/teal colors */
-.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-teal-500, .bg-teal-600,
-.text-blue-500, .text-blue-600, .text-teal-500, .text-teal-600,
-.border-blue-500, .border-blue-600, .border-teal-500, .border-teal-600 {
-  background-color: #6b7280 !important;
-  color: #f9fafb !important;
-  border-color: #6b7280 !important;
-}
-
-/* Custom variables for consistent theming */
+/* CSS Variables for consistent theming */
 :root {
   --background: #1a1a1a;
   --foreground: #e5e5e5;
@@ -55,87 +46,132 @@ body, html {
   --input: #4b5563;
   --ring: #6b7280;
   --radius: 0.5rem;
+  --sidebar-bg: #1a1a1a;
+  --sidebar-hover: #374151;
+  --button-bg: #6b7280;
+  --button-hover: #7f8a96;
+  --tab-active: #6b7280;
+  --tab-inactive: #374151;
 }
 
-/* Chat container styling */
-.chat-container {
-  background-color: #2d2d2d !important;
-  color: #e5e5e5 !important;
-}
+/* Global component overrides */
+.bg-primary { background-color: var(--primary) !important; }
+.bg-secondary { background-color: var(--secondary) !important; }
+.bg-muted { background-color: var(--muted) !important; }
+.bg-card { background-color: var(--card) !important; }
+.bg-background { background-color: var(--background) !important; }
 
-.chat-sidebar {
-  background-color: #1a1a1a !important;
-  border-right: 1px solid #4b5563 !important;
+.text-primary { color: var(--primary-foreground) !important; }
+.text-secondary { color: var(--secondary-foreground) !important; }
+.text-muted-foreground { color: var(--muted-foreground) !important; }
+.text-foreground { color: var(--foreground) !important; }
+
+.border-primary { border-color: var(--primary) !important; }
+.border-secondary { border-color: var(--secondary) !important; }
+.border-border { border-color: var(--border) !important; }
+
+/* Force remove any blue/teal colors */
+.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-teal-500, .bg-teal-600,
+.text-blue-500, .text-blue-600, .text-teal-500, .text-teal-600,
+.border-blue-500, .border-blue-600, .border-teal-500, .border-teal-600,
+[class*="blue"], [class*="teal"] {
+  background-color: var(--button-bg) !important;
+  color: var(--primary-foreground) !important;
+  border-color: var(--button-bg) !important;
 }
 
 /* Button styling */
-button {
-  background-color: #6b7280 !important;
-  color: #f9fafb !important;
-  border: 1px solid #6b7280 !important;
+button, .btn {
+  background-color: var(--button-bg) !important;
+  color: var(--primary-foreground) !important;
+  border: 1px solid var(--button-bg) !important;
   border-radius: 6px;
   padding: 8px 16px;
   transition: all 0.2s ease;
+  cursor: pointer;
 }
 
-button:hover {
-  background-color: #7f8a96 !important;
-  border-color: #7f8a96 !important;
+button:hover, .btn:hover {
+  background-color: var(--button-hover) !important;
+  border-color: var(--button-hover) !important;
 }
 
-button:focus {
-  outline: 2px solid #6b7280 !important;
+button:focus, .btn:focus {
+  outline: 2px solid var(--ring) !important;
   outline-offset: 2px;
+}
+
+button:disabled, .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Input styling */
 input, textarea, select {
-  background-color: #374151 !important;
-  color: #f9fafb !important;
-  border: 1px solid #4b5563 !important;
+  background-color: var(--secondary) !important;
+  color: var(--primary-foreground) !important;
+  border: 1px solid var(--border) !important;
   border-radius: 6px;
   padding: 8px 12px;
+  transition: all 0.2s ease;
 }
 
 input:focus, textarea:focus, select:focus {
-  outline: 2px solid #6b7280 !important;
+  outline: 2px solid var(--ring) !important;
   outline-offset: 2px;
-  border-color: #6b7280 !important;
+  border-color: var(--ring) !important;
 }
 
 /* Tab styling */
-[role="tab"] {
-  background-color: #374151 !important;
-  color: #9ca3af !important;
-  border: 1px solid #4b5563 !important;
+[role="tab"], .tab-trigger {
+  background-color: var(--tab-inactive) !important;
+  color: var(--muted-foreground) !important;
+  border: 1px solid var(--border) !important;
+  transition: all 0.2s ease;
 }
 
-[role="tab"][data-state="active"] {
-  background-color: #6b7280 !important;
-  color: #f9fafb !important;
+[role="tab"][data-state="active"], .tab-trigger.active {
+  background-color: var(--tab-active) !important;
+  color: var(--primary-foreground) !important;
 }
 
-/* Override any remaining blue/teal in Radix components */
+/* Radix UI component overrides */
 [data-radix-popper-content-wrapper],
 [data-radix-select-content],
 [data-radix-tabs-content],
-[data-radix-dialog-content] {
-  background-color: #2d2d2d !important;
-  border: 1px solid #4b5563 !important;
-  color: #e5e5e5 !important;
+[data-radix-dialog-content],
+[data-radix-popover-content] {
+  background-color: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--foreground) !important;
+  border-radius: 6px !important;
+}
+
+[data-radix-select-item]:hover,
+[data-radix-dropdown-menu-item]:hover {
+  background-color: var(--muted) !important;
+  color: var(--foreground) !important;
 }
 
 /* Badge styling */
 .badge {
-  background-color: #6b7280 !important;
-  color: #f9fafb !important;
-  border: 1px solid #6b7280 !important;
+  background-color: var(--button-bg) !important;
+  color: var(--primary-foreground) !important;
+  border: 1px solid var(--button-bg) !important;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
 }
 
 /* Sidebar specific styling */
+.chat-sidebar {
+  background-color: var(--sidebar-bg) !important;
+  border-right: 1px solid var(--border) !important;
+}
+
 .sidebar-button {
-  background-color: #6b7280 !important;
-  color: #f9fafb !important;
+  background-color: var(--button-bg) !important;
+  color: var(--primary-foreground) !important;
   border: none !important;
   border-radius: 6px;
   width: 40px;
@@ -144,38 +180,22 @@ input:focus, textarea:focus, select:focus {
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .sidebar-button:hover {
-  background-color: #7f8a96 !important;
+  background-color: var(--button-hover) !important;
 }
 
 .sidebar-button-active {
-  background-color: #6b7280 !important;
-  color: #f9fafb !important;
+  background-color: var(--tab-active) !important;
+  color: var(--primary-foreground) !important;
 }
 
-/* Force override any blue backgrounds in the UI */
-* {
-  background-color: inherit !important;
-}
-
-body * {
-  background-color: transparent;
-}
-
-.chat-container * {
-  background-color: transparent;
-}
-
-/* Specific overrides for components that might have blue */
-[class*="blue"],
-[class*="teal"],
-[style*="blue"],
-[style*="teal"] {
-  background-color: #6b7280 !important;
-  color: #f9fafb !important;
-  border-color: #6b7280 !important;
+/* Chat container styling */
+.chat-container {
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
 }
 
 /* Animation classes */
@@ -190,8 +210,20 @@ body * {
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
-  button {
+  button, .btn {
     min-height: 44px;
     min-width: 44px;
   }
+}
+
+/* Utility classes */
+.gray-theme {
+  background-color: var(--button-bg) !important;
+  color: var(--primary-foreground) !important;
+  border-color: var(--button-bg) !important;
+}
+
+.gray-theme:hover {
+  background-color: var(--button-hover) !important;
+  border-color: var(--button-hover) !important;
 }

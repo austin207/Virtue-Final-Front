@@ -45,7 +45,14 @@ export const useSendMessage = ({
   selectedModel
 }: UseSendMessageProps) => {
 
-  const handleSendMessage = async (content: string, msgTemperature?: number, maxLength?: number) => {
+  const handleSendMessage = async (
+    content: string, 
+    msgTemperature?: number, 
+    maxLength?: number,
+    topK?: number,
+    topP?: number,
+    repetitionPenalty?: number
+  ) => {
     const userMessage: MessageType = {
       id: Date.now().toString(),
       role: 'user',
@@ -78,9 +85,9 @@ export const useSendMessage = ({
           length: maxLength || length, 
           temperature: msgTemperature || temperature,
           model: mapModelToServiceType(selectedModel),
-          top_k: top_K,
-          top_p: top_P,
-          repetition_penalty
+          top_k: topK || top_K,
+          top_p: topP || top_P,
+          repetition_penalty: repetitionPenalty || repetition_penalty
         },
         (token) => {
           aiContent += token;

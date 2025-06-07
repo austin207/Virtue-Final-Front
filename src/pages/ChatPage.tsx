@@ -134,6 +134,12 @@ export const ChatPage: React.FC<ChatPageProps> = ({
           setTemperature={setTemperature}
           length={length}
           setLength={setLength}
+          top_K={top_K}
+          setTopK={setTopK}
+          top_P={top_P}
+          setTopP={setTopP}
+          repetition_penalty={repetition_penalty}
+          setRepetitionPenalty={setRepetitionPenalty}
           tokensPerSecond={tokensPerSecond}
         />
       </div>

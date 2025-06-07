@@ -7,7 +7,7 @@ import { QuickAssistanceModal } from '@/components/chat/QuickAssistanceModal';
 import { SearchModal } from '@/components/search/SearchModal';
 
 interface ChatInputProps {
-  onSendMessage: (message: string, temperature?: number, length?: number) => void;
+  onSendMessage: (message: string, temperature?: number, length?: number, topK?: number, topP?: number, repetitionPenalty?: number) => void;
   placeholder?: string;
   disabled?: boolean;
   advancedMode?: boolean;
@@ -15,6 +15,12 @@ interface ChatInputProps {
   setTemperature?: (value: number) => void;
   length?: number;
   setLength?: (value: number) => void;
+  top_K?: number;
+  setTopK?: (value: number) => void;
+  top_P?: number;
+  setTopP?: (value: number) => void;
+  repetition_penalty?: number;
+  setRepetitionPenalty?: (value: number) => void;
   tokensPerSecond?: number | null;
 }
 
@@ -27,6 +33,12 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   setTemperature,
   length = 150,
   setLength,
+  top_K = 40,
+  setTopK,
+  top_P = 0.9,
+  setTopP,
+  repetition_penalty = 1.1,
+  setRepetitionPenalty,
   tokensPerSecond = null,
 }) => {
   const [message, setMessage] = useState('');
@@ -45,7 +57,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim()) {
-      onSendMessage(message, temperature, length);
+      onSendMessage(message, temperature, length, top_K, top_P, repetition_penalty);
       setMessage('');
     }
   };
@@ -54,101 +66,11 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     setMessage(prev => prev + (prev ? '\n\n' : '') + results);
   };
 
-  const containerStyle = {
-    position: 'relative' as const,
-    maxWidth: '768px',
-    margin: '0 auto',
-    width: '100%',
-    padding: '16px 16px 32px 16px'
-  };
-
-  const formStyle = {
-    position: 'relative' as const,
-    display: 'flex',
-    alignItems: 'center'
-  };
-
-  const iconStyle = {
-    position: 'absolute' as const,
-    left: '12px',
-    color: '#9ca3af',
-    width: '20px',
-    height: '20px'
-  };
-
-  const inputStyle = {
-    width: '100%',
-    padding: '12px 12px 12px 44px',
-    paddingRight: '128px',
-    backgroundColor: '#374151',
-    borderRadius: '8px',
-    border: '1px solid #4b5563',
-    color: '#f9fafb',
-    fontSize: '14px',
-    outline: 'none',
-    transition: 'all 0.2s ease'
-  };
-
-  const inputFocusStyle = {
-    borderColor: '#6b7280',
-    boxShadow: '0 0 0 2px rgba(107, 114, 128, 0.2)'
-  };
-
-  const inputDisabledStyle = {
-    opacity: 0.5,
-    cursor: 'not-allowed'
-  };
-
-  const buttonsContainerStyle = {
-    position: 'absolute' as const,
-    right: '12px',
-    display: 'flex',
-    gap: '4px'
-  };
-
-  const buttonStyle = {
-    width: '32px',
-    height: '32px',
-    borderRadius: '8px',
-    border: '1px solid #4b5563',
-    backgroundColor: '#374151',
-    color: '#f9fafb',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    transition: 'all 0.2s ease'
-  };
-
-  const submitButtonStyle = {
-    ...buttonStyle,
-    backgroundColor: '#6b7280',
-    borderColor: '#6b7280'
-  };
-
-  const submitButtonHoverStyle = {
-    backgroundColor: '#7f8a96'
-  };
-
-  const buttonHoverStyle = {
-    backgroundColor: '#4b5563'
-  };
-
-  const submitButtonDisabledStyle = {
-    opacity: 0.5,
-    cursor: 'not-allowed'
-  };
-
-  const buttonIconStyle = {
-    width: '16px',
-    height: '16px'
-  };
-
   return (
     <>
-      <div style={containerStyle}>
-        <form onSubmit={handleSubmit} style={formStyle}>
-          <div style={iconStyle}>
+      <div className="chat-input-container">
+        <form onSubmit={handleSubmit} className="chat-input-form">
+          <div className="input-icon">
             <Wand2 />
           </div>
           <input
@@ -158,70 +80,39 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             onChange={e => setMessage(e.target.value)}
             placeholder={placeholder}
             disabled={disabled}
-            style={{
-              ...inputStyle,
-              ...(disabled ? inputDisabledStyle : {}),
-            }}
-            onFocus={(e) => Object.assign(e.target.style, inputFocusStyle)}
-            onBlur={(e) => Object.assign(e.target.style, inputStyle)}
+            className="chat-input-field"
           />
-          <div style={buttonsContainerStyle}>
+          <div className="input-buttons">
             <button
               type="submit"
-              style={{
-                ...submitButtonStyle,
-                ...((!message.trim() || disabled) ? submitButtonDisabledStyle : {})
-              }}
+              className={`input-button primary ${(!message.trim() || disabled) ? 'disabled' : ''}`}
               disabled={!message.trim() || disabled}
-              onMouseEnter={(e) => {
-                if (message.trim() && !disabled) {
-                  Object.assign(e.currentTarget.style, submitButtonHoverStyle);
-                }
-              }}
-              onMouseLeave={(e) => {
-                Object.assign(e.currentTarget.style, submitButtonStyle);
-              }}
             >
-              <ArrowUp style={buttonIconStyle} />
+              <ArrowUp />
             </button>
             <button
               type="button"
-              style={buttonStyle}
+              className="input-button"
               onClick={() => setShowSearch(true)}
               title="Web Search"
-              onMouseEnter={(e) => Object.assign(e.currentTarget.style, buttonHoverStyle)}
-              onMouseLeave={(e) => Object.assign(e.currentTarget.style, buttonStyle)}
             >
-              <Search style={buttonIconStyle} />
+              <Search />
             </button>
             <button
               type="button"
-              style={buttonStyle}
+              className="input-button"
               onClick={() => setShowQuickAssistance(true)}
               title="Quick Assistance"
-              onMouseEnter={(e) => Object.assign(e.currentTarget.style, buttonHoverStyle)}
-              onMouseLeave={(e) => Object.assign(e.currentTarget.style, buttonStyle)}
             >
-              <HelpCircle style={buttonIconStyle} />
+              <HelpCircle />
             </button>
             <button
               type="button"
-              style={{
-                ...buttonStyle,
-                ...(disabled ? { opacity: 0.5, cursor: 'not-allowed' } : {})
-              }}
+              className={`input-button ${disabled ? 'disabled' : ''}`}
               disabled={disabled}
               title="Voice Input"
-              onMouseEnter={(e) => {
-                if (!disabled) {
-                  Object.assign(e.currentTarget.style, buttonHoverStyle);
-                }
-              }}
-              onMouseLeave={(e) => {
-                Object.assign(e.currentTarget.style, buttonStyle);
-              }}
             >
-              <Mic style={buttonIconStyle} />
+              <Mic />
             </button>
           </div>
         </form>
@@ -237,6 +128,102 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         onClose={() => setShowSearch(false)}
         onInsertResults={handleInsertSearchResults}
       />
+
+      <style jsx>{`
+        .chat-input-container {
+          position: relative;
+          max-width: 768px;
+          margin: 0 auto;
+          width: 100%;
+          padding: 16px 16px 32px 16px;
+        }
+
+        .chat-input-form {
+          position: relative;
+          display: flex;
+          align-items: center;
+        }
+
+        .input-icon {
+          position: absolute;
+          left: 12px;
+          color: #9ca3af;
+          width: 20px;
+          height: 20px;
+          z-index: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .chat-input-field {
+          width: 100%;
+          padding: 12px 12px 12px 44px;
+          padding-right: 128px;
+          background-color: #374151 !important;
+          border-radius: 8px;
+          border: 1px solid #4b5563 !important;
+          color: #f9fafb !important;
+          font-size: 14px;
+          outline: none;
+          transition: all 0.2s ease;
+        }
+
+        .chat-input-field:focus {
+          border-color: #6b7280 !important;
+          box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.2);
+        }
+
+        .chat-input-field:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .input-buttons {
+          position: absolute;
+          right: 12px;
+          display: flex;
+          gap: 4px;
+        }
+
+        .input-button {
+          width: 32px;
+          height: 32px;
+          border-radius: 8px;
+          border: 1px solid #4b5563;
+          background-color: #374151;
+          color: #f9fafb;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          padding: 0;
+        }
+
+        .input-button:hover:not(.disabled) {
+          background-color: #4b5563;
+        }
+
+        .input-button.primary {
+          background-color: #6b7280;
+          border-color: #6b7280;
+        }
+
+        .input-button.primary:hover:not(.disabled) {
+          background-color: #7f8a96;
+        }
+
+        .input-button.disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .input-button svg {
+          width: 16px;
+          height: 16px;
+        }
+      `}</style>
     </>
   );
 };
