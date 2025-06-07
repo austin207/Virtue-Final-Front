@@ -183,7 +183,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .model-selector-container {
           width: 100%;
         }

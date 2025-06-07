@@ -129,7 +129,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         onInsertResults={handleInsertSearchResults}
       />
 
-      <style jsx>{`
+      <style>{`
         .chat-input-container {
           position: relative;
           max-width: 768px;
